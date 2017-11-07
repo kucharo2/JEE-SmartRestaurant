@@ -6,7 +6,7 @@ How to prepare your environment to get this project working
       It will not work when you tried to run it again even after one failed run.
       If something will failed during the run i recommend to drop whole database and start the creation from the begging
 
-- copy jbossSetup/postgresql-42.1.4.jar and jbossSetup/modele.xml into your %JBOSS_HOME%\modules\system\layers\base\org\postgresql\main\
+- download postgresql-42.1.4.jar copy it with jbossSetup/modele.xml into your %JBOSS_HOME%\modules\system\layers\base\org\postgresql\main\
   You may need to create those directories
 
 - now you need to specify a datasource in jboss that will be used by our application
