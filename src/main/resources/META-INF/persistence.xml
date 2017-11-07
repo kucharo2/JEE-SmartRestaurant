@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="primary">
+		<!-- If you are running in a production environment, add a managed data source -->
+		<jta-data-source>java:/SmartRestaurant</jta-data-source>
+		<properties>
+			<!--<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>-->
+			<property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
+		</properties>
+	</persistence-unit>
+</persistence>
