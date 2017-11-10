@@ -1,5 +1,6 @@
 package cz.kucharo2.data.entity;
 
+import cz.kucharo2.data.enums.BillStatus;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class Bill extends DtoEntity {
     public static final String TABLE_NAME = "Bill";
     public static final String BILL_ID = "bil_id";
     public static final String DATE = "date";
+    public static final String STATUS = "status";
     public static final String TABLE_ID = "table_id";
     public static final String ACCOUNT_ID = "account_id";
 
@@ -31,6 +33,10 @@ public class Bill extends DtoEntity {
 
     @Column(name = DATE)
     private Date date = new Date();
+
+    @Column(name = STATUS)
+    @Enumerated(EnumType.STRING)
+    private BillStatus status;
 
     @ManyToOne
     @JoinColumn(name = ACCOUNT_ID)
@@ -62,6 +68,22 @@ public class Bill extends DtoEntity {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public BillStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BillStatus status) {
+        this.status = status;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public Collection<BillItem> getBillItems() {
