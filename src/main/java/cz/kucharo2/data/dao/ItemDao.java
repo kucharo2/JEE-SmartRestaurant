@@ -31,9 +31,9 @@ public interface ItemDao extends AbstractGenericDao<Item> {
 	/**
 	 * Get items with lazy loaded possible combinations for it.
 	 *
-	 * @param itemsIds item ids
+	 * @param itemId item id
 	 * @return list of items
 	 */
-	public List<Item> getItemsWithCombinations(List<Integer> itemsIds);
+	Item getItemsWithCombinations(Integer itemId);
 
 }

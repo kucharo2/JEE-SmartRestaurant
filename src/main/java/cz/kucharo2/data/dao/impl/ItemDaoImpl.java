@@ -4,9 +4,12 @@ import cz.kucharo2.data.dao.ItemDao;
 import cz.kucharo2.data.entity.Category;
 import cz.kucharo2.data.entity.Item;
 import cz.kucharo2.data.enums.CategoryType;
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,15 +47,12 @@ public class ItemDaoImpl extends AbstractGenericDaoImpl<Item> implements ItemDao
     }
 
     @Override
-    public List<Item> getItemsWithCombinations(List<Integer> itemsIds) {
-        //TODO implement for entity manager
-//        Session openSession = getOpenSession();
-//        Criteria crit = openSession.createCriteria(Item.class)
-//                .add(Restrictions.in("id", itemsIds))
-//                .setFetchMode("itemCombination", FetchMode.JOIN)
-//                .setFetchMode("itemCombinationTo", FetchMode.JOIN);
-//        List<Item> items = (List<Item>) crit.list();
-//        return closeSessionAndReturnValue(items, openSession);
-        return new ArrayList<>();
+    public Item getItemsWithCombinations(Integer itemId) {
+        Session session = (Session) getEntityManager().getDelegate();
+        Criteria crit = session.createCriteria(Item.class)
+                .add(Restrictions.eq("id", itemId))
+                .setFetchMode("itemCombination", FetchMode.JOIN)
+                .setFetchMode("itemCombinationTo", FetchMode.JOIN);
+        return (Item) crit.uniqueResult();
     }
 }

@@ -35,13 +35,13 @@ public interface MenuService {
 	List<Item> getItemsByCategory(CategoryType code);
 
 	/**
-	 * Returns correct combinations to selected items in bill for specific category
+	 * Returns correct combinations to selected item with specific category
 	 *
-	 * @param billId bill id
+	 * @param itemId item id
 	 * @param category category
 	 * @return list of items
 	 */
-	List<Item> getItemsByCombinationToAndCategory(int billId, CategoryType category);
+	List<Item> getItemsByCombinationToAndCategory(int itemId, CategoryType category);
 
 	Item getItemById(int id);
 

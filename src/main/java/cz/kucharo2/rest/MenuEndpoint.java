@@ -1,13 +1,14 @@
 package cz.kucharo2.rest;
 
-import cz.kucharo2.data.dao.ItemDao;
 import cz.kucharo2.data.entity.Category;
 import cz.kucharo2.data.entity.Item;
 import cz.kucharo2.data.enums.CategoryType;
+import cz.kucharo2.service.MenuService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
@@ -17,12 +18,11 @@ import java.util.List;
  * @Author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
 
-//TODO dummy endpoint only for angular ajax testing - remove in future
 @Path("/menu")
 public class MenuEndpoint {
 
     @Inject
-    private ItemDao itemDao;
+    private MenuService menuService;
 
     @GET
     @Path("items")
@@ -52,6 +52,13 @@ public class MenuEndpoint {
 
         itemsList.add(item1);
         itemsList.add(item2);
-        return itemDao.getAll();
+        return itemsList;
+    }
+
+    @GET
+    @Path("item/{item_id}/sideDish")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Item> getSideDishesForItem(@PathParam("item_id") Integer itemId) {
+        return menuService.getItemsByCombinationToAndCategory(itemId, CategoryType.PRILOHA);
     }
 }

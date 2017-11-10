@@ -24,6 +24,10 @@ public class Item extends DtoEntity {
     public static final String IMAGE = "image";
     public static final String DESCRIPTION = "description";
     public static final String CATEGORY_ID = "category_id";
+    // item combination table
+    public static final String ITEM_COMBINATION_TABLE = "item_combination";
+    public static final String ITEM_1_COMBINATION = "item_1";
+    public static final String ITEM_2_COMBINATION = "item_2";
 
     @Id
     @Column(name = ITEM_ID)
@@ -53,18 +57,18 @@ public class Item extends DtoEntity {
     private Category category;
 
     @ManyToMany
-    @JoinTable(name = "item_combination",
-            joinColumns = @JoinColumn(name = "item_1"),
-            inverseJoinColumns = @JoinColumn(name = "item_2"))
+    @JoinTable(name = ITEM_COMBINATION_TABLE,
+            joinColumns = @JoinColumn(name = ITEM_1_COMBINATION),
+            inverseJoinColumns = @JoinColumn(name = ITEM_2_COMBINATION))
     @JsonIgnore
-    private Collection<Item> itemCombination;
+    private Set<Item> itemCombination;
 
     @ManyToMany
-    @JoinTable(name = "item_combination",
-            joinColumns = @JoinColumn(name = "item_2"),
-            inverseJoinColumns = @JoinColumn(name = "item_1"))
+    @JoinTable(name = ITEM_COMBINATION_TABLE,
+            joinColumns = @JoinColumn(name = ITEM_2_COMBINATION),
+            inverseJoinColumns = @JoinColumn(name = ITEM_1_COMBINATION))
     @JsonIgnore
-    private Collection<Item> itemCombinationTo;
+    private Set<Item> itemCombinationTo;
 
     @Override
     public Integer getId() {
@@ -132,30 +136,20 @@ public class Item extends DtoEntity {
     }
 
 
-    public Collection<Item> getItemCombination() {
+    public Set<Item> getItemCombination() {
         return itemCombination;
     }
 
-    public void setItemCombination(Collection<Item> itemCombination) {
+    public void setItemCombination(Set<Item> itemCombination) {
         this.itemCombination = itemCombination;
     }
 
-    public Collection<Item> getItemCombinationTo() {
+    public Set<Item> getItemCombinationTo() {
         return itemCombinationTo;
     }
 
-    public void setItemCombinationTo(Collection<Item> itemCombinationTo) {
+    public void setItemCombinationTo(Set<Item> itemCombinationTo) {
         this.itemCombinationTo = itemCombinationTo;
-    }
-
-    @JsonIgnore
-    public Set<Item> getCombinations() {
-        Set<Item> combinations = new HashSet<>(getItemCombination());
-        Collection<Item> itemCombinations = getItemCombinationTo();
-        if (itemCombinations != null) {
-            combinations.addAll(itemCombinations);
-        }
-        return combinations;
     }
 
     @Override
@@ -178,20 +172,6 @@ public class Item extends DtoEntity {
         if (reviews != null ? !reviews.equals(dish.reviews) : dish.reviews != null) return false;
 
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + price;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (code != null ? code.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (reviews != null ? reviews.hashCode() : 0);
-        result = 31 * result + (category != null ? category.hashCode() : 0);
-        result = 31 * result + (itemCombination != null ? itemCombination.hashCode() : 0);
-        result = 31 * result + (itemCombinationTo != null ? itemCombinationTo.hashCode() : 0);
-        return result;
     }
 
     @Override
