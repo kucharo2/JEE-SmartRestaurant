@@ -88,7 +88,7 @@ public abstract class AbstractGenericDaoImpl<T extends DtoEntity> implements Abs
 
     protected Query createGetWhereConditionQuery(String whereCondition, Map<String, Object> sqlParams) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM ").append(clazz.getAnnotation(Table.class).name()).append(" WHERE ");
+        sb.append("SELECT e FROM ").append(clazz.getAnnotation(Table.class).name()).append(" e WHERE ");
         sb.append(whereCondition);
         Query query = entityManager.createQuery(sb.toString());
         for (String key : sqlParams.keySet()) {
