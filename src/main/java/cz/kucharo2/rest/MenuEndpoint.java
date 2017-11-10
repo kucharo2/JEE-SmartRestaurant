@@ -1,9 +1,11 @@
 package cz.kucharo2.rest;
 
+import cz.kucharo2.data.dao.ItemDao;
 import cz.kucharo2.data.entity.Category;
 import cz.kucharo2.data.entity.Item;
 import cz.kucharo2.data.enums.CategoryType;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -18,6 +20,9 @@ import java.util.List;
 //TODO dummy endpoint only for angular ajax testing - remove in future
 @Path("/menu")
 public class MenuEndpoint {
+
+    @Inject
+    private ItemDao itemDao;
 
     @GET
     @Path("items")
@@ -47,6 +52,6 @@ public class MenuEndpoint {
 
         itemsList.add(item1);
         itemsList.add(item2);
-        return itemsList;
+        return itemDao.getAll();
     }
 }

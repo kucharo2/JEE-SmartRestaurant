@@ -41,6 +41,7 @@ public class Item extends DtoEntity {
     private String description;
 
     @OneToMany(mappedBy = "item")
+    @JsonIgnore
     private Collection<Review> reviews;
 
     @ManyToOne
@@ -51,12 +52,14 @@ public class Item extends DtoEntity {
     @JoinTable(name = "item_combination",
             joinColumns = @JoinColumn(name = "item_1"),
             inverseJoinColumns = @JoinColumn(name = "item_2"))
+    @JsonIgnore
     private Collection<Item> itemCombination;
 
     @ManyToMany
     @JoinTable(name = "item_combination",
             joinColumns = @JoinColumn(name = "item_2"),
             inverseJoinColumns = @JoinColumn(name = "item_1"))
+    @JsonIgnore
     private Collection<Item> itemCombinationTo;
 
     @Override
@@ -116,7 +119,7 @@ public class Item extends DtoEntity {
         this.category = category;
     }
 
-    @JsonIgnore
+
     public Collection<Item> getItemCombination() {
         return itemCombination;
     }

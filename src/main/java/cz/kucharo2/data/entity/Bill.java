@@ -42,7 +42,7 @@ public class Bill extends DtoEntity {
     @JoinColumn(name = ACCOUNT_ID)
     private Account account;
 
-    @OneToMany(mappedBy = "bill")
+    @OneToMany(mappedBy = "bill", fetch = FetchType.EAGER)
     private Collection<BillItem> billItems;
 
     @Override

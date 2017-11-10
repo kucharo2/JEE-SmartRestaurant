@@ -1,6 +1,7 @@
 package cz.kucharo2.data.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import cz.kucharo2.data.enums.CategoryType;
 import org.hibernate.annotations.Proxy;
 
@@ -38,6 +39,7 @@ public class Category extends DtoEntity {
     private Category parentCategory;
 
     @OneToMany(mappedBy = "parentCategory")
+    @JsonIgnore
     private Collection<Category> childCategories;
 
     @Override
