@@ -27,10 +27,14 @@
                     <tr>
                         <th>Název</th>
                         <th>Cena</th>
+                        <th class="text-center">Akce</th>
                     </tr>
-                    <tr ng-repeat="item in items" ng-click="fetchDetailOfItem(item.id)">
+                    <tr ng-repeat="item in items">
                         <td>{{item.name}}</a></td>
                         <td>{{item.price}} Kč</td>
+                        <td class="text-center">
+                            <button class="btn btn-primary" ng-click="selectMainDish(item.id)">Vybrat</button>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -56,22 +60,38 @@
                         <tr>
                             <th>Název</th>
                             <th>Cena</th>
+                            <th class="text-center">Akce</th>
                         </tr>
                         <tr ng-repeat="sideDish in sideDishes">
                             <td>{{sideDish.name}}</a></td>
                             <td>{{sideDish.price}} Kč</td>
+                            <td class="text-center">
+                                <button class="btn btn-primary" ng-click="selectSideDish(sideDish.id)">Vybrat</button>
+                            </td>
                         </tr>
                     </table>
                 </div>
             </div>
             <button class="btn btn-lg btn-success">Potvrdit</button>
         </div>
-    </div>
-</div>
-<!-- Footer -->
-<div class="footer">
-    <div class="footer-info text-center">
-        SmartRestaurant 2017
+        <!-- Order -->
+        <div class="order">
+            <div class="dish-info">
+                <h3>Aktuální výběr</h3>
+                <div class="table-responsive ">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Název</th>
+                            <th>Cena</th>
+                        </tr>
+                        <tr ng-repeat="selectedDish in selectedDishes">
+                            <td>{{selectedDish.name}}</a></td>
+                            <td>{{selectedDish.price}} Kč</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
