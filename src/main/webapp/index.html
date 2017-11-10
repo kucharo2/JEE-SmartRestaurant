@@ -1,13 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="smartRestaurantApp">
 <head>
     <meta charset="UTF-8">
     <title>Smart restaurant!</title>
+    <script src="angular/angular.js"></script>
+    <script src="js/app.js"></script>
 </head>
 <body>
-    <h1>Hello lazy bastards.</h1>
-    <iframe src="https://giphy.com/embed/3o6Zt9g8jEvjKm1ITC" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-    <i>--- matyapav</i>
-    <p>I'm not functional. <b>Implement me!</b></p>
+<h1>Dummy list jidel</h1>
+<div ng-controller="MenuListController">
+    <ul>
+        <li ng-repeat="item in items">
+            {{item.code}} - {{item.name}} {{item.price}} Kč
+        </li>
+    </ul>
+</div>
+k
 </body>
 </html>
