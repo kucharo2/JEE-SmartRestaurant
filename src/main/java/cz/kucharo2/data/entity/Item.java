@@ -21,6 +21,7 @@ public class Item extends DtoEntity {
     public static final String PRICE = "price";
     public static final String NAME = "name";
     public static final String CODE = "code";
+    public static final String IMAGE = "image";
     public static final String DESCRIPTION = "description";
     public static final String CATEGORY_ID = "category_id";
 
@@ -36,6 +37,9 @@ public class Item extends DtoEntity {
 
     @Column(name = CODE)
     private String code;
+
+    @Column(name = IMAGE)
+    private String image;
 
     @Column(name = DESCRIPTION)
     private String description;
@@ -93,6 +97,14 @@ public class Item extends DtoEntity {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getDescription() {

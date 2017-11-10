@@ -120,7 +120,8 @@ CREATE TABLE Item
 	price numeric NOT NULL,
 	category_id integer NOT NULL,
 	description varchar(255) NULL,
-	code varchar(50) NOT NULL
+	code varchar(50) NOT NULL,
+	image varchar(150) NOT NULL
 )
 ;
 
