@@ -1,5 +1,6 @@
 package cz.kucharo2.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -115,6 +116,7 @@ public class Item extends DtoEntity {
         this.category = category;
     }
 
+    @JsonIgnore
     public Collection<Item> getItemCombination() {
         return itemCombination;
     }
@@ -131,10 +133,12 @@ public class Item extends DtoEntity {
         this.itemCombinationTo = itemCombinationTo;
     }
 
+    @JsonIgnore
     public Set<Item> getCombinations() {
-        Set<Item> combinations = new HashSet<Item>(getItemCombination());
-        for (Item dish : getItemCombinationTo()) {
-            combinations.add(dish);
+        Set<Item> combinations = new HashSet<>(getItemCombination());
+        Collection<Item> itemCombinations = getItemCombinationTo();
+        if (itemCombinations != null) {
+            combinations.addAll(itemCombinations);
         }
         return combinations;
     }
