@@ -1,0 +1,56 @@
+.half-of-parent {
+    width: 50%;
+    display: inline-block;
+}
+
+.right-side {
+    float: right;
+    padding: 25px;
+    position: absolute;
+    left: 50%;
+    bottom: 0px;
+    top: 100px;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dish-info {
+    display: inline-block;
+    padding-bottom: 10px;
+    overflow-y: auto;
+}
+
+.dish-image {
+    width: 300px;
+    float: right;
+}
+
+.header {
+    height: 100px;
+    background-color: darkgray;
+    width: 100%;
+}
+
+.content-absolute {
+    position: absolute;
+    top: 100px;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    overflow-y: scroll;
+}
+
+.right-bottom-quarter {
+    height: 45%;
+    overflow-y: scroll;
+    flex-grow: 1;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: grey;
+    height: 20px;
+}

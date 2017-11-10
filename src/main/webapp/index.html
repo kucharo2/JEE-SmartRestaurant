@@ -3,17 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <title>Smart restaurant!</title>
-    <script src="angular/angular.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-grid.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-reboot.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="angular/angular.min.js"></script>
     <script src="js/app.js"></script>
 </head>
 <body>
-<h1>Dummy list jidel</h1>
-<div ng-controller="MenuListController">
-    <ul>
-        <li ng-repeat="item in items">
-            {{item.code}} - {{item.name}} {{item.price}} Kč
-        </li>
-    </ul>
+<!-- Header -->
+<div class="header text-center">
+    <h1>SMART RESTAURANT</h1>
+</div>
+<div class="container-fluid">
+    <div ng-controller="MenuListController">
+        <!-- Table of dishes -->
+        <div class="content-absolute half-of-parent">
+            <h1>Nabídka</h1>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <tr>
+                        <th>Název</th>
+                        <th>Cena</th>
+                    </tr>
+                    <tr ng-repeat="item in items" ng-click="fetchDetailOfItem(item.id)">
+                        <td>{{item.name}}</a></td>
+                        <td>{{item.price}} Kč</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Additional info -->
+        <div class="half-of-parent right-side" ng-if="detailItem != undefined && detailItem != null">
+            <div class="dish-info">
+                <img class="dish-image" src="img/rizek.jpg" alt="A tasty image of a {{detailItem.name}}"/>
+                <h1>{{detailItem.name}}</h1>
+                <p><strong>Kategorie:</strong> {{detailItem.category.name}}</p>
+                <p><strong>Popis:</strong>
+                    <span ng-if="detailItem.description != null">{{detailItem.description}}</span>
+                    <span ng-if="detailItem.description == null">
+                            Hodor, hodor. Hodor. Hodor, hodor hodor - hodor; hodor hodor hodor hodor. Hodor. Hodor hodor HODOR! Hodor hodor, hodor. Hodor HODOR hodor, hodor hodor... Hodor hodor hodor?! Hodor. Hodor hodor hodor, hodor. Hodor hodor, hodor, hodor hodor. Hodor hodor - hodor, hodor. Hodor hodor - hodor. Hodor hodor - HODOR hodor, hodor hodor - hodor, hodor. Hodor hodor. Hodor! Hodor hodor, hodor - hodor hodor hodor hodor. Hodor.
+                        </span>
+                </p>
+            </div>
+            <!-- Combinations -->
+            <h3>Toto jídlo lze kombinovat s těmito položkami</h3>
+            <div class="right-bottom-quarter">
+                <div class="table-responsive ">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Název</th>
+                            <th>Cena</th>
+                        </tr>
+                        <tr ng-repeat="sideDish in sideDishes">
+                            <td>{{sideDish.name}}</a></td>
+                            <td>{{sideDish.price}} Kč</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <button class="btn btn-lg btn-success">Potvrdit</button>
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<div class="footer">
+    <div class="footer-info text-center">
+        SmartRestaurant 2017
+    </div>
 </div>
 </body>
 </html>
