@@ -23,7 +23,6 @@ public class CategoryDaoImpl extends AbstractGenericDaoImpl<Category> implements
         String query = Category.CODE + " = :code";
         Map<String, Object> params = new HashMap<>();
         params.put("code", code.name());
-
         return getByWhereConditionSingleResult(query, params);
     }
 }
