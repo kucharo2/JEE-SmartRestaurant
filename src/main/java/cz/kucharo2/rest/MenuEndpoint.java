@@ -12,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,5 +39,12 @@ public class MenuEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Item> getSideDishesForItem(@PathParam("item_id") Integer itemId) {
         return menuService.getItemsByCombinationToAndCategory(itemId, CategoryType.PRILOHA);
+    }
+
+    @GET
+    @Path("dishes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Category> getAllDishes() {
+        return menuService.getAllCategoriesByParentCategory(CategoryType.MAIN_FOOD);
     }
 }
