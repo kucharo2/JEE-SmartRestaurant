@@ -5,6 +5,7 @@ import cz.kucharo2.data.entity.Item;
 import cz.kucharo2.data.enums.CategoryType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Roman on 12/3/2014.
@@ -16,7 +17,7 @@ public interface MenuService {
 	 * @param category parent category
 	 * @return list of categories
 	 */
-	List<Category> getAllCategoriesByParentCategory(Category category);
+	Map<CategoryType, List<Category>> getAllCategoriesByParentCategory(Category category);
 
 	/**
 	 * Returns list of all categories by parent category code
@@ -24,7 +25,7 @@ public interface MenuService {
 	 * @param categoryType parent category type
 	 * @return list of all categories
 	 */
-	List<Category> getAllCategoriesByParentCategory(CategoryType categoryType);
+	Map<CategoryType, List<Category>> getAllCategoriesByParentCategory(CategoryType categoryType);
 
 	/**
 	 * Returns list of items by category

@@ -13,6 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Pavel Matyáš (matyapav@fel.cvut.cz)
@@ -44,7 +45,7 @@ public class MenuEndpoint {
     @GET
     @Path("dishes")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Category> getAllDishes() {
+    public Map<CategoryType, List<Category>> getAllDishes() {
         return menuService.getAllCategoriesByParentCategory(CategoryType.MAIN_FOOD);
     }
 }
