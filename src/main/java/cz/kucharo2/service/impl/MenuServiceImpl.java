@@ -29,14 +29,24 @@ public class MenuServiceImpl implements MenuService {
 	private BillDao billDao;
 
 	@Override
-	public Map<CategoryType, List<Category>> getAllCategoriesByParentCategory(Category category) {
+	public List<Category> getAllCategoriesByParentCategory(Category category) {
 		return getAllCategoriesByParentCategory(category.getCode());
 	}
 
 	@Override
-	public Map<CategoryType, List<Category>> getAllCategoriesByParentCategory(CategoryType categoryType) {
-		Map map = new HashMap<CategoryType, List<Category>>();
-		map.put(categoryType, categoryDao.getCategoryByCode(categoryType).getChildCategories());
+	public List<Category> getAllCategoriesByParentCategory(CategoryType categoryType) {
+		return (List<Category>) categoryDao.getCategoryByCode(categoryType).getChildCategories();
+	}
+
+	@Override
+	public Map<CategoryType, List<Item>> getAllDishesByCode(CategoryType categoryType) {
+		Map map = new HashMap<CategoryType, List<Item>>();
+		List list = (List) categoryDao.getCategoryByCode(categoryType).getChildCategories();
+		for (Iterator<Category> i = list.iterator(); i.hasNext(); ) {
+			Category category = i.next();
+			map.put(category.getCode(), itemDao.getItemsByCategory(category.getCode()));
+		}
+
 		return map;
 	}
 
