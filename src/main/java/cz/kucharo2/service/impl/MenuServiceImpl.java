@@ -10,6 +10,7 @@ import cz.kucharo2.service.MenuService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
  * Created by Roman on 12/3/2014.
  */
 @ApplicationScoped
+@Transactional
 public class MenuServiceImpl implements MenuService {
 
 	@Inject

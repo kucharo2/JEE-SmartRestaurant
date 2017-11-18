@@ -13,11 +13,13 @@ import cz.kucharo2.service.TableService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  * Created by Roman on 12/2/2014.
  */
 @ApplicationScoped
+@Transactional
 public class OrderingServiceImpl implements OrderingService {
 	
 	@Inject

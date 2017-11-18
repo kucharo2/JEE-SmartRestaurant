@@ -9,12 +9,14 @@ import cz.kucharo2.service.CashDeskService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
  * Created by Roman on 12/2/2014.
  */
 @ApplicationScoped
+@Transactional
 public class CashDeskServiceImpl implements CashDeskService {
 
 	@Inject
