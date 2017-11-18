@@ -3,6 +3,7 @@ package cz.kucharo2.data.entity;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * @Author Roman Kuchár <kucharrom@gmail.com>.
@@ -38,8 +39,12 @@ public class BillItem extends DtoEntity {
     @Column(name = PRICE)
     private int price;
 
-    @Column(name = PARENT_ID)
-    private Integer parent_id;
+    @OneToOne
+    @JoinColumn(name = PARENT_ID)
+    private Category parentBillItems;
+
+    @OneToMany(mappedBy = "parentBillItems")
+    private Collection<BillItem> childBillItems;
 
     @Override
     public Integer getId() {
@@ -82,12 +87,20 @@ public class BillItem extends DtoEntity {
         this.price = price;
     }
 
-    public Integer getParent_id() {
-        return parent_id;
+    public Category getParentBillItems() {
+        return parentBillItems;
     }
 
-    public void setParent_id(Integer parent_id) {
-        this.parent_id = parent_id;
+    public void setParentBillItems(Category parentBillItems) {
+        this.parentBillItems = parentBillItems;
+    }
+
+    public Collection<BillItem> getChildBillItems() {
+        return childBillItems;
+    }
+
+    public void setChildBillItems(Collection<BillItem> childBillItems) {
+        this.childBillItems = childBillItems;
     }
 
     @Override
@@ -101,7 +114,6 @@ public class BillItem extends DtoEntity {
         if (price != billItem.price) return false;
         if (!id.equals(billItem.id)) return false;
         if (!bill.equals(billItem.bill)) return false;
-        if (!parent_id.equals(billItem.parent_id)) return false;
         return item.equals(billItem.item);
     }
 
@@ -112,9 +124,6 @@ public class BillItem extends DtoEntity {
         result = 31 * result + item.hashCode();
         result = 31 * result + (paid ? 1 : 0);
         result = 31 * result + price;
-        if (parent_id != null) {
-            result = 31 * result + parent_id.hashCode();
-        }
         return result;
     }
 }
