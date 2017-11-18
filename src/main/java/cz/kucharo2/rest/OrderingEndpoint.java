@@ -2,12 +2,10 @@ package cz.kucharo2.rest;
 
 import cz.kucharo2.rest.model.AddOrderItemModel;
 import cz.kucharo2.service.OrderingService;
+import cz.kucharo2.service.exception.ServiceException;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -23,9 +21,15 @@ public class OrderingEndpoint {
     @Path("addItems")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Integer addItems(AddOrderItemModel model) {
+    public Integer addItems(AddOrderItemModel model) throws ServiceException {
         return orderingService.orderItem(model.getBillId(), model.getTableId(), model.getItemsToAdd()).getId();
     }
 
+    @POST
+    @Path("/confirm")
+    @Consumes(MediaType.TEXT_PLAIN)
+    public void confirmOrder(Integer orderId) throws ServiceException {
+        orderingService.confirmBill(orderId);
+    }
 
 }

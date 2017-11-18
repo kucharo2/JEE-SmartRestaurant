@@ -1,6 +1,7 @@
 package cz.kucharo2.service;
 
 import cz.kucharo2.data.entity.Bill;
+import cz.kucharo2.service.exception.ServiceException;
 
 /**
  * Created by Roman on 12/2/2014.
@@ -16,7 +17,7 @@ public interface OrderingService {
 	 *
 	 * @return created or updated bill
 	 */
-	Bill orderItem(Integer billId, int tableId, Integer... itemId);
+	Bill orderItem(Integer billId, int tableId, Integer... itemId) throws ServiceException;
 
 	/**
 	 * Deletes bill item
@@ -28,7 +29,7 @@ public interface OrderingService {
 	 * Confirms bill by id
 	 * @param billId bill id
 	 */
-	Bill confirmBill(int billId);
+	Bill confirmBill(int billId) throws ServiceException;
 
 	/**
 	 * Returns bill by id

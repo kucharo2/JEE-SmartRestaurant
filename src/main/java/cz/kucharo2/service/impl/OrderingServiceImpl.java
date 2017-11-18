@@ -12,6 +12,7 @@ import cz.kucharo2.service.CashDeskService;
 import cz.kucharo2.service.MenuService;
 import cz.kucharo2.service.OrderingService;
 import cz.kucharo2.service.TableService;
+import cz.kucharo2.service.exception.ServiceException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -42,7 +43,7 @@ public class OrderingServiceImpl implements OrderingService {
 	private BillDao billDao;
 
 	@Override
-	public Bill orderItem(Integer billId, int tableId, Integer... itemIds) {
+	public Bill orderItem(Integer billId, int tableId, Integer... itemIds) throws ServiceException {
 		if (itemIds.length < 1) {
 			throw new IllegalArgumentException("At least one item id must be set.");
 		}
@@ -55,7 +56,7 @@ public class OrderingServiceImpl implements OrderingService {
 			bill = cashDeskService.getBillById(billId);
 		}
 		if (bill.getStatus() != BillStatus.CREATED) {
-			throw new IllegalArgumentException("Not able to add another item on already confirmed order.");
+			throw new ServiceException("Not able to add another item on already confirmed order.");
 		}
 		List<Item> itemsToBeAddToBill = new ArrayList<>();
 		BillItem mainFood = null;
@@ -87,8 +88,12 @@ public class OrderingServiceImpl implements OrderingService {
 	}
 
 	@Override
-	public Bill confirmBill(int billId) {
+	public Bill confirmBill(int billId) throws ServiceException {
 		Bill bill = billDao.getById(billId);
+		if (bill.getStatus() != BillStatus.CREATED) {
+			throw new ServiceException("Cannot confirm order in different state than CREATED");
+		}
+		bill.setStatus(BillStatus.CONFIRMED);
 		billDao.createOrUpdate(bill);
 		return bill;
 	}
