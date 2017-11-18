@@ -81,10 +81,12 @@
                 <div class="table-responsive ">
                     <table class="table table-hover">
                         <tr>
+                            <th>Ks</th>
                             <th>Název</th>
                             <th>Cena</th>
                         </tr>
-                        <tr ng-repeat="selectedDish in selectedDishes">
+                        <tr ng-repeat="selectedDish in selectedDishes track by $index">
+                            <td>{{selectedDish.count}}</td>
                             <td>{{selectedDish.name}}</a></td>
                             <td>{{selectedDish.price}} Kč</td>
                         </tr>

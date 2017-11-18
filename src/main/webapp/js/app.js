@@ -20,9 +20,11 @@ app.controller('MenuListController', function MenuListController($scope, $http) 
     $scope.selectMainDish = function (id) {
         for (var index = 0; index < $scope.items.length; index++) {
             if (id === $scope.items[index].id) {
-                $scope.detailItem = $scope.items[index];
+                var dish = $scope.items[index];
+                dish["count"] = 1;
+                $scope.detailItem = dish;
                 $scope.selectedDishes = [];
-                $scope.selectedDishes.push($scope.items[index]);
+                $scope.selectedDishes.push(dish);
                 fetchCombinationsForItem(id);
                 return;
             }
@@ -32,7 +34,13 @@ app.controller('MenuListController', function MenuListController($scope, $http) 
     $scope.selectSideDish = function (id) {
         for (var index = 0; index < $scope.sideDishes.length; index++) {
             if (id === $scope.sideDishes[index].id) {
-                $scope.selectedDishes.push($scope.sideDishes[index]);
+                var sideDish = $scope.sideDishes[index];
+                if((index = $scope.selectedDishes.indexOf(sideDish)) >= 0){
+                    $scope.selectedDishes[index].count++;
+                }else {
+                    sideDish["count"] = 1;
+                    $scope.selectedDishes.push(sideDish);
+                }
                 return;
             }
         }
