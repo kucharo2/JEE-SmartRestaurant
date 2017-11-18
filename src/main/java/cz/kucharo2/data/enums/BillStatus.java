@@ -7,5 +7,6 @@ public enum BillStatus {
     CREATED,
     CONFIRMED,
     IN_PROGRES,
-    FINISHED
+    FINISHED,
+    CANCELED
 }
