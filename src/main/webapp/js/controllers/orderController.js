@@ -27,6 +27,10 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
             })
         }
         $scope.order.push(orderItem);
+        $("#basketButton").addClass("shake");
+        setTimeout(function() {
+            $("#basketButton").removeClass("shake");
+        }, 800);
     };
 
     $rootScope.$on('addToOrder', function(event, args) {

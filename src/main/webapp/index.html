@@ -165,8 +165,8 @@
         </div>
         <!-- Order -->
         <div class="order" ng-controller="OrderController">
-            <button class="btn btn-success right-top-corner" ng-click="showOrderDialog()">
-                Košík
+            <button id="basketButton" class="btn btn-success right-top-corner" ng-click="showOrderDialog()">
+                <i class="fa fa-sticky-note-o" aria-hidden="true"></i> Vaše objednávka [{{order.length}}]
             </button>
             <div id="orderModal" class="modal">
                 <div class="modal-dialog modal-lg">
