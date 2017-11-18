@@ -12,7 +12,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -42,15 +41,45 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Map<Category, List<Item>> getAllDishesByCategoryCode(CategoryType categoryType) {
-        Collection<Category> list = categoryDao.getCategoryByCode(categoryType).getChildCategories();
-        return list.stream().collect(Collectors.toMap(Function.identity(), c->itemDao.getItemsByCategory(c.getCode())));
+    public Map<Category, List<Item>> getAllItemsByCategoryCode(CategoryType categoryType) {
+        Map<Category, List<Item>> map = new HashMap<>();
+        Collection<Category> categories = categoryDao.getCategoryByCode(categoryType).getChildCategories();
+        List<CategoryType> categoryTypes = new ArrayList<>();
+
+		for (Category category : categories) {
+            categoryTypes.add(category.getCode());
+            map.put(category, new ArrayList<>());
+        }
+
+        for (Item item : itemDao.getItemsByListCategories(categoryTypes)) {
+            if (map.containsKey(item.getCategory())){
+                List<Item> items = map.get(item.getCategory());
+                items.add(item);
+            }
+        }
+
+        return map;
     }
 
     @Override
-    public Map<String, List<Item>> getAllDishesByCategoryCodeKeyedByCategoryName(CategoryType categoryType) {
-        Collection<Category> list = categoryDao.getCategoryByCode(categoryType).getChildCategories();
-        return list.stream().collect(Collectors.toMap(Category::getName, c -> itemDao.getItemsByCategory(c.getCode())));
+    public Map<String, List<Item>> getAllItemsByCategoryCodeKeyedByCategoryName (CategoryType categoryType){
+        Collection<Category> categories = categoryDao.getCategoryByCode(categoryType).getChildCategories();
+        List<CategoryType> categoryTypes = new ArrayList<>();
+        Map<String, List<Item>> map = new HashMap<>();
+
+        for (Category category : categories) {
+            categoryTypes.add(category.getCode());
+            map.put(category.getName(), new ArrayList<>());
+        }
+
+        for (Item item : itemDao.getItemsByListCategories(categoryTypes)) {
+            if (map.containsKey(item.getCategory().getName())){
+                List<Item> items = map.get(item.getCategory().getName());
+                items.add(item);
+            }
+        }
+
+        return map;
     }
 
     @Override
@@ -58,8 +87,9 @@ public class MenuServiceImpl implements MenuService {
         return itemDao.getItemsByCategory(code);
     }
 
+
     @Override
-    public List<Item> getItemsByCombinationToAndCategory(int itemId, CategoryType categoryType) {
+    public List<Item> getItemsByCombinationToAndCategory ( int itemId, CategoryType categoryType){
         Item itemWithCombinations = itemDao.getItemsWithCombinations(itemId);
 
         Set<Item> combinations = new HashSet<>();
@@ -79,8 +109,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Item getItemById(int id) {
+    public Item getItemById ( int id){
         return itemDao.getById(id);
     }
-
 }
