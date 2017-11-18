@@ -11,6 +11,8 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.inject.Inject;
+
 /**
  * Copyright 2017 IEAP CTU
  * Author: Jakub Begera (jakub.begera@cvut.cz)
@@ -18,17 +20,21 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class BillItemImplTest {
 
+    @Inject
+    private BillItemDao billItemDao;
+
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)
-//                .addPackages(true, BillItemDao.class.getPackage())
-//                .addPackages(true, BillItem.class.getPackage())
-//                .addPackages(true, BillStatus.class.getPackage())
+                .addPackages(true, BillItemDao.class.getPackage())
+                .addPackages(true, BillItem.class.getPackage())
+                .addPackages(true, BillStatus.class.getPackage())
+                .addAsResource("META-INF/persistence.xml")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
     @Test
     public void testParentId() throws Exception {
-
+        billItemDao.getAll();
     }
 }

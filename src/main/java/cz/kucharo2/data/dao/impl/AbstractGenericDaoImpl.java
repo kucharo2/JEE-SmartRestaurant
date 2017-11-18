@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public abstract class AbstractGenericDaoImpl<T extends DtoEntity> implements AbstractGenericDao<T> {
 
-    @PersistenceContext
+    @PersistenceContext(name = "primary")
     private EntityManager entityManager;
 
     private Class<T> clazz;
