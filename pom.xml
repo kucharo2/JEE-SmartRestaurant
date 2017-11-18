@@ -20,12 +20,25 @@
 		<junit.version>4.10</junit.version>
 		<mockito.version>1.8.5</mockito.version>
         <arquillian.version>1.1.5.Final</arquillian.version>
+		<wildfly.version>8.2.0.Final</wildfly.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<javaee7.web.spec.version>1.0.3.Final</javaee7.web.spec.version>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-web-7.0</artifactId>
+				<version>${javaee7.web.spec.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -35,13 +48,13 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.jboss.spec</groupId>
-			<artifactId>jboss-javaee-web-7.0</artifactId>
-			<version>${javaee7.web.spec.version}</version>
-			<scope>provided</scope>
-			<type>pom</type>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.jboss.spec</groupId>-->
+			<!--<artifactId>jboss-javaee-web-7.0</artifactId>-->
+			<!--<version>${javaee7.web.spec.version}</version>-->
+			<!--<scope>provided</scope>-->
+			<!--<type>pom</type>-->
+		<!--</dependency>-->
 
 		<!--Database connection dependencies-->
 		<dependency>
@@ -183,4 +196,87 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+	<profiles>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<!-- We add the JBoss repository as we need the JBoss AS connectors for Arquillian -->
+			<repositories>
+				<!-- The JBoss Community public repository is a composite repository of several major repositories -->
+				<!-- see http://community.jboss.org/wiki/MavenGettingStarted-Users -->
+				<repository>
+					<id>jboss-public-repository</id>
+					<name>JBoss Repository</name>
+					<url>http://repository.jboss.org/nexus/content/groups/public</url>
+					<!-- These optional flags are designed to speed up your builds by reducing remote server calls -->
+					<releases>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+
+			<pluginRepositories>
+				<pluginRepository>
+					<id>jboss-public-repository</id>
+					<name>JBoss Repository</name>
+					<url>http://repository.jboss.org/nexus/content/groups/public</url>
+					<releases>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+
+			<!-- An optional Arquillian testing profile that executes tests in your JBoss AS instance -->
+			<!-- This profile will start a new JBoss AS instance, and execute the test, shutting it down when done -->
+			<!-- Run with: mvn clean test -Parq-jbossas-managed -->
+			<id>arq-jbossas-managed</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-container-managed</artifactId>
+					<version>${wildfly.version}</version>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<groupId>sun.jdk</groupId>
+							<artifactId>jconsole</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>org.jboss.arquillian.protocol</groupId>
+					<artifactId>arquillian-protocol-servlet</artifactId>
+					<version>${arquillian.version}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn -->
+			<!-- Use this profile for any OpenShift specific customization your app will need -->
+			<!-- By default that is to put the resulting archive into the 'deployments' folder -->
+			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+			<id>openshift</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>2.1.1</version>
+						<configuration>
+							<outputDirectory>deployments</outputDirectory>
+							<warName>ROOT</warName>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
