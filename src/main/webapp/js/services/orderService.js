@@ -15,12 +15,12 @@ app.service('OrderService', function ($http) {
                 itemsIds.push(orderItem[i].id);
             }
         }
-        console.log(itemsIds);
         var data = {
             "tableId" : tableid,
             "billId": billid,
             "itemsToAdd" :  createItemIdsFromOrderItem(orderItem)
         };
+        console.log(data);
         return $http.post(apiPrefix + "/order/addItems", data)
     };
 

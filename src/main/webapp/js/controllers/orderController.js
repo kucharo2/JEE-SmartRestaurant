@@ -75,7 +75,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
             }
         }
         //push last item group
-        itemArr.push(itemGroup);
+        if(itemGroup.length !== 0){
+            itemArr.push(itemGroup);
+        }
 
         $scope.order = itemArr;
         shakeButton();
