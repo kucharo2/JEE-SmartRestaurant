@@ -1,7 +1,5 @@
 package cz.kucharo2.rest.model;
 
-import java.util.List;
-
 /**
  * @Author Roman Kuchár <kucharrom@gmail.com>.
  */
