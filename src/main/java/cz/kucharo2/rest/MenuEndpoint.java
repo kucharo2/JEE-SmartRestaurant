@@ -38,7 +38,7 @@ public class MenuEndpoint {
     @GET
     @Path("dishes")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Category, List<Item>> getAllDishes() {
-        return menuService.getAllDishesByCategoryCode(CategoryType.MAIN_FOOD);
+    public Map<String, List<Item>> getAllDishes() {
+        return menuService.getAllDishesByCategoryCodeKeyedByCategoryName(CategoryType.MAIN_FOOD);
     }
 }

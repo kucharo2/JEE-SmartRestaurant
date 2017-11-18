@@ -27,7 +27,19 @@ public interface MenuService {
 	 */
 	List<Category> getAllCategoriesByParentCategory(CategoryType categoryType);
 
+	/**
+	 * Returns map of category-dishes pairs = category as key and its corresponding dishes as value
+	 * @param categoryType category type
+	 * @return map of category dishes pairs
+	 */
 	Map<Category, List<Item>> getAllDishesByCategoryCode(CategoryType categoryType);
+
+	/**
+	 * Returns map of category name -dishes pairs = category name as key and its corresponding dishes as value
+	 * @param categoryType category type
+	 * @return map of category dishes pairs
+	 */
+	Map<String, List<Item>> getAllDishesByCategoryCodeKeyedByCategoryName(CategoryType categoryType);
 
 	/**
 	 * Returns list of items by category
