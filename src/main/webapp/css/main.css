@@ -21,7 +21,7 @@ body {
     background-color: rgba(255, 255, 255, 0.9);
 }
 
-.order {
+.actualSelection {
     float: right;
     padding: 25px;
     position: absolute;
@@ -40,6 +40,7 @@ body {
     display: inline-block;
     padding-bottom: 10px;
     overflow-y: auto;
+    width: 100%;
 }
 
 .dish-image {
@@ -75,4 +76,10 @@ body {
 
 #actualChoiceTable > tbody tr:last-child td {
     border-bottom: 2px solid #000;
+}
+
+.right-top-corner {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
