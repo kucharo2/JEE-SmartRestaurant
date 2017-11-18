@@ -21,6 +21,7 @@ public class Category extends DtoEntity {
     public static final String CATEGORY_NAME = "category_name";
     public static final String CODE = "code";
     public static final String PARENT_ID = "parent_id";
+    public static final String PRIORITY = "priority";
 
     @Id
     @Column(name = CATEGORY_ID)
@@ -34,12 +35,16 @@ public class Category extends DtoEntity {
     @Column(name = CATEGORY_NAME)
     private String name;
 
+    @Column(name = PRIORITY)
+    private Integer priority;
+
     @ManyToOne
     @JoinColumn(name = PARENT_ID)
     @JsonIgnore
     private Category parentCategory;
 
     @OneToMany(mappedBy = "parentCategory")
+    @OrderBy("priority ASC")
     @JsonIgnore
     private Collection<Category> childCategories;
 
@@ -82,6 +87,14 @@ public class Category extends DtoEntity {
 
     public void setChildCategories(Collection<Category> childCategories) {
         this.childCategories = childCategories;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setOrder(Integer order) {
+        this.priority = order;
     }
 
     @Override
