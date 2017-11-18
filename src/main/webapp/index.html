@@ -13,31 +13,46 @@
     <script src="js/app.js"></script>
 </head>
 <body>
-<!-- Modal -->
-<div id="unconfirmedSelectionModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Confirmation</h4>
-            </div>
-            <div class="modal-body">
-                <p>Do you want to save changes you made to document before closing?</p>
-                <p class="text-warning"><small>If you don't save, your changes will be lost.</small></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- Header -->
 <div class="header text-center">
     <h1>SMART RESTAURANT</h1>
 </div>
 <div class="container-fluid">
     <div ng-controller="MenuListController">
+        <!-- Modal -->
+        <div id="unconfirmedSelectionModal" class="modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Nepotvrzený předchozí výběr</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Chystáte se vybrat další jídlo, ale nepotvrdili jste váš předchozí výběr jídla. Co si přejete udělat?</p>
+                        <h4>Předchozí výběr</h4>
+                        <div class="table-responsive ">
+                            <table class="table table-hover">
+                                <tr>
+                                    <th>Ks</th>
+                                    <th>Název</th>
+                                    <th>Cena</th>
+                                </tr>
+                                <tr ng-repeat="selectedDish in selectedDishes track by $index">
+                                    <td>{{selectedDish.count}}</td>
+                                    <td>{{selectedDish.name}}</a></td>
+                                    <td>{{selectedDish.price}} Kč</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="continuePrevSelectionBtn" type="button" class="btn btn-default">Pokračovat v předchozím výběru</button>
+                        <button id="cancelPrevSelectionBtn" type="button" class="btn btn-default">Zrušit předchozí výběr</button>
+                        <button id="confirmPrevSelectionBtn" type="button" class="btn btn-primary">Potvrdit předchozí výběr</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Table of dishes -->
         <div class="content-absolute half-of-parent">
             <h1>Nabídka</h1>
@@ -55,7 +70,7 @@
                         <td>{{dish.name}}</a></td>
                         <td>{{dish.price}} Kč</td>
                         <td class="text-center">
-                            <button class="btn btn-primary" ng-click="selectMainDish(category, dish)">Vybrat</button>
+                            <button class="btn btn-primary" ng-click="startSelectingMainDish(category, dish)">Vybrat</button>
                         </td>
                     </tr>
                 </table>
@@ -94,7 +109,7 @@
                     </table>
                 </div>
             </div>
-            <button class="btn btn-lg btn-success">Potvrdit</button>
+            <button class="btn btn-lg btn-success" ng-click="confirmSelection()">Potvrdit</button>
         </div>
         <!-- Order -->
         <div class="order">
@@ -111,6 +126,23 @@
                             <td>{{selectedDish.count}}</td>
                             <td>{{selectedDish.name}}</a></td>
                             <td>{{selectedDish.price}} Kč</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="dish-info">
+                <h3>Aktuální objednávka</h3>
+                <div class="table-responsive ">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Ks</th>
+                            <th>Název</th>
+                            <th>Cena</th>
+                        </tr>
+                        <tr ng-repeat="dish in order track by $index">
+                            <td>{{dish.count}}</td>
+                            <td>{{dish.name}}</a></td>
+                            <td>{{dish.price}} Kč</td>
                         </tr>
                     </table>
                 </div>

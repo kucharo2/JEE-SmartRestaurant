@@ -11,6 +11,7 @@ var apiPrefix = "api/v1";
  */
 app.controller('MenuListController', function MenuListController($scope, $http) {
     $scope.selectedDishes = [];
+    $scope.order = [];
 
     $http.get(apiPrefix + "/menu/dishes")
         .then(function (response) {
@@ -18,12 +19,43 @@ app.controller('MenuListController', function MenuListController($scope, $http) 
             $scope.items = response.data;
         });
 
-    $scope.selectMainDish = function (category, dish) {
-        dish["count"] = 1;
-        $scope.detailItem = dish;
+    $scope.startSelectingMainDish = function (category, dish) {
+        if($scope.selectedDishes.length > 0){
+            showConfirmSelectionDialog();
+            $("#continuePrevSelectionBtn").click(function () {
+               hideConfirmSelectionDialog();
+            });
+            $("#cancelPrevSelectionBtn").click(function () {
+                $scope.discardSelection();
+                selectMainDish(category, dish);
+                hideConfirmSelectionDialog();
+            });
+            $("#confirmPrevSelectionBtn").click(function () {
+                $scope.confirmSelection();
+                selectMainDish(category, dish);
+                hideConfirmSelectionDialog();
+            });
+        } else {
+            selectMainDish(category, dish);
+        }
+    };
+
+    $scope.discardSelection = function () {
         $scope.selectedDishes = [];
-        $scope.selectedDishes.push(dish);
-        fetchCombinationsForItem(dish.id);
+    };
+
+    $scope.confirmSelection = function(){
+        for(var i=0; i < $scope.selectedDishes.length; i++){
+            var dish = $scope.selectedDishes[i];
+            var index = -1;
+            if((index = $scope.order.indexOf(dish)) >= 0){
+                $scope.order[index].count++;
+            }else {
+                dish["count"] = 1;
+                $scope.order.push(dish);
+            }
+        }
+        $scope.selectedDishes = [];
     };
 
     $scope.selectSideDish = function (sideDish) {
@@ -42,10 +74,22 @@ app.controller('MenuListController', function MenuListController($scope, $http) 
                 $scope.sideDishes = response.data;
             });
 
+    };
+
+    var selectMainDish = function (category, dish) {
+        dish["count"] = 1;
+        $scope.detailItem = dish;
+        $scope.selectedDishes = [];
+        $scope.selectedDishes.push(dish);
+        fetchCombinationsForItem(dish.id);
     }
 
-    var showWarningDialog = function(){
+    var showConfirmSelectionDialog = function(){
        $("#unconfirmedSelectionModal").show();
+    }
+
+    var hideConfirmSelectionDialog = function () {
+        $("#unconfirmedSelectionModal").hide();
     }
 
 });
