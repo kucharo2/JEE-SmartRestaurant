@@ -6,7 +6,7 @@ package cz.kucharo2.data.enums;
 public enum AccountRole {
 
     COOKER,
-    CUSTOMER,
-    ANNONYM
+    REGISTERED_CUSTOMER,
+    ANONYMOUS_CUSTOMER
 
 }
