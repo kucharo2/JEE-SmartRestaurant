@@ -42,11 +42,11 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Map<Category, List<Item>> getAllDishesByCategoryCode(CategoryType categoryType) {
-		Map map = new HashMap<Category, List<Item>>();
+		Map<Category, List<Item>> map = new HashMap<>();
 		List list = (List) categoryDao.getCategoryByCode(categoryType).getChildCategories();
 		for (Iterator<Category> i = list.iterator(); i.hasNext(); ) {
 			Category category = i.next();
-			map.put(category.getCode(), itemDao.getItemsByCategory(category.getCode()));
+			map.put(category, itemDao.getItemsByCategory(category.getCode()));
 		}
 
 		return map;

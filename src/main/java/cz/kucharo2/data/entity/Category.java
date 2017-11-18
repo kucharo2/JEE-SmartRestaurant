@@ -6,7 +6,6 @@ import cz.kucharo2.data.enums.CategoryType;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
-import javax.persistence.Table;
 import java.util.Collection;
 
 /**
@@ -36,6 +35,7 @@ public class Category extends DtoEntity {
 
     @ManyToOne
     @JoinColumn(name = PARENT_ID)
+    @JsonIgnore
     private Category parentCategory;
 
     @OneToMany(mappedBy = "parentCategory")
@@ -108,14 +108,4 @@ public class Category extends DtoEntity {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", parentCategory=" + parentCategory +
-                ", childCategories=" + childCategories +
-                '}';
-    }
 }
