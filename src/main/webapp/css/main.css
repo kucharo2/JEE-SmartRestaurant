@@ -1,6 +1,11 @@
+body {
+    background-image: url("../img/background.jpg");
+    background-size: 100%;
+}
 .half-of-parent {
     width: 40%;
     display: inline-block;
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .right-side {
@@ -9,10 +14,11 @@
     position: absolute;
     left: 40%;
     bottom: 0px;
-    top: 100px;
+    top: 60px;
     height: 90%;
     display: flex;
     flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .order {
@@ -21,10 +27,13 @@
     position: absolute;
     left: 80%;
     bottom: 0px;
-    top: 100px;
-    height: 90%;
+    top: 60px;
+    height: 93%;
     display: flex;
     flex-direction: column;
+    width: 20%;
+    border-left: 2px solid black;
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .dish-info {
@@ -39,15 +48,15 @@
 }
 
 .header {
-    height: 100px;
-    background-color: darkgray;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.9);
     width: 100%;
 }
 
 .content-absolute {
     position: absolute;
-    top: 100px;
-    bottom: 40px;
+    top: 60px;
+    bottom: 0px;
     left: 0;
     right: 0;
     overflow-y: scroll;
@@ -59,3 +68,11 @@
     flex-grow: 1;
 }
 
+#actualChoiceTable > table {
+    margin: 0;
+    border-spacing: 0;
+}
+
+#actualChoiceTable > tbody tr:last-child td {
+    border-bottom: 2px solid #000;
+}
