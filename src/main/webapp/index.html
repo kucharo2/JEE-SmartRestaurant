@@ -75,24 +75,25 @@
         <div class="content-absolute half-of-parent">
             <h1 class="text-center">Nabídka</h1>
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover hideOverflow">
                     <tr>
                         <th>Název</th>
                         <th>Cena</th>
                         <th class="text-center">Akce</th>
                     </tr>
                     <tbody ng-repeat="(category, dishes) in items">
-                    <tr>
-                        <th colspan="3" class="text-center btn-primary">{{category}}</th>
-                    </tr>
-                    <tr ng-repeat="dish in dishes">
-                        <td>{{dish.name}}</td>
-                        <td>{{dish.price}} Kč</td>
-                        <td class="text-center">
-                            <button class="btn btn-primary" ng-click="startSelectingMainDish(category, dish)">Vybrat
-                            </button>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th colspan="3" class="text-center btn-outline-dark categoryHeading" ng-click="toggleCategoryItems($index)">{{category}}</th>
+                        </tr>
+                        <tr ng-repeat="dish in dishes" class="category{{$parent.$index}} invisibleElement">
+                            <td>{{dish.name}}</td>
+                            <td>{{dish.price}} Kč</td>
+                            <td class="text-center">
+                                <button class="btn btn-primary" ng-click="startSelectingMainDish(category, dish)">Vybrat
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
                     </tbody>
                 </table>
             </div>

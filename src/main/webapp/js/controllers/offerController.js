@@ -73,6 +73,10 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
         }
     };
 
+    $scope.toggleCategoryItems = function (categoryIndex) {
+        $('.category' + categoryIndex).toggleClass('invisibleElement')
+    };
+
     var selectMainDish = function (category, dish) {
         dish["count"] = 1;
         dish["main"] = true;

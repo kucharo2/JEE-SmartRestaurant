@@ -93,6 +93,20 @@ body {
     animation-duration: 1s;
 }
 
+.hideOverflow {
+    overflow: hidden;
+}
+
+.invisibleElement {
+    visibility: collapse;
+}
+
+.categoryHeading {
+    text-transform: uppercase;
+}
+.categoryHeading:hover {
+    cursor: pointer;
+}
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes shake {
     10%, 90% {
