@@ -28,7 +28,7 @@ public class CashDeskServiceImpl implements CashDeskService {
 
 	@Override
 	public Bill getBillById(int id) {
-		return billDao.getById(id);
+		return billDao.getBillWithItems(id);
 	}
 
 	@Override

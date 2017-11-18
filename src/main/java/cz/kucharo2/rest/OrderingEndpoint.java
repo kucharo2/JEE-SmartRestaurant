@@ -1,5 +1,6 @@
 package cz.kucharo2.rest;
 
+import cz.kucharo2.data.entity.Bill;
 import cz.kucharo2.rest.model.AddOrderItemModel;
 import cz.kucharo2.service.OrderingService;
 import cz.kucharo2.service.exception.ServiceException;
@@ -21,8 +22,8 @@ public class OrderingEndpoint {
     @Path("addItems")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Integer addItems(AddOrderItemModel model) throws ServiceException {
-        return orderingService.orderItem(model.getBillId(), model.getTableId(), model.getItemsToAdd()).getId();
+    public Bill addItems(AddOrderItemModel model) throws ServiceException {
+        return orderingService.orderItem(model.getBillId(), model.getTableId(), model.getItemsToAdd());
     }
 
     @POST

@@ -25,4 +25,6 @@ public interface BillDao extends AbstractGenericDao<Bill> {
 	 * @param tableId table id
 	 */
 	Bill getCreatedBillOnTable(int tableId);
+
+	Bill getBillWithItems(int billId);
 }

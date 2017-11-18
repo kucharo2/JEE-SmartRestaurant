@@ -5,6 +5,7 @@ import cz.kucharo2.data.entity.Bill;
 import cz.kucharo2.data.entity.BillItem;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,5 +38,12 @@ public class BillDaoImpl extends AbstractGenericDaoImpl<Bill> implements BillDao
         params.put("tableId", tableId);
 
         return getByWhereConditionSingleResult(query, params);
+    }
+
+    @Override
+    public Bill getBillWithItems(int billId) {
+        Query query = getEntityManager().createQuery("select b from Bill b join fetch b.billItems where b.id = :billId")
+                .setParameter("billId", billId);
+        return (Bill) query.getSingleResult();
     }
 }
