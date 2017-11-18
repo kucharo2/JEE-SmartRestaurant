@@ -51,10 +51,11 @@ public class MenuServiceImpl implements MenuService {
             map.put(category, new ArrayList<>());
         }
 
-        for (Item item : itemDao.getItemsByListCategories(categoryTypes)) {
+        List<Item> items = itemDao.getItemsByListCategories(categoryTypes);
+        for (Item item : items) {
             if (map.containsKey(item.getCategory())){
-                List<Item> items = map.get(item.getCategory());
-                items.add(item);
+                List<Item> currentItems = map.get(item.getCategory());
+                currentItems.add(item);
             }
         }
 
@@ -72,10 +73,11 @@ public class MenuServiceImpl implements MenuService {
             map.put(category.getName(), new ArrayList<>());
         }
 
-        for (Item item : itemDao.getItemsByListCategories(categoryTypes)) {
+        List<Item> items = itemDao.getItemsByListCategories(categoryTypes);
+        for (Item item : items) {
             if (map.containsKey(item.getCategory().getName())){
-                List<Item> items = map.get(item.getCategory().getName());
-                items.add(item);
+                List<Item> currentItems = map.get(item.getCategory().getName());
+                currentItems.add(item);
             }
         }
 
