@@ -1,13 +1,9 @@
 app.service('OrderService', function ($http) {
 
     this.createAndAddItemToOrder = function (tableid, orderItem) {
-        var itemsIds = [];
-        for(var i=0; i < orderItem.length; i++){
-            itemsIds.push(orderItem[i].id);
-        }
         var data = {
-            "tableId" : 1,
-            "itemsToAdd" : itemsIds
+            "tableId" : tableid,
+            "itemsToAdd" : createItemIdsFromOrderItem(orderItem)
         };
         return $http.post(apiPrefix + "/order/addItems", data)
     };
@@ -15,14 +11,30 @@ app.service('OrderService', function ($http) {
     this.addItemToOrder = function (tableid, billid, orderItem) {
         var itemsIds = [];
         for(var i=0; i < orderItem.length; i++){
-            itemsIds.push(orderItem[i].id);
+            for(var j=0; j < orderItem[i].count; j++){
+                itemsIds.push(orderItem[i].id);
+            }
         }
         var data = {
-            "tableId" : 1,
-            "billId": 2,
-            "itemsToAdd" : itemsIds
+            "tableId" : tableid,
+            "billId": billid,
+            "itemsToAdd" :  createItemIdsFromOrderItem(orderItem)
         };
         return $http.post(apiPrefix + "/order/addItems", data)
     };
+    
+    this.removeItemFromOrder = function (tableid, billid, item) {
+        $http.delete(apiPrefix + "/order/deleteItem/", billid)
+    };
+
+    var createItemIdsFromOrderItem = function (orderItem) {
+        var itemsIds = [];
+        for(var i=0; i < orderItem.length; i++){
+            for(var j=0; j < orderItem[i].count; j++) {
+                itemsIds.push(orderItem[i].id);
+            }
+        }
+        return itemsIds;
+    }
 
 });
