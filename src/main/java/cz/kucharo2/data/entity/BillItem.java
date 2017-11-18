@@ -39,11 +39,11 @@ public class BillItem extends DtoEntity {
     @Column(name = PRICE)
     private int price;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = PARENT_ID)
-    private Category parentBillItems;
+    private BillItem parentBillItem;
 
-    @OneToMany(mappedBy = "parentBillItems")
+    @OneToMany(mappedBy = "parentBillItem")
     private Collection<BillItem> childBillItems;
 
     @Override
@@ -87,12 +87,12 @@ public class BillItem extends DtoEntity {
         this.price = price;
     }
 
-    public Category getParentBillItems() {
-        return parentBillItems;
+    public BillItem getParentBillItem() {
+        return parentBillItem;
     }
 
-    public void setParentBillItems(Category parentBillItems) {
-        this.parentBillItems = parentBillItems;
+    public void setParentBillItem(BillItem parentBillItems) {
+        this.parentBillItem = parentBillItems;
     }
 
     public Collection<BillItem> getChildBillItems() {
