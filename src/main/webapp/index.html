@@ -55,7 +55,7 @@
                         <td>{{dish.name}}</a></td>
                         <td>{{dish.price}} Kč</td>
                         <td class="text-center">
-                            <button class="btn btn-primary" ng-click="selectMainDish(item.id)">Vybrat</button>
+                            <button class="btn btn-primary" ng-click="selectMainDish(category, dish)">Vybrat</button>
                         </td>
                     </tr>
                 </table>
@@ -88,7 +88,7 @@
                             <td>{{sideDish.name}}</a></td>
                             <td>{{sideDish.price}} Kč</td>
                             <td class="text-center">
-                                <button class="btn btn-primary" ng-click="selectSideDish(sideDish.id)">Vybrat</button>
+                                <button class="btn btn-primary" ng-click="selectSideDish(sideDish)">Vybrat</button>
                             </td>
                         </tr>
                     </table>

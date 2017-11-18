@@ -18,32 +18,21 @@ app.controller('MenuListController', function MenuListController($scope, $http) 
             $scope.items = response.data;
         });
 
-    $scope.selectMainDish = function (id) {
-        for (var index = 0; index < $scope.items.length; index++) {
-            if (id === $scope.items[index].id) {
-                var dish = $scope.items[index];
-                dish["count"] = 1;
-                $scope.detailItem = dish;
-                $scope.selectedDishes = [];
-                $scope.selectedDishes.push(dish);
-                fetchCombinationsForItem(id);
-                return;
-            }
-        }
+    $scope.selectMainDish = function (category, dish) {
+        dish["count"] = 1;
+        $scope.detailItem = dish;
+        $scope.selectedDishes = [];
+        $scope.selectedDishes.push(dish);
+        fetchCombinationsForItem(dish.id);
     };
 
-    $scope.selectSideDish = function (id) {
-        for (var index = 0; index < $scope.sideDishes.length; index++) {
-            if (id === $scope.sideDishes[index].id) {
-                var sideDish = $scope.sideDishes[index];
-                if((index = $scope.selectedDishes.indexOf(sideDish)) >= 0){
-                    $scope.selectedDishes[index].count++;
-                }else {
-                    sideDish["count"] = 1;
-                    $scope.selectedDishes.push(sideDish);
-                }
-                return;
-            }
+    $scope.selectSideDish = function (sideDish) {
+        var index = -1;
+        if((index = $scope.selectedDishes.indexOf(sideDish)) >= 0){
+            $scope.selectedDishes[index].count++;
+        }else {
+            sideDish["count"] = 1;
+            $scope.selectedDishes.push(sideDish);
         }
     };
 
