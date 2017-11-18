@@ -19,6 +19,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public class OrderingServiceImpl implements OrderingService {
 	private BillDao billDao;
 
 	@Override
-	public Bill orderItem(AddOrderItemModel model) throws ServiceException {
+	public Integer orderItem(AddOrderItemModel model) throws ServiceException {
 		if (model.getItemsToAdd().length < 1) {
 			throw new IllegalArgumentException("At least one item id must be set.");
 		}
@@ -80,17 +81,22 @@ public class OrderingServiceImpl implements OrderingService {
 			}
 			cashDeskService.createBillItem(billItem);
 		}
-		return cashDeskService.getBillById(bill.getId());
+		return cashDeskService.getBillById(bill.getId()).getId();
 	}
 
 	@Override
-	public boolean removeItemFomOrder(int billItemId) throws ServiceException {
+	public Integer removeItemFomOrder(int billItemId) throws ServiceException {
 		Bill bill = billItemDao.getById(billItemId).getBill();
 		if (bill.getStatus() != BillStatus.CREATED){
 			throw new ServiceException("Cannot delete item from order, because it's in different state than CREATED");
 		}
-
-		return billItemDao.delete(billItemDao.getById(billItemId));
+		BillItem billItem = billItemDao.getById(billItemId);
+		Collection<BillItem> childs = billItem.getChildBillItems();
+		for (BillItem child : childs) {
+			billItemDao.delete(child);
+		}
+		billItemDao.delete(billItemDao.getById(billItemId));
+		return bill.getId();
 	}
 
 	@Override

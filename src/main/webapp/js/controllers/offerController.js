@@ -12,15 +12,15 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
     $scope.startSelectingMainDish = function (category, dish) {
         if($scope.selectedDishes.length > 0){
             showConfirmSelectionDialog();
-            $("#continuePrevSelectionBtn").click(function () {
+            $("#continuePrevSelectionBtn").off('click').on('click', function () {
                 hideConfirmSelectionDialog();
             });
-            $("#cancelPrevSelectionBtn").click(function () {
+            $("#cancelPrevSelectionBtn").off('click').on('click', function () {
                 $scope.discardSelection();
                 selectMainDish(category, dish);
                 hideConfirmSelectionDialog();
             });
-            $("#confirmPrevSelectionBtn").click(function () {
+            $("#confirmPrevSelectionBtn").off('click').on('click', function () {
                 $scope.confirmSelection();
                 selectMainDish(category, dish);
                 hideConfirmSelectionDialog();

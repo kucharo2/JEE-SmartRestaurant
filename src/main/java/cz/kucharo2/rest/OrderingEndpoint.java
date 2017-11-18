@@ -23,7 +23,8 @@ public class OrderingEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Bill addItems(AddOrderItemModel model) throws ServiceException {
-        return orderingService.orderItem(model);
+        Integer billId = orderingService.orderItem(model);
+        return orderingService.getBillById(billId);
     }
 
     @POST
@@ -32,9 +33,10 @@ public class OrderingEndpoint {
         orderingService.confirmBill(orderId);
     }
     @DELETE
-    @Path("deleteItem/{orderId}")
-    public void deleteItems(@PathParam("orderId") Integer orderId) throws ServiceException {
-        orderingService.removeItemFomOrder(orderId);
+    @Path("deleteItem/{billItemId}")
+    public Bill deleteItems(@PathParam("billItemId") Integer billItemId) throws ServiceException {
+        Integer billId  = orderingService.removeItemFomOrder(billItemId);
+        return orderingService.getBillById(billId);
     }
 
 }

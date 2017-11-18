@@ -183,10 +183,6 @@ public class Item extends DtoEntity {
                 ", name='" + name + '\'' +
                 ", code='" + code + '\'' +
                 ", description='" + description + '\'' +
-                ", reviews=" + reviews +
-                ", category=" + category +
-                ", itemCombination=" + itemCombination +
-                ", itemCombinationTo=" + itemCombinationTo +
                 '}';
     }
 }

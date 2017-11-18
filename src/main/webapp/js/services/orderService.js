@@ -15,6 +15,7 @@ app.service('OrderService', function ($http) {
                 itemsIds.push(orderItem[i].id);
             }
         }
+        console.log(itemsIds);
         var data = {
             "tableId" : tableid,
             "billId": billid,
@@ -22,9 +23,9 @@ app.service('OrderService', function ($http) {
         };
         return $http.post(apiPrefix + "/order/addItems", data)
     };
-    
-    this.removeItemFromOrder = function (tableid, billid, item) {
-        $http.delete(apiPrefix + "/order/deleteItem/", billid)
+
+    this.removeItemFromOrder = function (billItemId) {
+        return $http.delete(apiPrefix + "/order/deleteItem/"+billItemId);
     };
 
     var createItemIdsFromOrderItem = function (orderItem) {

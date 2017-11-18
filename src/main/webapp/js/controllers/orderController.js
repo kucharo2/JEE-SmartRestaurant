@@ -3,7 +3,6 @@
  */
 app.controller('OrderController', function MenuListController($scope, $rootScope, OrderService) {
     $scope.order = [];
-    $scope.billId = -1;
     $scope.tableId = 1; //TODO dummy
 
     $scope.showOrderDialog = function () {
@@ -15,31 +14,29 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     };
 
     $scope.decreaseAmount = function (dish) {
-        var index;
-        if((index = $scope.selectedDishes.indexOf(dish)) >= 0){
-            if(dish.main){
-                $scope.selectedDishes = [];
-                $scope.detailItem = null;
-            } else{
-                $scope.selectedDishes[index].count--;
-                if($scope.selectedDishes[index].count === 0){
-                    $scope.selectedDishes.splice(index, 1);
-                }
-            }
+        var idToRemove = dish.ids[0];
+        dish.count --;
+        dish.ids.splice(0,1);
+        if(dish.count === 0){
+            $scope.order.slice($scope.order.indexOf(dish), 1);
         }
+        OrderService.removeItemFromOrder(idToRemove).then(function (response) {
+            processAddResponse(response);
+
+        });
+
     };
 
     $scope.addToOrder = function (orderItem) {
-        if($scope.order.length === 0){
+        console.log(orderItem);
+        if($scope.bill === undefined){
             OrderService.createAndAddItemToOrder($scope.tableId, orderItem).then(function (response) {
                 processAddResponse(response);
-                $scope.order.push(orderItem);
             })
 
         } else {
-            OrderService.addItemToOrder($scope.tableId, $scope.billId, orderItem).then(function (response) {
+            OrderService.addItemToOrder($scope.tableId, $scope.bill.id, orderItem).then(function (response) {
                 processAddResponse(response);
-                $scope.order.push(orderItem);
             })
         }
 
@@ -51,9 +48,46 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
 
     var processAddResponse = function(response){
         console.log(response.data);
-        $scope.billId = response.data.id;
         $scope.bill = response.data;
+        //sort bill items by id - time when they were added
+        $scope.bill.billItems.sort(function(item1, item2){return item1.id-item2.id});
+
+        var itemArr = [];
+        var itemGroup = [];
+        for(var i = 0; i < $scope.bill.billItems.length; i++){
+            var billItem = $scope.bill.billItems[i];
+            if(billItem.parentBillItem === null){
+                //push existing and start new item group
+                if(itemGroup.length > 0){
+                    itemArr.push(itemGroup);
+                    itemGroup = [];
+                }
+            }
+            var index;
+            if((index = orderContainsItem(billItem.item, itemGroup)) >= 0){
+                itemGroup[index]["count"]++;
+                itemGroup[index]["ids"].push(billItem.id);
+            }else{
+                billItem.item["count"] = 1;
+                billItem.item["ids"] = [billItem.id];
+                billItem.item["main"] = billItem.parentBillItem === null;
+                itemGroup.push(billItem.item);
+            }
+        }
+        //push last item group
+        itemArr.push(itemGroup);
+
+        $scope.order = itemArr;
         shakeButton();
+    };
+
+    var orderContainsItem = function(item, arr){
+        for(var i = 0; i < arr.length; i++){
+            if(arr[i].id === item.id){
+                return i;
+            }
+        }
+        return -1;
     }
 
     var shakeButton = function () {
