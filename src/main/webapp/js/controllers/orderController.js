@@ -14,26 +14,52 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         $("#orderModal").hide();
     };
 
+    $scope.decreaseAmount = function (dish) {
+        var index;
+        if((index = $scope.selectedDishes.indexOf(dish)) >= 0){
+            if(dish.main){
+                $scope.selectedDishes = [];
+                $scope.detailItem = null;
+            } else{
+                $scope.selectedDishes[index].count--;
+                if($scope.selectedDishes[index].count === 0){
+                    $scope.selectedDishes.splice(index, 1);
+                }
+            }
+        }
+    };
+
     $scope.addToOrder = function (orderItem) {
         if($scope.order.length === 0){
             OrderService.createAndAddItemToOrder($scope.tableId, orderItem).then(function (response) {
-                console.log(response.data);
-                $scope.billId = response.data;
+                processAddResponse(response);
+                $scope.order.push(orderItem);
             })
 
         } else {
             OrderService.addItemToOrder($scope.tableId, $scope.billId, orderItem).then(function (response) {
-                console.log("Item added");
+                processAddResponse(response);
+                $scope.order.push(orderItem);
             })
         }
-        $scope.order.push(orderItem);
-        $("#basketButton").addClass("shake");
-        setTimeout(function() {
-            $("#basketButton").removeClass("shake");
-        }, 800);
+
     };
 
     $rootScope.$on('addToOrder', function(event, args) {
         $scope.addToOrder(args.orderItem);
     });
+
+    var processAddResponse = function(response){
+        console.log(response.data);
+        $scope.billId = response.data.id;
+        $scope.bill = response.data;
+        shakeButton();
+    }
+
+    var shakeButton = function () {
+        $("#basketButton").addClass("shake");
+        setTimeout(function() {
+            $("#basketButton").removeClass("shake");
+        }, 800);
+    }
 });
