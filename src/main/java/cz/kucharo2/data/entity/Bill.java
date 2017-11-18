@@ -17,7 +17,7 @@ import java.util.Date;
 public class Bill extends DtoEntity {
 
     public static final String TABLE_NAME = "Bill";
-    public static final String BILL_ID = "bil_id";
+    public static final String BILL_ID = "bill_id";
     public static final String DATE = "date";
     public static final String STATUS = "status";
     public static final String TABLE_ID = "table_id";
@@ -25,6 +25,7 @@ public class Bill extends DtoEntity {
 
     @Id
     @Column(name = BILL_ID)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

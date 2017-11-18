@@ -2,10 +2,7 @@ package cz.kucharo2.data.entity;
 
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @Author Roman Kuchár <kucharrom@gmail.com>.
@@ -22,6 +19,7 @@ public class ItemParam extends DtoEntity {
 
     @Id
     @Column(name = ITEM_PARAM_ID)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = PARAM_NAME)

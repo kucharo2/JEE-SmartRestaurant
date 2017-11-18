@@ -31,6 +31,7 @@ public class Item extends DtoEntity {
 
     @Id
     @Column(name = ITEM_ID)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = PRICE)

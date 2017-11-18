@@ -23,6 +23,7 @@ public class Account extends DtoEntity {
 
     @Id
     @Column(name = ACCOUNT_ID)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = USERNAME)

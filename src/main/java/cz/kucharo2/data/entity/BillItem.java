@@ -23,6 +23,7 @@ public class BillItem extends DtoEntity {
 
     @Id
     @Column(name = ID_COLUMN)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

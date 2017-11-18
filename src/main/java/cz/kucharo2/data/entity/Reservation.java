@@ -27,6 +27,7 @@ public class Reservation extends DtoEntity {
 
     @Id
     @Column(name = RESERVATION_ID)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

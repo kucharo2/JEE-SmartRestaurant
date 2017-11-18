@@ -24,6 +24,7 @@ public class Category extends DtoEntity {
 
     @Id
     @Column(name = CATEGORY_ID)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = CODE)

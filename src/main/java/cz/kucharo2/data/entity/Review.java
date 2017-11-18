@@ -21,6 +21,7 @@ public class Review extends DtoEntity {
 
     @Id
     @Column(name = REVIEW_ID)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = STARS)

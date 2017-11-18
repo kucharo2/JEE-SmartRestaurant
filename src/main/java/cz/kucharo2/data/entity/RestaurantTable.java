@@ -19,6 +19,7 @@ public class RestaurantTable extends DtoEntity {
 
 	@Id
 	@Column(name = TABLE_ID)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
 	@Column(name = NAME)
