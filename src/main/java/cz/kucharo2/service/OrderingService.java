@@ -1,5 +1,6 @@
 package cz.kucharo2.service;
 
+import cz.kucharo2.common.model.AddOrderItemModel;
 import cz.kucharo2.data.entity.Bill;
 import cz.kucharo2.service.exception.ServiceException;
 
@@ -8,16 +9,14 @@ import cz.kucharo2.service.exception.ServiceException;
  */
 public interface OrderingService {
 
-	/**
+	/***
 	 * Order a single item
 	 *
-	 * @param itemId item to order
-	 * @param billId  bill on which is ordering
-	 * @param tableId table where is ordering
-	 *
-	 * @return created or updated bill
+	 * @param model
+	 * @return
+	 * @throws ServiceException
 	 */
-	Bill orderItem(Integer billId, int tableId, Integer... itemId) throws ServiceException;
+	Bill orderItem(AddOrderItemModel model) throws ServiceException;
 
 	/**
 	 * Deletes bill item

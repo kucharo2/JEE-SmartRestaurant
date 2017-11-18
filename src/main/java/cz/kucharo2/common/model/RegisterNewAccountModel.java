@@ -1,4 +1,4 @@
-package cz.kucharo2.rest.model;
+package cz.kucharo2.common.model;
 
 import cz.kucharo2.data.enums.AccountRole;
 

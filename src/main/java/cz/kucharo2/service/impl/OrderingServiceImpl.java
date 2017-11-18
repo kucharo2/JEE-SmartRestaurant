@@ -1,5 +1,6 @@
 package cz.kucharo2.service.impl;
 
+import cz.kucharo2.common.model.AddOrderItemModel;
 import cz.kucharo2.data.dao.BillDao;
 import cz.kucharo2.data.dao.BillItemDao;
 import cz.kucharo2.data.entity.Bill;
@@ -43,24 +44,24 @@ public class OrderingServiceImpl implements OrderingService {
 	private BillDao billDao;
 
 	@Override
-	public Bill orderItem(Integer billId, int tableId, Integer... itemIds) throws ServiceException {
-		if (itemIds.length < 1) {
+	public Bill orderItem(AddOrderItemModel model) throws ServiceException {
+		if (model.getItemsToAdd().length < 1) {
 			throw new IllegalArgumentException("At least one item id must be set.");
 		}
 		Bill bill;
-		if (billId == null) {
+		if (model.getBillId() == null) {
 			// create new bill
-			RestaurantTable table = tableService.getTable(tableId);
+			RestaurantTable table = tableService.getTable(model.getTableId());
 			bill = cashDeskService.createBillOnTable(table);
 		} else {
-			bill = cashDeskService.getBillById(billId);
+			bill = cashDeskService.getBillById(model.getBillId());
 		}
 		if (bill.getStatus() != BillStatus.CREATED) {
 			throw new ServiceException("Not able to add another item on already confirmed order.");
 		}
 		List<Item> itemsToBeAddToBill = new ArrayList<>();
 		BillItem mainFood = null;
-		for (Integer itemId : itemIds) {
+		for (Integer itemId : model.getItemsToAdd()) {
 			Item item = menuService.getItemById(itemId);
 
 			if (mainFood == null && item.getCategory().getParentCategory().getCode() == CategoryType.MAIN_FOOD

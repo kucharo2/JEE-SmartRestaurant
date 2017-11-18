@@ -1,4 +1,4 @@
-package cz.kucharo2.rest.model;
+package cz.kucharo2.common.model;
 
 /**
  * @Author Roman Kuchár <kucharrom@gmail.com>.
