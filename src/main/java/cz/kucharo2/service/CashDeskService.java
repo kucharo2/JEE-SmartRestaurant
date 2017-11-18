@@ -10,13 +10,6 @@ import java.util.List;
  * Created by Roman on 12/2/2014.
  */
 public interface CashDeskService {
-	/**
-	 * Returns bill by specific id
-	 *
-	 * @param id bill id
-	 * @return bill
-	 */
-	Bill getBillById(int id);
 
 	/**
 	 * Create bill for specific table

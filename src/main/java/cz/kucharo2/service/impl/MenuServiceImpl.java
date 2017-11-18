@@ -1,6 +1,5 @@
 package cz.kucharo2.service.impl;
 
-import cz.kucharo2.data.dao.BillDao;
 import cz.kucharo2.data.dao.CategoryDao;
 import cz.kucharo2.data.dao.ItemDao;
 import cz.kucharo2.data.entity.Category;
@@ -26,9 +25,6 @@ public class MenuServiceImpl implements MenuService {
 
     @Inject
     private ItemDao itemDao;
-
-    @Inject
-    private BillDao billDao;
 
     @Override
     public List<Category> getAllCategoriesByParentCategory(Category category) {

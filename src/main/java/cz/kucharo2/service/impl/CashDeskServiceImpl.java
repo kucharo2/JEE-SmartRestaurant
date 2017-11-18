@@ -27,11 +27,6 @@ public class CashDeskServiceImpl implements CashDeskService {
 	private BillItemDao billItemDao;
 
 	@Override
-	public Bill getBillById(int id) {
-		return billDao.getBillWithItems(id);
-	}
-
-	@Override
 	public Bill createBillOnTable(RestaurantTable table) {
 		Bill bill = new Bill();
 		bill.setTable(table);

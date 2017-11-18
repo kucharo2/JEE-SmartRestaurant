@@ -55,7 +55,7 @@ public class OrderingServiceImpl implements OrderingService {
 			RestaurantTable table = tableService.getTable(model.getTableId());
 			bill = cashDeskService.createBillOnTable(table);
 		} else {
-			bill = cashDeskService.getBillById(model.getBillId());
+			bill = getBillById(model.getBillId());
 		}
 		if (bill.getStatus() != BillStatus.CREATED) {
 			throw new ServiceException("Not able to add another item on already confirmed order.");
@@ -81,7 +81,7 @@ public class OrderingServiceImpl implements OrderingService {
 			}
 			cashDeskService.createBillItem(billItem);
 		}
-		return cashDeskService.getBillById(bill.getId()).getId();
+		return bill.getId();
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class OrderingServiceImpl implements OrderingService {
 
 	@Override
 	public Bill getBillById(int billId) {
-		return billDao.getById(billId);
+		return billDao.getBillWithItems(billId);
 	}
 
 	@Override
