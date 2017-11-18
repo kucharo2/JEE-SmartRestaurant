@@ -1,5 +1,6 @@
 package cz.kucharo2.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class BillItem extends DtoEntity {
 
     @ManyToOne
     @JoinColumn(name = BILL_ID)
+    @JsonIgnore
     private Bill bill;
 
     @ManyToOne
@@ -45,6 +47,7 @@ public class BillItem extends DtoEntity {
     private BillItem parentBillItem;
 
     @OneToMany(mappedBy = "parentBillItem")
+    @JsonIgnore
     private Collection<BillItem> childBillItems;
 
     @Override

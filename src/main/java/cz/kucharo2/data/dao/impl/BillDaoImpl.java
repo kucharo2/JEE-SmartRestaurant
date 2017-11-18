@@ -29,4 +29,13 @@ public class BillDaoImpl extends AbstractGenericDaoImpl<Bill> implements BillDao
 
         return getByWhereCondition(query, params);
     }
+
+    @Override
+    public Bill getCreatedBillOnTable(int tableId) {
+        String query =  Bill.TABLE_ID + " = :tableId and " + Bill.STATUS + " = 'CREATED'";
+        Map<String, Object> params = new HashMap<>();
+        params.put("tableId", tableId);
+
+        return getByWhereConditionSingleResult(query, params);
+    }
 }

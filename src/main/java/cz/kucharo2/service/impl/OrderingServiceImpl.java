@@ -47,7 +47,7 @@ public class OrderingServiceImpl implements OrderingService {
 		if (itemIds.length < 1) {
 			throw new IllegalArgumentException("At least one item id must be set.");
 		}
-		Bill bill = null;
+		Bill bill;
 		if (billId == null) {
 			// create new bill
 			RestaurantTable table = tableService.getTable(tableId);
@@ -101,6 +101,11 @@ public class OrderingServiceImpl implements OrderingService {
 	@Override
 	public Bill getBillById(int billId) {
 		return billDao.getById(billId);
+	}
+
+	@Override
+	public Bill getCreatedBillOnTable(int tableId) {
+		return billDao.getCreatedBillOnTable(tableId);
 	}
 
 	/**

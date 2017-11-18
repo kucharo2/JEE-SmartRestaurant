@@ -7,6 +7,7 @@ import cz.kucharo2.service.TableService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * Created by Roman on 12/3/2014.
@@ -21,5 +22,10 @@ public class TableServiceImpl implements TableService {
 	@Override
 	public RestaurantTable getTable(int id) {
 		return tableDao.getById(id);
+	}
+
+	@Override
+	public List<RestaurantTable> getAllTables() {
+		return tableDao.getAll();
 	}
 }

@@ -79,11 +79,19 @@ public abstract class AbstractGenericDaoImpl<T extends DtoEntity> implements Abs
 
 
     protected List<T> getByWhereCondition(String whereCondition, Map<String, Object> sqlParams) {
-        return createGetWhereConditionQuery(whereCondition, sqlParams).getResultList();
+        try {
+            return createGetWhereConditionQuery(whereCondition, sqlParams).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     protected T getByWhereConditionSingleResult(String whereCondition, Map<String, Object> sqlParams) {
-        return (T) createGetWhereConditionQuery(whereCondition, sqlParams).getSingleResult();
+        try {
+            return (T) createGetWhereConditionQuery(whereCondition, sqlParams).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     protected Query createGetWhereConditionQuery(String whereCondition, Map<String, Object> sqlParams) {

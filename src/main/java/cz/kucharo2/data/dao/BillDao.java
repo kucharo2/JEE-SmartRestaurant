@@ -11,12 +11,18 @@ import java.util.List;
 public interface BillDao extends AbstractGenericDao<Bill> {
 
 	/**
-	 *  Get all unpaid bills for specific table
+	 *  Get all unpaid bills for specific table.
 	 *
 	 * @param tableID table id
 	 * @return list of unpaid bills
 	 */
-	List getUnpaidBillOnTable(int tableID);
+	List<Bill> getUnpaidBillOnTable(int tableID);
 
 
+	/**
+	 * Get CREATED bill on table.
+	 *
+	 * @param tableId table id
+	 */
+	Bill getCreatedBillOnTable(int tableId);
 }
