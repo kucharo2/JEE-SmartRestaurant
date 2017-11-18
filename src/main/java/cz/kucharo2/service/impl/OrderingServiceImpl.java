@@ -6,6 +6,8 @@ import cz.kucharo2.data.entity.Bill;
 import cz.kucharo2.data.entity.BillItem;
 import cz.kucharo2.data.entity.Item;
 import cz.kucharo2.data.entity.RestaurantTable;
+import cz.kucharo2.data.enums.BillStatus;
+import cz.kucharo2.data.enums.CategoryType;
 import cz.kucharo2.service.CashDeskService;
 import cz.kucharo2.service.MenuService;
 import cz.kucharo2.service.OrderingService;
@@ -14,6 +16,8 @@ import cz.kucharo2.service.TableService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Roman on 12/2/2014.
@@ -38,16 +42,42 @@ public class OrderingServiceImpl implements OrderingService {
 	private BillDao billDao;
 
 	@Override
-	public Bill orderItem(int itemId, Integer billId, int tableId) {
+	public Bill orderItem(Integer billId, int tableId, Integer... itemIds) {
+		if (itemIds.length < 1) {
+			throw new IllegalArgumentException("At least one item id must be set.");
+		}
 		Bill bill = null;
 		if (billId == null) {
+			// create new bill
 			RestaurantTable table = tableService.getTable(tableId);
 			bill = cashDeskService.createBillOnTable(table);
 		} else {
 			bill = cashDeskService.getBillById(billId);
 		}
-		Item item = menuService.getItemById(itemId);
-		cashDeskService.createBillItem(createBillItem(item, bill));
+		if (bill.getStatus() != BillStatus.CREATED) {
+			throw new IllegalArgumentException("Not able to add another item on already confirmed order.");
+		}
+		List<Item> itemsToBeAddToBill = new ArrayList<>();
+		BillItem mainFood = null;
+		for (Integer itemId : itemIds) {
+			Item item = menuService.getItemById(itemId);
+
+			if (mainFood == null && item.getCategory().getParentCategory().getCode() == CategoryType.MAIN_FOOD
+					&& item.getCategory().getCode() != CategoryType.PRILOHA) {
+				mainFood = createBillItem(item, bill);
+				cashDeskService.createBillItem(mainFood);
+			} else {
+				itemsToBeAddToBill.add(item);
+			}
+		}
+		for (Item item : itemsToBeAddToBill) {
+			BillItem billItem = createBillItem(item, bill);
+
+            if (mainFood != null) {
+            	billItem.setParentBillItem(mainFood);
+			}
+			cashDeskService.createBillItem(billItem);
+		}
 		return cashDeskService.getBillById(bill.getId());
 	}
 

@@ -16,7 +16,7 @@ public interface OrderingService {
 	 *
 	 * @return created or updated bill
 	 */
-	Bill orderItem(int itemId, Integer billId, int tableId);
+	Bill orderItem(Integer billId, int tableId, Integer... itemId);
 
 	/**
 	 * Deletes bill item

@@ -5,6 +5,7 @@ import cz.kucharo2.data.dao.BillItemDao;
 import cz.kucharo2.data.entity.Bill;
 import cz.kucharo2.data.entity.BillItem;
 import cz.kucharo2.data.entity.RestaurantTable;
+import cz.kucharo2.data.enums.BillStatus;
 import cz.kucharo2.service.CashDeskService;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -34,6 +35,8 @@ public class CashDeskServiceImpl implements CashDeskService {
 	public Bill createBillOnTable(RestaurantTable table) {
 		Bill bill = new Bill();
 		bill.setTable(table);
+		bill.setStatus(BillStatus.CREATED);
+		billDao.createOrUpdate(bill);
 		return bill;
 	}
 

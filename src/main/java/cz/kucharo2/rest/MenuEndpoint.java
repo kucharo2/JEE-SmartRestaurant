@@ -18,7 +18,6 @@ import java.util.Map;
 /**
  * @Author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
-
 @Path("/menu")
 public class MenuEndpoint {
 
