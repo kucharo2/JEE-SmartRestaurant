@@ -26,9 +26,8 @@ public class OrderingEndpoint {
     }
 
     @POST
-    @Path("/confirm")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public void confirmOrder(Integer orderId) throws ServiceException {
+    @Path("{orderId}/confirm")
+    public void confirmOrder(@PathParam("orderId") Integer orderId) throws ServiceException {
         orderingService.confirmBill(orderId);
     }
 
