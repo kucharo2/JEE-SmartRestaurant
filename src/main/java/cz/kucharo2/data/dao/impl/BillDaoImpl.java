@@ -42,7 +42,7 @@ public class BillDaoImpl extends AbstractGenericDaoImpl<Bill> implements BillDao
 
     @Override
     public Bill getBillWithItems(int billId) {
-        Query query = getEntityManager().createQuery("select b from Bill b join fetch b.billItems where b.id = :billId")
+        Query query = getEntityManager().createQuery("select b from Bill b left join fetch b.billItems where b.id = :billId")
                 .setParameter("billId", billId);
         return (Bill) query.getSingleResult();
     }
