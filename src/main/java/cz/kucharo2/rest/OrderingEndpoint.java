@@ -31,7 +31,7 @@ public class OrderingEndpoint {
         orderingService.confirmBill(orderId);
     }
     @DELETE
-    @Path("deleteItems/{orderId}")
+    @Path("deleteItem/{orderId}")
     public void deleteItems(@PathParam("orderId") Integer orderId) throws ServiceException {
         orderingService.removeItemFomOrder(orderId);
     }
