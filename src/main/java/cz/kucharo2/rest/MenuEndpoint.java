@@ -28,13 +28,6 @@ public class MenuEndpoint {
     private ItemDao itemDao;
 
     @GET
-    @Path("items")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Item> getAllMenuItems() {
-        return itemDao.getAll();
-    }
-
-    @GET
     @Path("{item_id}/sideDish")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Item> getSideDishesForItem(@PathParam("item_id") Integer itemId) {
