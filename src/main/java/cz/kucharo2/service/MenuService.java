@@ -27,7 +27,7 @@ public interface MenuService {
 	 */
 	List<Category> getAllCategoriesByParentCategory(CategoryType categoryType);
 
-	Map<CategoryType, List<Item>> getAllDishesByCode(CategoryType categoryType);
+	Map<Category, List<Item>> getAllDishesByCategoryCode(CategoryType categoryType);
 
 	/**
 	 * Returns list of items by category

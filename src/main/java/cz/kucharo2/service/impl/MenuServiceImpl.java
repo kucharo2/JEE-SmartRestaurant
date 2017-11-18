@@ -41,8 +41,8 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public Map<CategoryType, List<Item>> getAllDishesByCode(CategoryType categoryType) {
-		Map map = new HashMap<CategoryType, List<Item>>();
+	public Map<Category, List<Item>> getAllDishesByCategoryCode(CategoryType categoryType) {
+		Map map = new HashMap<Category, List<Item>>();
 		List list = (List) categoryDao.getCategoryByCode(categoryType).getChildCategories();
 		for (Iterator<Category> i = list.iterator(); i.hasNext(); ) {
 			Category category = i.next();

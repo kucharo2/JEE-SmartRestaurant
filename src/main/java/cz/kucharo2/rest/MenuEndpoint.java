@@ -1,6 +1,7 @@
 package cz.kucharo2.rest;
 
 import cz.kucharo2.data.dao.ItemDao;
+import cz.kucharo2.data.entity.Category;
 import cz.kucharo2.data.entity.Item;
 import cz.kucharo2.data.enums.CategoryType;
 import cz.kucharo2.service.MenuService;
@@ -37,7 +38,7 @@ public class MenuEndpoint {
     @GET
     @Path("dishes")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<CategoryType, List<Item>> getAllDishes() {
-        return menuService.getAllDishesByCode(CategoryType.MAIN_FOOD);
+    public Map<Category, List<Item>> getAllDishes() {
+        return menuService.getAllDishesByCategoryCode(CategoryType.MAIN_FOOD);
     }
 }
