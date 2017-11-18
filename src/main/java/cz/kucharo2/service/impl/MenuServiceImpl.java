@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * Created by Roman on 12/3/2014.
  */
 @ApplicationScoped
-@Transactional
+@Transactional(rollbackOn = Exception.class)
 public class MenuServiceImpl implements MenuService {
 
 	@Inject

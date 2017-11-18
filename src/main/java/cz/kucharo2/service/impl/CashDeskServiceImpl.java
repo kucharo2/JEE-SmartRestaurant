@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Roman on 12/2/2014.
  */
 @ApplicationScoped
-@Transactional
+@Transactional(rollbackOn = Exception.class)
 public class CashDeskServiceImpl implements CashDeskService {
 
 	@Inject

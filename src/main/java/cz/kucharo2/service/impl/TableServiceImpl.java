@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
  * Created by Roman on 12/3/2014.
  */
 @ApplicationScoped
-@Transactional
+@Transactional(rollbackOn = Exception.class)
 public class TableServiceImpl implements TableService {
 
 	@Inject
