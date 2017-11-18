@@ -2,6 +2,7 @@ package cz.kucharo2.rest;
 
 import cz.kucharo2.data.entity.Bill;
 import cz.kucharo2.data.entity.RestaurantTable;
+import cz.kucharo2.filter.Secured;
 import cz.kucharo2.service.OrderingService;
 import cz.kucharo2.service.TableService;
 
@@ -28,6 +29,7 @@ public class TableEndpoint {
     @GET
     @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
     public List<RestaurantTable> getAllTables() {
         return tableService.getAllTables();
     }

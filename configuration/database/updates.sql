@@ -19,3 +19,10 @@ UPDATE category SET priority = 7 WHERE code = 'PANAKY';
 --18.11 18:10
 alter table account ADD COLUMN email VARCHAR(150) NULL;
 alter table account ADD COLUMN phone VARCHAR(13) NOT NULL;
+
+----18.11 18:43 user roles and anonymous_customer (username: anonymous, pass:cvut2017)
+insert into account_role (role_id) values ('COOKER');
+insert into account_role (role_id) values ('REGISTERED_CUSTOMER');
+insert into account_role (role_id) values ('ANONYMOUS_CUSTOMER');
+insert into account (username, password, role_id, phone)
+values ('anonymous', 'ffa266cf9a65a1b19cf4f5d106498e61', 'ANONYMOUS_CUSTOMER', '123');
