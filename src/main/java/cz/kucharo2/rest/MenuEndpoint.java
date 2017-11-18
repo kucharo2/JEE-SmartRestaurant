@@ -35,7 +35,7 @@ public class MenuEndpoint {
     }
 
     @GET
-    @Path("item/{item_id}/sideDish")
+    @Path("{item_id}/sideDish")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Item> getSideDishesForItem(@PathParam("item_id") Integer itemId) {
         return menuService.getItemsByCombinationToAndCategory(itemId, CategoryType.PRILOHA);

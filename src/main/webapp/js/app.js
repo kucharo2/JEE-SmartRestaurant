@@ -47,7 +47,7 @@ app.controller('MenuListController', function MenuListController($scope, $http) 
     };
 
     var fetchCombinationsForItem = function (id) {
-        $http.get(apiPrefix + "/menu/item/" + id + "/sideDish")
+        $http.get(apiPrefix + "/menu/" + id + "/sideDish")
             .then(function (response) {
                 $scope.sideDishes = response.data;
             });
