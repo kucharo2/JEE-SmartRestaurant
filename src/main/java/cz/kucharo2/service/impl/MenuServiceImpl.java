@@ -42,7 +42,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Map<Category, List<Item>> getAllItemsByCategoryCode(CategoryType categoryType) {
-        Map<Category, List<Item>> map = new HashMap<>();
+        Map<Category, List<Item>> map = new LinkedHashMap<>();
         Collection<Category> categories = categoryDao.getCategoryByCode(categoryType).getChildCategories();
         List<CategoryType> categoryTypes = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class MenuServiceImpl implements MenuService {
     public Map<String, List<Item>> getAllItemsByCategoryCodeKeyedByCategoryName (CategoryType categoryType){
         Collection<Category> categories = categoryDao.getCategoryByCode(categoryType).getChildCategories();
         List<CategoryType> categoryTypes = new ArrayList<>();
-        Map<String, List<Item>> map = new HashMap<>();
+        Map<String, List<Item>> map = new LinkedHashMap<>();
 
         for (Category category : categories) {
             categoryTypes.add(category.getCode());
