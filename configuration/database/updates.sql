@@ -15,3 +15,7 @@ UPDATE category SET priority = 4 WHERE code = 'PRILOHA';
 UPDATE category SET priority = 5 WHERE code = 'NEALKOHOLICKE_NAPOJE';
 UPDATE category SET priority = 6 WHERE code = 'PIVO';
 UPDATE category SET priority = 7 WHERE code = 'PANAKY';
+
+--18.11 18:10
+alter table account ADD COLUMN email VARCHAR(150) NULL;
+alter table account ADD COLUMN phone VARCHAR(13) NOT NULL;
