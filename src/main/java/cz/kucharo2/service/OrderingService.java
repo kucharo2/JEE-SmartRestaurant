@@ -23,7 +23,7 @@ public interface OrderingService {
 	 * Deletes bill item
 	 * @param billItemId bill item id
 	 */
-	boolean removeItemFomOrder(int billItemId);
+	boolean removeItemFomOrder(int billItemId) throws ServiceException;
 
 	/**
 	 * Confirms bill by id

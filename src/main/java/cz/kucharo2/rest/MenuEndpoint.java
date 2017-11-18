@@ -1,6 +1,5 @@
 package cz.kucharo2.rest;
 
-import cz.kucharo2.data.dao.ItemDao;
 import cz.kucharo2.data.entity.Item;
 import cz.kucharo2.data.enums.CategoryType;
 import cz.kucharo2.service.MenuService;
@@ -22,9 +21,6 @@ public class MenuEndpoint {
 
     @Inject
     private MenuService menuService;
-
-    @Inject
-    private ItemDao itemDao;
 
     @GET
     @Path("{item_id}/sideDish")

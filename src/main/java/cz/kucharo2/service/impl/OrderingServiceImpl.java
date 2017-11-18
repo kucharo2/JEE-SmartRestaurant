@@ -83,7 +83,12 @@ public class OrderingServiceImpl implements OrderingService {
 	}
 
 	@Override
-	public boolean removeItemFomOrder(int billItemId) {
+	public boolean removeItemFomOrder(int billItemId) throws ServiceException {
+		Bill bill = billItemDao.getById(billItemId).getBill();
+		if (bill.getStatus() != BillStatus.CREATED){
+			throw new ServiceException("Cannot delete item from order, because it's in different state than CREATED");
+		}
+
 		return billItemDao.delete(billItemDao.getById(billItemId));
 	}
 
