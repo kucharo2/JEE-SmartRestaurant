@@ -18,6 +18,7 @@ public class BillItem extends DtoEntity {
     public static final String PRICE = "price";
     public static final String BILL_ID = "bill_id";
     public static final String ITEM_ID = "item_id";
+    public static final String PARENT_ID = "parent_id";
 
     @Id
     @Column(name = ID_COLUMN)
@@ -36,6 +37,9 @@ public class BillItem extends DtoEntity {
 
     @Column(name = PRICE)
     private int price;
+
+    @Column(name = PARENT_ID)
+    private Integer parent_id;
 
     @Override
     public Integer getId() {
@@ -78,6 +82,14 @@ public class BillItem extends DtoEntity {
         this.price = price;
     }
 
+    public Integer getParent_id() {
+        return parent_id;
+    }
+
+    public void setParent_id(Integer parent_id) {
+        this.parent_id = parent_id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,6 +101,7 @@ public class BillItem extends DtoEntity {
         if (price != billItem.price) return false;
         if (!id.equals(billItem.id)) return false;
         if (!bill.equals(billItem.bill)) return false;
+        if (!parent_id.equals(billItem.parent_id)) return false;
         return item.equals(billItem.item);
     }
 
@@ -99,6 +112,9 @@ public class BillItem extends DtoEntity {
         result = 31 * result + item.hashCode();
         result = 31 * result + (paid ? 1 : 0);
         result = 31 * result + price;
+        if (parent_id != null) {
+            result = 31 * result + parent_id.hashCode();
+        }
         return result;
     }
 }

@@ -100,7 +100,8 @@ CREATE TABLE Bill_item
 	paid boolean NOT NULL   DEFAULT false,
 	price numeric NOT NULL,
 	bill_id integer NULL,
-	item_id integer NULL
+	item_id integer NULL,
+	parent_id integer;
 )
 ;
 
@@ -310,6 +311,10 @@ ALTER TABLE Reservation ADD CONSTRAINT FK_Reservation_Table
 
 ALTER TABLE Review ADD CONSTRAINT FK_Review_Item
 	FOREIGN KEY (item_id) REFERENCES Item (item_id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE Bill_item ADD CONSTRAINT FK_Bill_item_parent
+	FOREIGN KEY (parent_id) REFERENCES Bill_item (bill_item_id) ON DELETE No Action ON UPDATE No Action
 ;
 
 /* Create Table Comments, Sequences for Autonumber Columns */
