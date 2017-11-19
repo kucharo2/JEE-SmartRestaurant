@@ -5,6 +5,7 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * @Author Roman Kuchár <kucharrom@gmail.com>.
@@ -21,6 +22,7 @@ public class BillItem extends DtoEntity {
     public static final String BILL_ID = "bill_id";
     public static final String ITEM_ID = "item_id";
     public static final String PARENT_ID = "parent_id";
+    public static final String CREATED = "created";
 
     @Id
     @Column(name = ID_COLUMN)
@@ -49,6 +51,9 @@ public class BillItem extends DtoEntity {
     @OneToMany(mappedBy = "parentBillItem")
     @JsonIgnore
     private Collection<BillItem> childBillItems;
+
+    @JoinColumn(name = CREATED)
+    private Date created;
 
     @Override
     public Integer getId() {
@@ -105,6 +110,14 @@ public class BillItem extends DtoEntity {
 
     public void setChildBillItems(Collection<BillItem> childBillItems) {
         this.childBillItems = childBillItems;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     @Override

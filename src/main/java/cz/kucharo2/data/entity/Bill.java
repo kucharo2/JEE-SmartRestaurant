@@ -44,6 +44,7 @@ public class Bill extends DtoEntity {
     private Account account;
 
     @OneToMany(mappedBy = "bill")
+    @OrderBy(BillItem.CREATED + " asc")
     private Collection<BillItem> billItems;
 
     @Override

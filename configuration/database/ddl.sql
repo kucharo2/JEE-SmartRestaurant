@@ -101,7 +101,8 @@ CREATE TABLE Bill_item
 	price numeric NOT NULL,
 	bill_id integer NULL,
 	item_id integer NULL,
-	parent_id integer NULL
+	parent_id integer NULL,
+	created TIMESTAMP DEFAULT now();
 )
 ;
 

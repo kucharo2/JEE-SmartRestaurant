@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,112 +29,116 @@ import java.util.List;
 @ApplicationScoped
 @Transactional(rollbackOn = Exception.class)
 public class OrderingServiceImpl implements OrderingService {
-	
-	@Inject
-	private CashDeskService cashDeskService;
 
-	@Inject
-	private TableService tableService;
+    @Inject
+    private CashDeskService cashDeskService;
 
-	@Inject
-	private MenuService menuService;
+    @Inject
+    private TableService tableService;
 
-	@Inject
-	private BillItemDao billItemDao;
+    @Inject
+    private MenuService menuService;
 
-	@Inject
-	private BillDao billDao;
+    @Inject
+    private BillItemDao billItemDao;
 
-	@Override
-	public Integer orderItem(AddOrderItemModel model) throws ServiceException {
-		if (model.getItemsToAdd().length < 1) {
-			throw new IllegalArgumentException("At least one item id must be set.");
-		}
-		Bill bill;
-		if (model.getBillId() == null) {
-			// create new bill
-			RestaurantTable table = tableService.getTable(model.getTableId());
-			bill = cashDeskService.createBillOnTable(table);
-		} else {
-			bill = getBillById(model.getBillId());
-		}
-		if (bill.getStatus() != BillStatus.CREATED) {
-			throw new ServiceException("Not able to add another item on already confirmed order.");
-		}
-		List<Item> itemsToBeAddToBill = new ArrayList<>();
-		BillItem mainFood = null;
-		for (Integer itemId : model.getItemsToAdd()) {
-			Item item = menuService.getItemById(itemId);
+    @Inject
+    private BillDao billDao;
 
-			if (mainFood == null && item.getCategory().getParentCategory().getCode() == CategoryType.MAIN_FOOD
-					&& item.getCategory().getCode() != CategoryType.PRILOHA) {
-				mainFood = createBillItem(item, bill);
-				cashDeskService.createBillItem(mainFood);
-			} else {
-				itemsToBeAddToBill.add(item);
-			}
-		}
-		for (Item item : itemsToBeAddToBill) {
-			BillItem billItem = createBillItem(item, bill);
+    @Override
+    public Integer orderItem(AddOrderItemModel model) throws ServiceException {
+        if (model.getItemsToAdd().length < 1) {
+            throw new IllegalArgumentException("At least one item id must be set.");
+        }
+        Bill bill;
+        if (model.getBillId() == null) {
+            // check opened order on table
+            bill = getCreatedBillOnTable(model.getTableId());
+            if (bill == null) {
+                // create new bill
+                RestaurantTable table = tableService.getTable(model.getTableId());
+                bill = cashDeskService.createBillOnTable(table);
+            }
+        } else {
+            bill = getBillById(model.getBillId());
+        }
+        if (bill.getStatus() != BillStatus.CREATED) {
+            throw new ServiceException("Not able to add another item on already confirmed order.");
+        }
+        List<Item> itemsToBeAddToBill = new ArrayList<>();
+        BillItem mainFood = null;
+        for (Integer itemId : model.getItemsToAdd()) {
+            Item item = menuService.getItemById(itemId);
+
+            if (mainFood == null && item.getCategory().getParentCategory().getCode() == CategoryType.MAIN_FOOD
+                    && item.getCategory().getCode() != CategoryType.PRILOHA) {
+                mainFood = createBillItem(item, bill);
+                cashDeskService.createBillItem(mainFood);
+            } else {
+                itemsToBeAddToBill.add(item);
+            }
+        }
+        for (Item item : itemsToBeAddToBill) {
+            BillItem billItem = createBillItem(item, bill);
 
             if (mainFood != null) {
-            	billItem.setParentBillItem(mainFood);
-			}
-			cashDeskService.createBillItem(billItem);
-		}
-		return bill.getId();
-	}
+                billItem.setParentBillItem(mainFood);
+            }
+            cashDeskService.createBillItem(billItem);
+        }
+        return bill.getId();
+    }
 
-	@Override
-	public Integer removeItemFomOrder(int billItemId) throws ServiceException {
-		Bill bill = billItemDao.getById(billItemId).getBill();
-		if (bill.getStatus() != BillStatus.CREATED){
-			throw new ServiceException("Cannot delete item from order, because it's in different state than CREATED");
-		}
-		BillItem billItem = billItemDao.getById(billItemId);
-		Collection<BillItem> childs = billItem.getChildBillItems();
-		for (BillItem child : childs) {
-			billItemDao.delete(child);
-		}
-		billItemDao.delete(billItemDao.getById(billItemId));
-		return bill.getId();
-	}
+    @Override
+    public Integer removeItemFomOrder(int billItemId) throws ServiceException {
+        Bill bill = billItemDao.getById(billItemId).getBill();
+        if (bill.getStatus() != BillStatus.CREATED) {
+            throw new ServiceException("Cannot delete item from order, because it's in different state than CREATED");
+        }
+        BillItem billItem = billItemDao.getById(billItemId);
+        Collection<BillItem> childs = billItem.getChildBillItems();
+        for (BillItem child : childs) {
+            billItemDao.delete(child);
+        }
+        billItemDao.delete(billItemDao.getById(billItemId));
+        return bill.getId();
+    }
 
-	@Override
-	public Bill confirmBill(int billId) throws ServiceException {
-		Bill bill = billDao.getById(billId);
-		if (bill.getStatus() != BillStatus.CREATED) {
-			throw new ServiceException("Cannot confirm order in different state than CREATED");
-		}
-		bill.setStatus(BillStatus.CONFIRMED);
-		billDao.createOrUpdate(bill);
-		return bill;
-	}
+    @Override
+    public Bill confirmBill(int billId) throws ServiceException {
+        Bill bill = billDao.getById(billId);
+        if (bill.getStatus() != BillStatus.CREATED) {
+            throw new ServiceException("Cannot confirm order in different state than CREATED");
+        }
+        bill.setStatus(BillStatus.CONFIRMED);
+        billDao.createOrUpdate(bill);
+        return bill;
+    }
 
-	@Override
-	public Bill getBillById(int billId) {
-		return billDao.getBillWithItems(billId);
-	}
+    @Override
+    public Bill getBillById(int billId) {
+        return billDao.getBillWithItems(billId);
+    }
 
-	@Override
-	public Bill getCreatedBillOnTable(int tableId) {
-		return billDao.getCreatedBillOnTable(tableId);
-	}
+    @Override
+    public Bill getCreatedBillOnTable(int tableId) {
+        return billDao.getCreatedBillOnTable(tableId);
+    }
 
-	/**
-	 * Creates a bill item from item
-	 *
-	 * @param item item
-	 * @param bill bill on witch is ordered
-	 *
-	 * @return created bill item food
-	 */
-	private BillItem createBillItem(Item item, Bill bill) {
-		BillItem billItemFood = new BillItem();
-		billItemFood.setItem(item);
-		billItemFood.setPrice(item.getPrice());
-		billItemFood.setBill(bill);
-		return billItemFood;
-	}
+    /**
+     * Creates a bill item from item
+     *
+     * @param item item
+     * @param bill bill on witch is ordered
+     * @return created bill item food
+     */
+    private BillItem createBillItem(Item item, Bill bill) {
+        BillItem billItemFood = new BillItem();
+        billItemFood.setItem(item);
+        billItemFood.setPrice(item.getPrice());
+        billItemFood.setBill(bill);
+        billItemFood.setCreated(new Date());
+        return billItemFood;
+    }
 
 }

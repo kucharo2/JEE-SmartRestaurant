@@ -26,3 +26,6 @@ insert into account_role (role_id) values ('REGISTERED_CUSTOMER');
 insert into account_role (role_id) values ('ANONYMOUS_CUSTOMER');
 insert into account (username, password, role_id, phone)
 values ('anonymous', 'ffa266cf9a65a1b19cf4f5d106498e61', 'ANONYMOUS_CUSTOMER', '123');
+
+-- 19.11 add created column
+ALTER table bill_item add COLUMN created TIMESTAMP DEFAULT now();
