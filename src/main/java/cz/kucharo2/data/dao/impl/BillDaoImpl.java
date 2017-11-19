@@ -6,6 +6,7 @@ import cz.kucharo2.data.entity.BillItem;
 import cz.kucharo2.data.enums.BillStatus;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.List;
@@ -40,13 +41,21 @@ public class BillDaoImpl extends AbstractGenericDaoImpl<Bill> implements BillDao
                 .setParameter("accountId", accountId)
                 .setParameter("status", BillStatus.CREATED);
 
-        return (Bill) query.getSingleResult();
+        try {
+            return (Bill) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public Bill getBillWithItems(int billId) {
         Query query = getEntityManager().createQuery("select b from Bill b left join fetch b.billItems where b.id = :billId")
                 .setParameter("billId", billId);
-        return (Bill) query.getSingleResult();
+        try {
+            return (Bill) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
