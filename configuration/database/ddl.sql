@@ -74,7 +74,7 @@ CREATE TABLE Account
 	password varchar(100) NOT NULL,
 	first_name varchar(50) NULL,
 	last_name varchar(50) NULL,
-	role_id varchar(50) NULL
+	role_id varchar(50) NOT NULL
 )
 ;
 
