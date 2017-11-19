@@ -1,0 +1,188 @@
+<!-- OFFER VIEW -->
+
+<div ng-controller="MenuListController">
+    <!-- Unconfirmed selection Modal -->
+    <div id="unconfirmedSelectionModal" class="modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Nepotvrzený předchozí výběr</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Chystáte se vybrat další jídlo, ale nepotvrdili jste váš předchozí výběr jídla. Co si přejete
+                        udělat?</p>
+                    <h4>Předchozí výběr [ {{selectionPrice}} Kč ]</h4>
+                    <div class="table-responsive ">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>Ks</th>
+                                <th>Název</th>
+                                <th>Cena</th>
+                            </tr>
+                            <tr ng-repeat="selectedDish in selectedDishes track by $index">
+                                <td>{{selectedDish.count}}</td>
+                                <td>{{selectedDish.name}}</a></td>
+                                <td>{{selectedDish.price}} Kč</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="continuePrevSelectionBtn" type="button" class="btn btn-default">Pokračovat v
+                        předchozím výběru
+                    </button>
+                    <button id="cancelPrevSelectionBtn" type="button" class="btn btn-default">Zrušit předchozí
+                        výběr
+                    </button>
+                    <button id="confirmPrevSelectionBtn" type="button" class="btn btn-primary">Potvrdit předchozí
+                        výběr
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Table of dishes -->
+    <div class="content-absolute half-of-parent">
+        <h1 class="text-center">Nabídka</h1>
+        <div class="table-responsive">
+            <table class="table table-hover hideOverflow">
+                <tr>
+                    <th>Název</th>
+                    <th>Cena</th>
+                    <th class="text-center">Akce</th>
+                </tr>
+                <tbody ng-repeat="(category, dishes) in items">
+                    <tr>
+                        <th colspan="3" class="text-center btn-outline-dark categoryHeading" ng-click="toggleCategoryItems($index)">{{category}}</th>
+                    </tr>
+                    <tr ng-repeat="dish in dishes" class="category{{$parent.$index}} invisibleElement">
+                        <td>{{dish.name}}</td>
+                        <td>{{dish.price}} Kč</td>
+                        <td class="text-center">
+                            <button class="btn btn-primary" ng-click="startSelectingMainDish(category, dish)">Vybrat
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Additional info -->
+    <div class="half-of-parent right-side" ng-if="detailItem != undefined && detailItem != null">
+        <div class="dish-info">
+            <img class="dish-image" src="img/rizek.jpg" alt="A tasty image of a {{detailItem.name}}"/>
+            <h1>{{detailItem.name}}</h1>
+            <p><strong>Kategorie:</strong> {{detailItem.category.name}}</p>
+            <p><strong>Popis:</strong>
+                <span ng-if="detailItem.description != null">{{detailItem.description}}</span>
+                <span ng-if="detailItem.description == null">
+                        Hodor, hodor. Hodor. Hodor, hodor hodor - hodor; hodor hodor hodor hodor. Hodor. Hodor hodor HODOR! Hodor hodor, hodor. Hodor HODOR hodor, hodor hodor... Hodor hodor hodor?! Hodor. Hodor hodor hodor, hodor. Hodor hodor, hodor, hodor hodor. Hodor hodor - hodor, hodor. Hodor hodor - hodor. Hodor hodor - HODOR hodor, hodor hodor - hodor, hodor. Hodor hodor. Hodor! Hodor hodor, hodor - hodor hodor hodor hodor. Hodor.
+                    </span>
+            </p>
+        </div>
+        <!-- Combinations -->
+        <h3>Toto jídlo lze kombinovat s těmito položkami</h3>
+        <div class="right-bottom-quarter">
+            <div class="table-responsive ">
+                <table class="table table-hover">
+                    <tr>
+                        <th>Název</th>
+                        <th>Cena</th>
+                        <th class="text-center">Akce</th>
+                    </tr>
+                    <tr ng-repeat="sideDish in sideDishes">
+                        <td>{{sideDish.name}}</a></td>
+                        <td>{{sideDish.price}} Kč</td>
+                        <td class="text-center">
+                            <button class="btn btn-success" ng-click="addSideDish(sideDish)">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <button class="btn btn-lg btn-success" ng-click="confirmSelection()">Potvrdit</button>
+    </div>
+
+    <div class="actualSelection">
+        <div class="dish-info">
+            <h3>Aktuální výběr [ Celková cena: {{selectionPrice}} Kč ]</h3>
+            <div class="table-responsive ">
+                <table class="table table-hover">
+                    <tr>
+                        <th>Ks</th>
+                        <th>Název</th>
+                        <th>Cena</th>
+                        <th>Akce</th>
+                    </tr>
+                    <tr ng-repeat="selectedDish in selectedDishes track by $index">
+                        <td>{{selectedDish.count}}</td>
+                        <td>
+                            <b ng-if="selectedDish.main">{{selectedDish.name}}</b>
+                            <span ng-if="!selectedDish.main">{{selectedDish.name}}</span>
+                        </td>
+                        <td>{{selectedDish.price}} Kč</td>
+                        <td>
+                            <button class="btn btn-danger" ng-click="decreaseAmountOfDish(selectedDish)">
+                                <i class="fa fa-minus" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Order -->
+    <div class="order" ng-controller="OrderController">
+        <div id="tableAndBillInfo" class="left-top-corner" >
+            Číslo stolu: <b>{{tableId}}</b>  <span ng-if="bill !== undefined && bill !== null"> / Číslo objednávky: <b>{{bill.id}}</b></span>
+        </div>
+        <button id="basketButton" class="btn btn-success right-top-corner" ng-click="showOrderDialog()">
+            <i class="fa fa-sticky-note-o" aria-hidden="true"></i> Vaše objednávka [{{order.length}}]
+        </button>
+        <div id="orderModal" class="modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Aktuální objednávka [ Celková cena: {{orderPrice}} Kč ]</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="dish-info">
+                            <div class="table-responsive ">
+                                <table class="table table-hover" id="actualChoiceTable">
+                                    <tr>
+                                        <th>Ks</th>
+                                        <th>Název</th>
+                                        <th>Cena</th>
+                                        <th>Akce</th>
+                                    </tr>
+                                    <tbody ng-repeat="orderItem in order">
+                                        <tr ng-repeat="dish in orderItem track by $index">
+                                            <td>{{dish.count}}</td>
+                                            <td>
+                                                <b ng-if="dish.main">{{dish.name}}</b>
+                                                <span ng-if="!dish.main">{{dish.name}}</span>
+                                            </td>
+                                            <td>{{dish.price}} Kč</td>
+                                            <td>
+                                                <button class="btn btn-danger" ng-click="decreaseAmount(dish)">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" ng-click="closeOrderDialog()">Zavřít</button>
+                        <button type="button" class="btn btn-primary" ng-click="confirmOrder()">Odeslat objednávku</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

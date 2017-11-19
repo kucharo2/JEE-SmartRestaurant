@@ -3,6 +3,10 @@ body {
     background-size: 100%;
 }
 
+.container-fluid {
+    height: 90%;
+}
+
 .half-of-parent {
     width: 40%;
     display: inline-block;

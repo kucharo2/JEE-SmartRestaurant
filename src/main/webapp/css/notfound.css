@@ -1,0 +1,21 @@
+#notfoundview {
+    padding-top: 20px;
+    text-align: center;
+    background-color: black;
+    color :white;
+    margin-left: -20px;
+    margin-right: -20px;
+    height: 100%;
+    align-items: center;
+    display: flex;
+}
+
+#notfoundview > div {
+    margin: auto;
+}
+
+#notfoundview h1 {
+    width: 600px;
+    float: right;
+    padding: 51px;
+}
