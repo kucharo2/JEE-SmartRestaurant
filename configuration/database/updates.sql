@@ -34,3 +34,7 @@ UPDATE bill SET status = 'CANCELED' WHERE status = 'CREATED';
 
 --19.11. 12:12
 alter table account ALTER COLUMN role_id SET NOT NULL;
+-- 19.11. 19.19
+delete from account_role where role_id = 'COOKER';
+INSERT INTO account_role (role_id) VALUES ('WAITER');
+ALTER TABLE Account ADD CONSTRAINT UQ_Username UNIQUE (username);
