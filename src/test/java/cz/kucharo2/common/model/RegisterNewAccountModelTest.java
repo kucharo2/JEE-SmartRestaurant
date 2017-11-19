@@ -9,6 +9,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -16,8 +17,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class RegisterNewAccountModelTest {
-    private static ValidatorFactory validatorFactory;
-    private static Validator validator;
+    private ValidatorFactory validatorFactory;
+    private Validator validator;
     private RegisterNewAccountModel registerNewAccountModel;
 
     @Before
@@ -109,7 +110,7 @@ public class RegisterNewAccountModelTest {
 
         Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
         List<ConstraintViolation<RegisterNewAccountModel>> listViolations = new ArrayList(violations);
-        listViolations.sort((o1, o2) -> o1.getMessage().compareTo(o2.getMessage()));
+        listViolations.sort(Comparator.comparing(ConstraintViolation::getMessage));
         assertEquals(2, listViolations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = listViolations.get(0);
@@ -131,7 +132,7 @@ public class RegisterNewAccountModelTest {
 
         Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
         List<ConstraintViolation<RegisterNewAccountModel>> listViolations = new ArrayList(violations);
-        listViolations.sort((o1, o2) -> o1.getMessage().compareTo(o2.getMessage()));
+        listViolations.sort(Comparator.comparing(ConstraintViolation::getMessage));
         assertEquals(2, listViolations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = listViolations.get(0);
@@ -169,7 +170,7 @@ public class RegisterNewAccountModelTest {
 
         Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
         List<ConstraintViolation<RegisterNewAccountModel>> listViolations = new ArrayList(violations);
-        listViolations.sort((o1, o2) -> o1.getMessage().compareTo(o2.getMessage()));
+        listViolations.sort(Comparator.comparing(ConstraintViolation::getMessage));
         assertEquals(2, listViolations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = listViolations.get(0);
