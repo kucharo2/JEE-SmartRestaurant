@@ -1,15 +1,16 @@
 /**
- * Angular controller for dishes list
+ * Angular controller for dishes list page
  * @type {angular.controller}
  * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
-app.controller('MenuListController', function MenuListController($rootScope, $scope, $location, $cookies, MenuListService) {
+app.controller('MenuListController', function MenuListController($rootScope, $scope, $location, $mdToast, $cookies, MenuListService) {
     if(($scope.tableId = $cookies.get("table")) === undefined) {
         $location.path("/tables");
     }
     $scope.selectedDishes = [];
     $scope.order = [];
     $scope.selectionPrice = 0;
+
 
     MenuListService.getAllDishesGroupedByCategories().then(function (response) {
         $scope.items = response.data;
@@ -139,5 +140,7 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
      */
     var hideConfirmSelectionDialog = function () {
         $("#unconfirmedSelectionModal").hide();
-    }
+    };
+
+
 });

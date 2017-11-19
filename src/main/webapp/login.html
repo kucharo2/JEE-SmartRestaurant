@@ -1,6 +1,11 @@
 <!-- LOGIN VIEW -->
 <div id="login" ng-controller="LoginController">
     <div class="card card-container">
+        <ul>
+            <li ng-repeat="error in errors">
+                <span style="color: red">{{error}}</span>
+            </li>
+        </ul>
         <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
         <p id="profile-name" class="profile-name-card"></p>
         <form class="form-signin" id="loginForm">

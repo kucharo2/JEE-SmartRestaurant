@@ -7,11 +7,39 @@ app.service('LoginService', function ($http) {
 
     /**
      * Logins user into application
-     * @returns {null}
+     * @returns {HttpPromise}
      */
-    this.loginUser = function () {
-        //TODO;
-        console.log("Login user - implement me");
+    this.loginUser = function (base64string) {
+        return $http({
+            url: apiPrefix + "/account/login",
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            data: base64string
+        });
+    };
+
+    this.logout = function () {
+        localStorage.removeItem("loggedUser");
+    };
+
+    /**
+     * Gets logged user
+     * @returns {HttpPromise}
+     */
+    this.getLoggerUser = function () {
+        var base64string = localStorage.getItem("loggedUser");
+        if(base64string !== null && base64string !== undefined && base64string !== "") {
+            return $http({
+                url: apiPrefix + "/account/login",
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain"
+                },
+                data: base64string
+            });
+        }
         return null;
     }
 

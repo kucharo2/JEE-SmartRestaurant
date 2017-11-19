@@ -6,6 +6,16 @@ body {
     background-size: 100%;
 }
 
+#loggedUser {
+    right: 200px;
+    width: 300px;
+}
+
+#userLogin {
+    right: 200px;
+    width: 300px;
+}
+
 .container-fluid {
     height: 90%;
 }
