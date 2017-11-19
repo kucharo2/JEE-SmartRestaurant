@@ -18,7 +18,6 @@ public interface BillDao extends AbstractGenericDao<Bill> {
 	 */
 	List<Bill> getUnpaidBillOnTable(int tableID);
 
-
 	/**
 	 * Get CREATED bill on table.
 	 *
@@ -26,5 +25,18 @@ public interface BillDao extends AbstractGenericDao<Bill> {
 	 */
 	Bill getCreatedBillOnTable(int tableId);
 
+	/**
+	 * Get CREATED bill for account.
+	 *
+	 * @param accountId table id
+	 */
+	Bill getCreatedBillOnAccount(int accountId);
+
+	/**
+	 * Returns bill with loaded bill items.
+	 *
+	 * @param billId bill id
+	 * @return bill by id
+	 */
 	Bill getBillWithItems(int billId);
 }

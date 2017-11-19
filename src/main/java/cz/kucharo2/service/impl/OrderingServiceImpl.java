@@ -125,6 +125,11 @@ public class OrderingServiceImpl implements OrderingService {
         return billDao.getCreatedBillOnTable(tableId);
     }
 
+    @Override
+    public Bill getCreatedBillOnAccount(int accountId) {
+        return billDao.getCreatedBillOnAccount(accountId);
+    }
+
     /**
      * Creates a bill item from item
      *

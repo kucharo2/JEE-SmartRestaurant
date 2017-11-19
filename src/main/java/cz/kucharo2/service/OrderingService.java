@@ -43,4 +43,11 @@ public interface OrderingService {
 	 */
 	Bill getCreatedBillOnTable(int tableId);
 
+	/**
+	 * Return bill in state CREATED for account.
+	 *
+	 * @param accountId id of account
+	 */
+	Bill getCreatedBillOnAccount(int accountId);
+
 }
