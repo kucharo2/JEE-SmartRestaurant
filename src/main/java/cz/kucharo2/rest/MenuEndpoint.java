@@ -2,6 +2,7 @@ package cz.kucharo2.rest;
 
 import cz.kucharo2.data.entity.Item;
 import cz.kucharo2.data.enums.CategoryType;
+import cz.kucharo2.filter.Secured;
 import cz.kucharo2.service.MenuService;
 
 import javax.inject.Inject;
@@ -25,6 +26,7 @@ public class MenuEndpoint {
     @GET
     @Path("{item_id}/sideDish")
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
     public List<Item> getSideDishesForItem(@PathParam("item_id") Integer itemId) {
         return menuService.getItemsByCombinationToAndCategory(itemId, CategoryType.PRILOHA);
     }
@@ -32,6 +34,7 @@ public class MenuEndpoint {
     @GET
     @Path("dishes")
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
     public Map<String, List<Item>> getAllDishes() {
         return menuService.getAllItemsByCategoryCodeKeyedByCategoryName(CategoryType.MAIN_FOOD);
     }
@@ -39,6 +42,7 @@ public class MenuEndpoint {
     @GET
     @Path("drinks")
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
     public Map<String, List<Item>> getAllDrinks() {
         return menuService.getAllItemsByCategoryCodeKeyedByCategoryName(CategoryType.DRINKS);
     }

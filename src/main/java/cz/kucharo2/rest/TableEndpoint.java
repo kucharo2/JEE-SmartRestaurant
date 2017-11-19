@@ -37,6 +37,7 @@ public class TableEndpoint {
     @GET
     @Path("{tableId}/createdBill")
     @Produces(MediaType.APPLICATION_JSON)
+    @Secured
     public Bill getCreatedBillOnTable(@PathParam("tableId") Integer tableId) {
         return orderingService.getCreatedBillOnTable(tableId);
     }
