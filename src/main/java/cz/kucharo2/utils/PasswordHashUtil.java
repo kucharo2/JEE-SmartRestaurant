@@ -1,8 +1,11 @@
 package cz.kucharo2.utils;
 
 import javax.validation.constraints.NotNull;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Copyright 2017 IEAP CTU
@@ -14,13 +17,14 @@ public class PasswordHashUtil {
         // util class should never be instanced
     }
 
+    private static Logger logger = Logger.getLogger(PasswordHashUtil.class.getName());
+
     public static String encrypt(@NotNull String passwordOriginal) {
         String password = "<|>?p!*&" + passwordOriginal + ".§";
 
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-
-            md.update(password.getBytes());
+            md.update(password.getBytes("UTF-8"));
 
             byte byteData[] = md.digest();
 
@@ -31,7 +35,8 @@ public class PasswordHashUtil {
 
             return sb.toString();
 
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            logger.log(Level.WARNING, "Algorithm MD5 not found or UFT-8 is not supported", e);
             e.printStackTrace();
             return null;
         }
