@@ -3,6 +3,7 @@ package cz.kucharo2.data.dao.impl;
 import cz.kucharo2.data.dao.BillDao;
 import cz.kucharo2.data.entity.Bill;
 import cz.kucharo2.data.entity.BillItem;
+import cz.kucharo2.data.enums.BillStatus;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.Query;
@@ -33,10 +34,11 @@ public class BillDaoImpl extends AbstractGenericDaoImpl<Bill> implements BillDao
 
     @Override
     public Bill getCreatedBillByTableAndUser(int tableId, int accountId) {
-        String whereCondition =  Bill.TABLE_ID + " = :tableId and " + Bill.ACCOUNT_ID + " = :accountId and " + Bill.STATUS + " = 'CREATED'";
-        Query query = getEntityManager().createQuery("select b from Bill b left join fetch b.billItems " + whereCondition)
+        Query query = getEntityManager().createQuery("select b from Bill b left join fetch b.billItems " +
+                "where b.table.id = :tableId and b.account.id = :accountId and b.status = :status")
                 .setParameter("tableId", tableId)
-                .setParameter("accountId", accountId);
+                .setParameter("accountId", accountId)
+                .setParameter("status", BillStatus.CREATED);
 
         return (Bill) query.getSingleResult();
     }
