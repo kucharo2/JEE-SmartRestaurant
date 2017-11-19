@@ -19,5 +19,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
 public @interface Secured {
-    AccountRole[] roles() default {ANONYMOUS_CUSTOMER, REGISTERED_CUSTOMER, COOKER};
+    AccountRole[] roles() default {ANONYMOUS_CUSTOMER, REGISTERED_CUSTOMER, WAITER};
 }
