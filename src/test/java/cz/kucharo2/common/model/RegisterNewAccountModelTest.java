@@ -16,6 +16,9 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * @Author Pavel Štíbal <stibapa1@fel.cvut.cz>.
+ */
 public class RegisterNewAccountModelTest {
     private ValidatorFactory validatorFactory;
     private Validator validator;

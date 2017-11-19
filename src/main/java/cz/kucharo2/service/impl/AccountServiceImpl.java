@@ -3,21 +3,41 @@ package cz.kucharo2.service.impl;
 import cz.kucharo2.common.model.RegisterNewAccountModel;
 import cz.kucharo2.data.dao.AccountDao;
 import cz.kucharo2.data.entity.Account;
+import cz.kucharo2.data.enums.AccountRole;
 import cz.kucharo2.service.AccountService;
 import cz.kucharo2.utils.PasswordHashUtil;
+import org.jboss.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.Base64;
 
+@ApplicationScoped
+@Transactional(rollbackOn = Exception.class)
 public class AccountServiceImpl implements AccountService {
 
     @Inject
-    private AccountDao accountDao;
+    private Logger logger;
+
+    @Inject
+    AccountDao accountDao;
 
     @Override
-    public Account createNewAccount(RegisterNewAccountModel model) {
+    public boolean createNewAccount(RegisterNewAccountModel model) {
+        Account account = new Account();
+        account.setAccountRole(AccountRole.REGISTERED_CUSTOMER);
+        account.setUsername(model.getUsername());
+        account.setPassword(PasswordHashUtil.encrypt(model.getPassword()));
+        account.setPhone(model.getPhone());
+        account.setFirstName(model.getFirstName());
+        account.setLastName(model.getLastName());
+        account.setEmail(model.getEmail());
 
-        return null;
+        accountDao.createOrUpdate(account);
+        logger.info("Creating new account " + model.getUsername());
+
+        return true;
     }
 
     @Override
@@ -34,5 +54,11 @@ public class AccountServiceImpl implements AccountService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Account findAccountByUsername(String username) {
+        return accountDao.findByUsername(username);
+
     }
 }

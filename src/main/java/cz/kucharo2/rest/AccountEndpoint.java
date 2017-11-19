@@ -5,8 +5,9 @@ import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.filter.Secured;
 import cz.kucharo2.rest.model.FieldError;
 import cz.kucharo2.rest.model.FormResponse;
-import cz.kucharo2.rest.validator.FormValidatorUtil;
+import cz.kucharo2.rest.validator.ValidatorUtil;
 import cz.kucharo2.service.AccountService;
+import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -23,7 +24,13 @@ import java.util.List;
 public class AccountEndpoint {
 
     @Inject
-    AccountService accountService;
+    private AccountService accountService;
+
+    @Inject
+    private Logger logger;
+
+    @Inject
+    private ValidatorUtil validatorUtil;
 
     @POST
     @Path("register")
@@ -31,13 +38,15 @@ public class AccountEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public FormResponse registerNewAccount(RegisterNewAccountModel model) {
-        List<FieldError> errors = FormValidatorUtil.validate(model);
+        List<FieldError> errors = validatorUtil.validate(model);
 
-        if (errors.isEmpty()) {
-            // todo add logic for successfully filled form
+        if (!errors.isEmpty()) {
+            return new FormResponse(null, errors);
         }
 
-        return new FormResponse(null, errors);
+        logger.info("User has entered the data correctly");
+        boolean isInsert = accountService.createNewAccount(model);
+        return new FormResponse(isInsert, null);
     }
 
     @POST

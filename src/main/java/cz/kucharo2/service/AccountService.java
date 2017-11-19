@@ -8,7 +8,12 @@ import cz.kucharo2.data.entity.Account;
  */
 public interface AccountService {
 
-    Account createNewAccount(RegisterNewAccountModel model);
+    /**
+     * register new user and set him to db
+     * @param model data model for create new Account
+     * @return boolean true if was create user
+     */
+    boolean createNewAccount(RegisterNewAccountModel model);
 
     /**
      * Checks account credentials.
@@ -17,4 +22,11 @@ public interface AccountService {
      * @return user account if credentials was correct
      */
     Account checkCorrectCredentials(String base64Hash);
+
+    /**
+     * Find account by username
+     * @param username string
+     * @return user account
+     */
+    Account findAccountByUsername(String username);
 }
