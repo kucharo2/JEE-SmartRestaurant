@@ -139,6 +139,14 @@
 			<version>2.9.2</version>
 		</dependency>
 
+		<!-- WildFly clustering API, namely @org.wildfly.clustering.annotation.Immutable annotation -->
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-clustering-web-api</artifactId>
+			<version>${wildfly.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -159,6 +167,24 @@
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
+				<executions>
+					<!-- Add the default execution as workaround for IDE to pick up the default configuration. -->
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+							<archive>
+								<manifestEntries>
+									<!-- WildFly clustering API if you want to experiment! -->
+									<Dependencies>org.wildfly.clustering.api</Dependencies>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.wildfly.plugins</groupId>
