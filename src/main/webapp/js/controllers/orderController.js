@@ -4,6 +4,7 @@
 app.controller('OrderController', function MenuListController($scope, $rootScope, $mdToast, OrderService) {
     $scope.order = [];
     $scope.tableId = 1; //TODO dummy
+    $scope.orderPrice = 0;
 
     $scope.showOrderDialog = function () {
         $("#orderModal").show();
@@ -85,6 +86,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     var refreshOrder = function () {
         var itemArr = [];
         var itemGroup = [];
+        var totalPrice = 0;
         for(var i = 0; i < $scope.bill.billItems.length; i++){
             var billItem = $scope.bill.billItems[i];
             if(billItem.parentBillItem === null){
@@ -104,6 +106,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
                 billItem.item["main"] = billItem.parentBillItem === null;
                 itemGroup.push(billItem.item);
             }
+            totalPrice += billItem.item.price;
         }
         //push last item group
         if(itemGroup.length !== 0){
@@ -111,6 +114,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         }
 
         $scope.order = itemArr;
+        $scope.orderPrice = totalPrice;
     };
 
     var orderContainsItem = function(item, arr){

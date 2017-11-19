@@ -4,6 +4,7 @@
 app.controller('MenuListController', function MenuListController($rootScope, $scope, MenuListService) {
     $scope.selectedDishes = [];
     $scope.order = [];
+    $scope.selectionPrice = 0;
 
     MenuListService.getAllDishesGroupedByCategories().then(function (response) {
         $scope.items = response.data;
@@ -44,7 +45,7 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
         $rootScope.$emit("addToOrder", {orderItem : orderItem});
         $scope.selectedDishes = [];
         $scope.detailItem = null;
-
+        $scope.selectionPrice = 0;
     };
 
     $scope.addSideDish = function (sideDish) {
@@ -56,6 +57,7 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
             sideDish["main"] = false;
             $scope.selectedDishes.push(sideDish);
         }
+        $scope.selectionPrice += sideDish.price;
     };
 
     $scope.decreaseAmountOfDish = function (dish) {
@@ -64,12 +66,15 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
             if(dish.main){
                 $scope.selectedDishes = [];
                 $scope.detailItem = null;
+                $scope.selectionPrice = 0;
             } else{
                 $scope.selectedDishes[index].count--;
                 if($scope.selectedDishes[index].count === 0){
                     $scope.selectedDishes.splice(index, 1);
                 }
+                $scope.selectionPrice -= sideDish.price;
             }
+
         }
     };
 
@@ -83,6 +88,7 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
         $scope.detailItem = dish;
         $scope.selectedDishes = [];
         $scope.selectedDishes.push(dish);
+        $scope.selectionPrice += dish.price;
         MenuListService.fetchCombinationsForItem(dish.id).then(function (response) {
             $scope.sideDishes = response.data;
         });
@@ -90,7 +96,7 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
 
     var showConfirmSelectionDialog = function(){
         $("#unconfirmedSelectionModal").show();
-    }
+    };
 
     var hideConfirmSelectionDialog = function () {
         $("#unconfirmedSelectionModal").hide();

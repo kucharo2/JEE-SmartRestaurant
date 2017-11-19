@@ -37,7 +37,7 @@
 </div>
 <div class="container-fluid">
     <div ng-controller="MenuListController">
-        <!-- Modal -->
+        <!-- Unconfirmed selection Modal -->
         <div id="unconfirmedSelectionModal" class="modal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -47,7 +47,7 @@
                     <div class="modal-body">
                         <p>Chystáte se vybrat další jídlo, ale nepotvrdili jste váš předchozí výběr jídla. Co si přejete
                             udělat?</p>
-                        <h4>Předchozí výběr</h4>
+                        <h4>Předchozí výběr [ {{selectionPrice}} Kč ]</h4>
                         <div class="table-responsive ">
                             <table class="table table-hover">
                                 <tr>
@@ -144,7 +144,7 @@
 
         <div class="actualSelection">
             <div class="dish-info">
-                <h3>Aktuální výběr</h3>
+                <h3>Aktuální výběr [ Celková cena: {{selectionPrice}} Kč ]</h3>
                 <div class="table-responsive ">
                     <table class="table table-hover">
                         <tr>
@@ -182,7 +182,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Aktuální objednávka</h4>
+                            <h4 class="modal-title">Aktuální objednávka [ Celková cena: {{orderPrice}} Kč ]</h4>
                         </div>
                         <div class="modal-body">
                             <div class="dish-info">
