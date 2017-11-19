@@ -5,6 +5,11 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     if(($scope.tableId = $cookies.get("table")) === undefined) {
         $location.path("/tables");
     }
+    OrderService.getActiveOrderOnTable($scope.tableId).then(function (response) {
+        if(response.data !== ""){
+            processGetBillResponse(response);
+        }
+    });
 
     $scope.order = [];
     $scope.orderPrice = 0;
@@ -76,6 +81,11 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     $rootScope.$on('addToOrder', function(event, args) {
         $scope.addToOrder(args.orderItem);
     });
+
+    var processGetBillResponse = function (response) {
+        $scope.bill = response.data;
+        refreshOrder();
+    };
 
     var processAddResponse = function(response){
         $scope.bill = response.data;

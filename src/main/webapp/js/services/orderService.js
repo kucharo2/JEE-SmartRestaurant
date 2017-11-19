@@ -24,6 +24,10 @@ app.service('OrderService', function ($http) {
         return $http.post(apiPrefix + "/order/addItems", data)
     };
 
+    this.getActiveOrderOnTable = function (tableid) {
+        return $http.get(apiPrefix + /table/+tableid+"/createdBill");
+    };
+
     this.removeItemFromOrder = function (billItemId) {
         return $http.delete(apiPrefix + "/order/deleteItem/" + billItemId);
     };
