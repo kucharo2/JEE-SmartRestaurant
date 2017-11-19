@@ -3,26 +3,23 @@ package cz.kucharo2.service.impl;
 import cz.kucharo2.common.model.AddOrderItemModel;
 import cz.kucharo2.data.dao.BillDao;
 import cz.kucharo2.data.dao.BillItemDao;
-import cz.kucharo2.data.entity.Bill;
-import cz.kucharo2.data.entity.BillItem;
-import cz.kucharo2.data.entity.Item;
-import cz.kucharo2.data.entity.RestaurantTable;
+import cz.kucharo2.data.entity.*;
 import cz.kucharo2.data.enums.BillStatus;
 import cz.kucharo2.data.enums.CategoryType;
+import cz.kucharo2.rest.model.SessionContext;
 import cz.kucharo2.service.CashDeskService;
 import cz.kucharo2.service.MenuService;
 import cz.kucharo2.service.OrderingService;
 import cz.kucharo2.service.TableService;
 import cz.kucharo2.service.exception.ServiceException;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by Roman on 12/2/2014.
@@ -49,6 +46,9 @@ public class OrderingServiceImpl implements OrderingService {
     @Inject
     private BillDao billDao;
 
+    @Inject
+    private SessionContext sessionContext;
+
     @Override
     public Integer orderItem(AddOrderItemModel model) throws ServiceException {
         if (model.getItemsToAdd().length < 1) {
@@ -66,6 +66,9 @@ public class OrderingServiceImpl implements OrderingService {
             }
         } else {
             bill = getBillById(model.getBillId());
+            if (!bill.getAccount().getId().equals(sessionContext.getLoggedAccount().getId())) {
+
+            }
         }
         if (bill.getStatus() != BillStatus.CREATED) {
             throw new ServiceException("Not able to add another item on already confirmed order.");
@@ -122,12 +125,8 @@ public class OrderingServiceImpl implements OrderingService {
 
     @Override
     public Bill getCreatedBillOnTable(int tableId) {
-        return billDao.getCreatedBillOnTable(tableId);
-    }
-
-    @Override
-    public Bill getCreatedBillOnAccount(int accountId) {
-        return billDao.getCreatedBillOnAccount(accountId);
+        Account loggedAccount = sessionContext.getLoggedAccount();
+        return billDao.getCreatedBillByTableAndUser(tableId, loggedAccount.getId());
     }
 
     /**

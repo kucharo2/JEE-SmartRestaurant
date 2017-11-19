@@ -1,9 +1,10 @@
 package cz.kucharo2.utils;
 
+import org.jboss.logging.Logger;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
-import java.util.logging.Logger;
 
 /**
  * Copyright 2017 IEAP CTU

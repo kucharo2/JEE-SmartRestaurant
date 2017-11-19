@@ -23,14 +23,7 @@ public interface BillDao extends AbstractGenericDao<Bill> {
 	 *
 	 * @param tableId table id
 	 */
-	Bill getCreatedBillOnTable(int tableId);
-
-	/**
-	 * Get CREATED bill for account.
-	 *
-	 * @param accountId table id
-	 */
-	Bill getCreatedBillOnAccount(int accountId);
+	Bill getCreatedBillByTableAndUser(int tableId, int accountId);
 
 	/**
 	 * Returns bill with loaded bill items.

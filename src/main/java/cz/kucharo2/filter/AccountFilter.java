@@ -3,7 +3,9 @@ package cz.kucharo2.filter;
 import cz.kucharo2.data.dao.AccountDao;
 import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.data.enums.AccountRole;
+import cz.kucharo2.rest.model.SessionContext;
 import cz.kucharo2.utils.PasswordHashUtil;
+import org.jboss.logging.Logger;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -18,8 +20,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Filter for authentication and authorization via Basic auth method.
@@ -34,8 +34,13 @@ public class AccountFilter implements ContainerRequestFilter {
 
     @Inject
     private AccountDao accountDao;
+
     @Inject
     private Logger logger;
+
+    @Inject
+    private SessionContext sessionContext;
+
     @Context
     private ResourceInfo resourceInfo;
 
@@ -81,6 +86,7 @@ public class AccountFilter implements ContainerRequestFilter {
                 return;
             }
         }
+        this.sessionContext.setLoggedAccount(account);
     }
 
     private void abortOnUnauthorized(ContainerRequestContext context, String reason, Object... reasonArgs) {
@@ -96,6 +102,6 @@ public class AccountFilter implements ContainerRequestFilter {
                                 "</div",
                         text))
                 .build());
-        logger.log(Level.INFO, text);
+        logger.info(text);
     }
 }

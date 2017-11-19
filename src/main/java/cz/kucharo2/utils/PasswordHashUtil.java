@@ -1,11 +1,11 @@
 package cz.kucharo2.utils;
 
+import org.jboss.logging.Logger;
+
 import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Copyright 2017 IEAP CTU
@@ -36,7 +36,7 @@ public class PasswordHashUtil {
             return sb.toString();
 
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-            logger.log(Level.WARNING, "Algorithm MD5 not found or UFT-8 is not supported", e);
+            logger.error("Algorithm MD5 not found or UFT-8 is not supported", e);
             e.printStackTrace();
             return null;
         }
