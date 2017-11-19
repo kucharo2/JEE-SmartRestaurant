@@ -33,7 +33,7 @@ public class BillDaoImpl extends AbstractGenericDaoImpl<Bill> implements BillDao
 
     @Override
     public Bill getCreatedBillByTableAndUser(int tableId, int accountId) {
-        String query =  Bill.TABLE_ID + " = :tableId and " + Bill.ACCOUNT_ID + " = :accountId" + Bill.STATUS + " = 'CREATED'";
+        String query =  Bill.TABLE_ID + " = :tableId and " + Bill.ACCOUNT_ID + " = :accountId and " + Bill.STATUS + " = 'CREATED'";
         Map<String, Object> params = new HashMap<>();
         params.put("tableId", tableId);
         params.put("accountId", accountId);
