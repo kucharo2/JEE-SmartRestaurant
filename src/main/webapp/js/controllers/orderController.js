@@ -1,7 +1,7 @@
 /**
  * Angular controller for order
  */
-app.controller('OrderController', function MenuListController($scope, $rootScope, OrderService) {
+app.controller('OrderController', function MenuListController($scope, $rootScope, $mdToast, OrderService) {
     $scope.order = [];
     $scope.tableId = 1; //TODO dummy
 
@@ -27,7 +27,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
 
     $scope.addToOrder = function (orderItem) {
         console.log(orderItem);
-        if($scope.bill === undefined){
+        if($scope.bill === undefined || $scope.bill === null){
             OrderService.createAndAddItemToOrder($scope.tableId, orderItem).then(function (response) {
                 processAddResponse(response);
             })
@@ -40,6 +40,21 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
 
     };
 
+    $scope.confirmOrder = function () {
+        OrderService.confirmOrder($scope.bill.id).then(function (response) {
+            $scope.order = [];
+            $scope.bill = null;
+            $scope.closeOrderDialog();
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent('Vaše objednávka byla odeslána!')
+                    .position('bottom right')
+                    .hideDelay(1500)
+            );
+            console.log(response);
+        });
+    };
+
     $rootScope.$on('addToOrder', function(event, args) {
         $scope.addToOrder(args.orderItem);
     });
@@ -48,17 +63,26 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         $scope.bill = response.data;
         refreshOrder();
         shakeButton();
+        $mdToast.show(
+            $mdToast.simple()
+                .textContent('Výběr přidán do vaší objednávky.')
+                .position('bottom right')
+                .hideDelay(1500)
+        );
     };
 
     var processRemoveResponse = function (response) {
         $scope.bill = response.data;
         refreshOrder();
+        $mdToast.show(
+            $mdToast.simple()
+                .textContent('Položka odebrána z objednávky.')
+                .position('bottom right')
+                .hideDelay(1500)
+        );
     };
 
     var refreshOrder = function () {
-        //sort bill items by id - time when they were added //TODO bylo by fajn sortovat mi to na backendu
-        $scope.bill.billItems.sort(function(item1, item2){return item1.id-item2.id});
-
         var itemArr = [];
         var itemGroup = [];
         for(var i = 0; i < $scope.bill.billItems.length; i++){
@@ -103,5 +127,6 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         setTimeout(function() {
             $("#basketButton").removeClass("shake");
         }, 800);
-    }
+    };
+
 });

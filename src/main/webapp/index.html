@@ -14,8 +14,13 @@
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- ANGULAR JS -->
-    <script src="angular/angular.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
     <script src="angular/angular-base64.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
     <!-- CUSTOM -->
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="js/app.js"></script>
@@ -168,7 +173,7 @@
         <!-- Order -->
         <div class="order" ng-controller="OrderController">
             <div id="tableAndBillInfo" class="left-top-corner" >
-                Číslo stolu: <b>{{tableId}}</b>  <span ng-if="bill !== undefined"> / Číslo objednávky: <b>{{bill.id}}</b></span>
+                Číslo stolu: <b>{{tableId}}</b>  <span ng-if="bill !== undefined && bill !== null"> / Číslo objednávky: <b>{{bill.id}}</b></span>
             </div>
             <button id="basketButton" class="btn btn-success right-top-corner" ng-click="showOrderDialog()">
                 <i class="fa fa-sticky-note-o" aria-hidden="true"></i> Vaše objednávka [{{order.length}}]
@@ -210,7 +215,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" ng-click="closeOrderDialog()">Zavřít</button>
-                            <button type="button" class="btn btn-primary">Odeslat objednávku</button>
+                            <button type="button" class="btn btn-primary" ng-click="confirmOrder()">Odeslat objednávku</button>
                         </div>
                     </div>
                 </div>
