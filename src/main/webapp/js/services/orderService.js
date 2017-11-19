@@ -5,7 +5,7 @@ app.service('OrderService', function ($http) {
             "tableId" : tableid,
             "itemsToAdd" : createItemIdsFromOrderItem(orderItem)
         };
-        return $http.post(apiPrefix + "/order/addItems", data)
+        return $http.post(apiPrefix + "/order/addItems",  data)
     };
 
     this.addItemToOrder = function (tableid, billid, orderItem) {

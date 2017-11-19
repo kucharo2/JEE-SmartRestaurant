@@ -83,7 +83,12 @@ body {
     position: absolute;
     top: 5px;
     right: 5px;
+}
 
+.left-top-corner {
+    position: absolute;
+    top: 15px;
+    left: 15px;
 }
 
 .shake {
@@ -107,6 +112,7 @@ body {
 .categoryHeading:hover {
     cursor: pointer;
 }
+
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes shake {
     10%, 90% {

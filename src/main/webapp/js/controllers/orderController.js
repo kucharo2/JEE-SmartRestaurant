@@ -21,10 +21,8 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
             $scope.order.slice($scope.order.indexOf(dish), 1);
         }
         OrderService.removeItemFromOrder(idToRemove).then(function (response) {
-            processAddResponse(response);
-
+            processRemoveResponse(response);
         });
-
     };
 
     $scope.addToOrder = function (orderItem) {
@@ -47,9 +45,18 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     });
 
     var processAddResponse = function(response){
-        console.log(response.data);
         $scope.bill = response.data;
-        //sort bill items by id - time when they were added
+        refreshOrder();
+        shakeButton();
+    };
+
+    var processRemoveResponse = function (response) {
+        $scope.bill = response.data;
+        refreshOrder();
+    };
+
+    var refreshOrder = function () {
+        //sort bill items by id - time when they were added //TODO bylo by fajn sortovat mi to na backendu
         $scope.bill.billItems.sort(function(item1, item2){return item1.id-item2.id});
 
         var itemArr = [];
@@ -80,7 +87,6 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         }
 
         $scope.order = itemArr;
-        shakeButton();
     };
 
     var orderContainsItem = function(item, arr){
@@ -90,7 +96,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
             }
         }
         return -1;
-    }
+    };
 
     var shakeButton = function () {
         $("#basketButton").addClass("shake");
