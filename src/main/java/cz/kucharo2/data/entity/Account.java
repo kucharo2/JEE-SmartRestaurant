@@ -115,6 +115,10 @@ public class Account extends DtoEntity {
         this.phone = phone;
     }
 
+    public boolean isAnnonymousAccount() {
+        return accountRole == AccountRole.ANONYMOUS_CUSTOMER;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

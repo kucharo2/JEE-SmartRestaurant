@@ -66,8 +66,12 @@ public class OrderingServiceImpl implements OrderingService {
             }
         } else {
             bill = getBillById(model.getBillId());
-            if (!bill.getAccount().getId().equals(sessionContext.getLoggedAccount().getId())) {
-
+            Account loggedAccount = sessionContext.getLoggedAccount();
+            if(bill.getAccount().isAnnonymousAccount() && !loggedAccount.isAnnonymousAccount()) {
+                bill.setAccount(loggedAccount);
+                billDao.createOrUpdate(bill);
+            } else if (!bill.getAccount().getId().equals(loggedAccount.getId())) {
+                throw new ServiceException("Cannot add bill item into bill that belongs to another account");
             }
         }
         if (bill.getStatus() != BillStatus.CREATED) {
