@@ -29,3 +29,5 @@ values ('anonymous', 'ffa266cf9a65a1b19cf4f5d106498e61', 'ANONYMOUS_CUSTOMER', '
 
 -- 19.11 add created column
 ALTER table bill_item add COLUMN created TIMESTAMP DEFAULT now();
+-- 19.11. update incorrect data on bill
+UPDATE bill SET status = 'CANCELED' WHERE status = 'CREATED';

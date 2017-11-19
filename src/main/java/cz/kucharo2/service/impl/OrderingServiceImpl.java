@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Roman on 12/2/2014.
@@ -29,6 +30,9 @@ import java.util.List;
 @ApplicationScoped
 @Transactional(rollbackOn = Exception.class)
 public class OrderingServiceImpl implements OrderingService {
+
+    @Inject
+    private Logger logger;
 
     @Inject
     private CashDeskService cashDeskService;
@@ -56,6 +60,7 @@ public class OrderingServiceImpl implements OrderingService {
             bill = getCreatedBillOnTable(model.getTableId());
             if (bill == null) {
                 // create new bill
+                logger.info("Creating new order on table " + model.getTableId());
                 RestaurantTable table = tableService.getTable(model.getTableId());
                 bill = cashDeskService.createBillOnTable(table);
             }
