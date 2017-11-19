@@ -48,7 +48,7 @@ public class BillItem extends DtoEntity {
     @JoinColumn(name = PARENT_ID)
     private BillItem parentBillItem;
 
-    @OneToMany(mappedBy = "parentBillItem")
+    @OneToMany(mappedBy = "parentBillItem", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private Collection<BillItem> childBillItems;
 

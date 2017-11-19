@@ -95,11 +95,6 @@ public class OrderingServiceImpl implements OrderingService {
         if (bill.getStatus() != BillStatus.CREATED) {
             throw new ServiceException("Cannot delete item from order, because it's in different state than CREATED");
         }
-        BillItem billItem = billItemDao.getById(billItemId);
-        Collection<BillItem> childs = billItem.getChildBillItems();
-        for (BillItem child : childs) {
-            billItemDao.delete(child);
-        }
         billItemDao.delete(billItemDao.getById(billItemId));
         return bill.getId();
     }
