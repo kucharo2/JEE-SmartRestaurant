@@ -32,6 +32,10 @@ app.service('OrderService', function ($http) {
         return $http.post(apiPrefix + "/order/" + billId + "/confirm", null);
     };
 
+    this.cancelOrder = function (billId) {
+        return $http.post(apiPrefix + "/order/" + billId + "/cancel", null);
+    };
+
     var createItemIdsFromOrderItem = function (orderItem) {
         var itemsIds = [];
         for (var i = 0; i < orderItem.length; i++) {

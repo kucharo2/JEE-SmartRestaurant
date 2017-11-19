@@ -1,7 +1,7 @@
 app.service('TablesService', function ($http) {
 
     this.getAllTables = function () {
-        return $http.get(apiPrefix + "/table/all", {headers: $http.defaults.headers});
+        return $http.get(apiPrefix + "/table/all");
     }
 
 });

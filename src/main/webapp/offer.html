@@ -139,6 +139,7 @@
         <div id="tableAndBillInfo" class="left-top-corner" >
             Číslo stolu: <b>{{tableId}}</b>
             <span ng-if="bill !== undefined && bill !== null"> / Číslo objednávky: <b>{{bill.id}}</b></span>
+            <a ng-if="bill !== undefined && bill !== null" ng-click="cancelOrder()" href=""> Zrušit objednávku </a>
             <a ng-if="bill === undefined || bill === null" href="#/tables">Vybrat jiný stůl</a>
         </div>
         <button id="basketButton" class="btn btn-success right-top-corner" ng-click="showOrderDialog()">

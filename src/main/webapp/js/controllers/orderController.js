@@ -44,6 +44,20 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
 
     };
 
+    $scope.cancelOrder = function () {
+        OrderService.cancelOrder($scope.bill.id).then(function (response) {
+            $scope.order = [];
+            $scope.bill = null;
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent('Objednávka byla zrušena!')
+                    .position('bottom right')
+                    .hideDelay(1500)
+            );
+            console.log(response);
+        });
+    };
+
     $scope.confirmOrder = function () {
         OrderService.confirmOrder($scope.bill.id).then(function (response) {
             $scope.order = [];
