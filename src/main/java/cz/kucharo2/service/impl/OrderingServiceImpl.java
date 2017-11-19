@@ -119,6 +119,17 @@ public class OrderingServiceImpl implements OrderingService {
     }
 
     @Override
+    public Bill cancelBIll(int billId) throws ServiceException {
+        Bill bill = billDao.getById(billId);
+        if (bill.getStatus() != BillStatus.CREATED) {
+            throw new ServiceException("Cannot cancel order in different state than CREATED");
+        }
+        bill.setStatus(BillStatus.CANCELED);
+        billDao.createOrUpdate(bill);
+        return bill;
+    }
+
+    @Override
     public Bill getBillById(int billId) {
         return billDao.getBillWithItems(billId);
     }

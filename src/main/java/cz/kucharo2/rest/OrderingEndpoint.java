@@ -36,6 +36,13 @@ public class OrderingEndpoint {
         orderingService.confirmBill(orderId);
     }
 
+    @POST
+    @Path("{orderId}/cancel")
+    @Secured
+    public void cancelOrder(@PathParam("orderId") Integer orderId) throws ServiceException {
+        orderingService.cancelBIll(orderId);
+    }
+
     @DELETE
     @Path("deleteItem/{billItemId}")
     @Secured

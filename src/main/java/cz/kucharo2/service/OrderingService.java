@@ -31,6 +31,12 @@ public interface OrderingService {
 	Bill confirmBill(int billId) throws ServiceException;
 
 	/**
+	 * Cancels bill by id
+	 * @param billId bill id
+	 */
+	Bill cancelBIll(int billId) throws ServiceException;
+
+	/**
 	 * Returns bill by id
 	 * @param billId bill id
 	 */
