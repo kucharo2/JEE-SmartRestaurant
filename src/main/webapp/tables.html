@@ -1,2 +1,21 @@
 <!-- TABLES VIEW -->
-tables page
+<div id="tables" ng-controller="TablesController">
+    <div class="card card-container">
+        <h1>Výběr stolu</h1>
+        <div id="tableSelection">
+            <div id="table1" class="selectable" ng-click="selectTable(1)"></div>
+            <div id="table3" class="selectable" ng-click="selectTable(3)"></div>
+            <div id="table2" class="selectable" ng-click="selectTable(2)"></div>
+            <div id="table6" class="selectable" ng-click="selectTable(6)"></div>
+            <div id="table5" class="selectable" ng-click="selectTable(5)"></div>
+            <div id="table7" class="selectable" ng-click="selectTable(7)"></div>
+            <div id="table4" class="selectable" ng-click="selectTable(4)"></div>
+        </div>
+        <div  id="tableSelected">
+            <h2 ng-if="selectedTable !== null && selectedTable !== undefined">Vybrali jste stůl <b>{{selectedTable.name}}</b> s kapacitou <b>{{selectedTable.size}}</b></h2>
+            <button ng-if="selectedTable !== null && selectedTable !== undefined" class="btn btn-lg btn-success" ng-click="confirmTableSelection()">Pokračovat</button>
+        </div>
+    </div>
+</div>
+
+

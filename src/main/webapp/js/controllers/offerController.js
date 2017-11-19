@@ -1,7 +1,10 @@
 /**
  * Angular controller for dishes list
  */
-app.controller('MenuListController', function MenuListController($rootScope, $scope, MenuListService) {
+app.controller('MenuListController', function MenuListController($rootScope, $scope, $location, $cookies, MenuListService) {
+    if(($scope.tableId = $cookies.get("table")) === undefined) {
+        $location.path("/tables");
+    }
     $scope.selectedDishes = [];
     $scope.order = [];
     $scope.selectionPrice = 0;
@@ -81,6 +84,8 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
     $scope.toggleCategoryItems = function (categoryIndex) {
         $('.category' + categoryIndex).toggleClass('invisibleElement')
     };
+
+
 
     var selectMainDish = function (category, dish) {
         dish["count"] = 1;

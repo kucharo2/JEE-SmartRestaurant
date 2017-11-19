@@ -3,7 +3,7 @@
  * @type {angular.Module}
  */
 
-var app = angular.module('smartRestaurantApp', ['ngRoute', 'base64', 'ngMaterial', 'ngAria']).config(function($routeProvider, $httpProvider, $base64) {
+var app = angular.module('smartRestaurantApp', ['ngRoute', 'base64', 'ngCookies', 'ngMaterial', 'ngAria']).config(function($routeProvider, $httpProvider, $base64) {
     var auth = $base64.encode("anonymous:cvut2017");
     $httpProvider.defaults.headers.common.Authorization = 'Basic ' + auth;
     $routeProvider

@@ -1,9 +1,12 @@
 /**
  * Angular controller for order
  */
-app.controller('OrderController', function MenuListController($scope, $rootScope, $mdToast, OrderService) {
+app.controller('OrderController', function MenuListController($scope, $rootScope, $mdToast, $cookies, OrderService) {
+    if(($scope.tableId = $cookies.get("table")) === undefined) {
+        $location.path("/tables");
+    }
+
     $scope.order = [];
-    $scope.tableId = 1; //TODO dummy
     $scope.orderPrice = 0;
 
     $scope.showOrderDialog = function () {
