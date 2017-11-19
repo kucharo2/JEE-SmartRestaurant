@@ -1,10 +1,9 @@
 package cz.kucharo2.filter;
 
-import cz.kucharo2.data.dao.AccountDao;
 import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.data.enums.AccountRole;
 import cz.kucharo2.rest.model.SessionContext;
-import cz.kucharo2.utils.PasswordHashUtil;
+import cz.kucharo2.service.AccountService;
 import org.jboss.logging.Logger;
 
 import javax.annotation.Priority;
@@ -19,7 +18,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
-import java.util.Base64;
 
 /**
  * Filter for authentication and authorization via Basic auth method.
@@ -33,7 +31,7 @@ import java.util.Base64;
 public class AccountFilter implements ContainerRequestFilter {
 
     @Inject
-    private AccountDao accountDao;
+    private AccountService accountService;
 
     @Inject
     private Logger logger;
@@ -53,21 +51,11 @@ public class AccountFilter implements ContainerRequestFilter {
         }
 
         String base64hash = authorizationHeader.substring("Basic".length()).trim();
-        String credentials = new String(Base64.getDecoder().decode(base64hash));
-        String[] split = credentials.split(":");
-        String username = split[0];
-        String pass = split[1];
 
-        // find user by username
-        Account account = accountDao.findByUsername(username);
-        if (account == null) {
-            abortOnUnauthorized(requestContext, "Invalid username %s", username);
-            return;
-        }
-
+        Account account = accountService.checkCorrectCredentials(base64hash);
         // password validation
-        if (!PasswordHashUtil.encrypt(pass).equals(account.getPassword())) {
-            abortOnUnauthorized(requestContext, "Invalid password for username %s", username);
+        if (account == null) {
+            abortOnUnauthorized(requestContext, "Invalid password or username.");
             return;
         }
 
