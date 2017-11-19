@@ -16,6 +16,9 @@ var app = angular.module('smartRestaurantApp', ['ngRoute', 'base64', 'ngMaterial
         .when("/tables", {
             templateUrl : "tables.html"
         })
+        .when("/register", {
+            templateUrl : "register.html"
+        })
         .otherwise({
             templateUrl : "notFound.html"
         });

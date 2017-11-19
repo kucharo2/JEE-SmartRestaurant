@@ -1,4 +1,12 @@
-
+#login {
+    text-align: center;
+    margin-left : -20px;
+    margin-right: -20px;
+    padding-top: 20px;
+    height: 100%;
+    align-items: center;
+    display: flex;
+}
 #login .card-container.card {
     max-width: 350px;
     padding: 40px 40px;

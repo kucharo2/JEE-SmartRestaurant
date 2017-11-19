@@ -1,5 +1,5 @@
 /**
- * Angular controller for dishes list
+ * Angular controller for login
  */
 app.controller('LoginController', function LoginController($scope, LoginService) {
     $scope.username = "";
@@ -11,8 +11,6 @@ app.controller('LoginController', function LoginController($scope, LoginService)
     }
 
     $("#loginForm").submit(function () {
-        console.log($scope.username);
-        console.log($scope.password);
         loginUser();
     })
 

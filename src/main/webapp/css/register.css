@@ -1,0 +1,85 @@
+#register {
+    text-align: center;
+    margin-left : -20px;
+    margin-right: -20px;
+    padding-top: 20px;
+    height: 100%;
+    align-items: center;
+    display: flex;
+}
+
+#register .btn {
+    font-weight: 700;
+    height: 36px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+#register .card {
+    max-width: 350px;
+    padding: 20px;
+    background-color: #F7F7F7;
+    /* just in case there no content*/
+    margin: 0 auto 25px;
+    /* shadows and rounded borders */
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+#register .card-container.card {
+    max-width: 350px;
+    padding: 40px 40px;
+}
+
+#register h1.title {
+    font-size: 50px;
+    font-family: 'Passion One', cursive;
+    font-weight: 400;
+}
+
+#register hr{
+    width: 10%;
+    color: #fff;
+}
+
+#register .form-group{
+    margin-bottom: 15px;
+}
+
+#register input,
+
+#register input::-webkit-input-placeholder {
+    direction: ltr;
+    height: 44px;
+    font-size: 16px;
+}
+
+#register .btn.btn-signin {
+    /*background-color: #4d90fe; */
+    background-color: rgb(104, 145, 162);
+    /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
+    padding: 0px;
+    font-weight: 700;
+    font-size: 14px;
+    height: 36px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: none;
+    -o-transition: all 0.218s;
+    -moz-transition: all 0.218s;
+    -webkit-transition: all 0.218s;
+    transition: all 0.218s;
+}
+
+#register .btn.btn-signin:hover,
+#register .btn.btn-signin:active,
+#register .btn.btn-signin:focus {
+    background-color: rgb(12, 97, 33);
+}

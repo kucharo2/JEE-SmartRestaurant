@@ -1,0 +1,65 @@
+<!-- LOGIN VIEW -->
+<div id="register" ng-controller="RegistrationController">
+    <div class="card card-container">
+            <ul>
+                <li ng-repeat="error in errors">
+                    <span style="color: red">{{error}}</span>
+                </li>
+            </ul>
+            <form class="form-horizontal" id="registrationForm">
+                <div class="form-group">
+                    <label for="username" class="cols-sm-2 control-label">Uživatelské jméno *</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" name="username" id="username" ng-model="username" required autofocus/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="firstName" class="cols-sm-2 control-label">Jméno</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" name="firstName" ng-model="firstName" id="firstName"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName" class="cols-sm-2 control-label">Příjmení</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" name="lastName" ng-model="lastName" id="lastName" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="cols-sm-2 control-label">Heslo *</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                            <input type="password" class="form-control" name="password" ng-model="password" id="password" required/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm" class="cols-sm-2 control-label">Heslo znovu *</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                            <input type="password" class="form-control" name="confirm" ng-model="passwordConfirm" id="confirm" required/>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Registrovat</button>
+            </form>
+            <br>
+            Už máte účet? <a href="#/login">Přihlašte se zde</a>
+    </div>
+</div>
