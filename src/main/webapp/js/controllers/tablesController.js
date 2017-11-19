@@ -1,9 +1,14 @@
 /**
  * Angular controller for table selection
+ * @type {angular.controller}
+ * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
 app.controller('TablesController', function TablesController($rootScope, $location, $scope, $cookies, TablesService) {
     var tablesCount = 0;
 
+    /**
+     * Gets all tables from backend
+     */
     TablesService.getAllTables().then(function(response){
         $scope.tables = response.data;
         tablesCount = $scope.tables.length;
@@ -15,6 +20,9 @@ app.controller('TablesController', function TablesController($rootScope, $locati
         $location.path("/");
     };
 
+    /**
+     * Fills table information with data from server
+     */
     var fillTablesInfo = function() {
         for(var i=0; i < tablesCount; i++){
             $("#table"+($scope.tables[i].id)).html(
@@ -23,6 +31,11 @@ app.controller('TablesController', function TablesController($rootScope, $locati
         }
     };
 
+    /**
+     * Gets table by id
+     * @param id
+     * @returns {*} table with specified id
+     */
     var getTableById = function (id) {
         for(var i=0; i < tablesCount; i++){
            if($scope.tables[i].id === id) {
@@ -32,6 +45,10 @@ app.controller('TablesController', function TablesController($rootScope, $locati
     };
 
 
+    /**
+     * Selects table with specified id
+     * @param id
+     */
     $scope.selectTable = function(id){
         for(var i=1; i <= tablesCount; i++){
             if(i === id){

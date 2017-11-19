@@ -1,10 +1,15 @@
 /**
  * Angular controller for order
+ * @type {angular.controller}
+ * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
 app.controller('OrderController', function MenuListController($scope, $rootScope, $mdToast, $cookies, OrderService) {
+    //get table id from cookies
     if(($scope.tableId = $cookies.get("table")) === undefined) {
         $location.path("/tables");
     }
+
+    //if there is a active bill on the table get it ...
     OrderService.getActiveOrderOnTable($scope.tableId).then(function (response) {
         if(response.data !== ""){
             processGetBillResponse(response);
@@ -14,14 +19,24 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     $scope.order = [];
     $scope.orderPrice = 0;
 
+    /**
+     * Shows order in dialog
+     */
     $scope.showOrderDialog = function () {
         $("#orderModal").show();
     };
 
+    /**
+     * Closes order dialog
+     */
     $scope.closeOrderDialog = function () {
         $("#orderModal").hide();
     };
 
+    /**
+     * Decreases amount of dish in order - if the dish is main side dishes are removed as well
+     * @param dish
+     */
     $scope.decreaseAmount = function (dish) {
         var idToRemove = dish.ids[0];
         dish.count --;
@@ -34,6 +49,10 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         });
     };
 
+    /**
+     * Adds dish into order
+     * @param orderItem
+     */
     $scope.addToOrder = function (orderItem) {
         console.log(orderItem);
         if($scope.bill === undefined || $scope.bill === null){
@@ -49,6 +68,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
 
     };
 
+    /**
+     * Cancels order
+     */
     $scope.cancelOrder = function () {
         OrderService.cancelOrder($scope.bill.id).then(function (response) {
             $scope.order = [];
@@ -63,6 +85,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         });
     };
 
+    /**
+     * Confirms and sends order
+     */
     $scope.confirmOrder = function () {
         OrderService.confirmOrder($scope.bill.id).then(function (response) {
             $scope.order = [];
@@ -78,15 +103,26 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         });
     };
 
+    /**
+     * Reacts on add to order event from offer controller and adds current selection into order
+     */
     $rootScope.$on('addToOrder', function(event, args) {
         $scope.addToOrder(args.orderItem);
     });
 
+    /**
+     * Processes active order on table if there is one
+     * @param response
+     */
     var processGetBillResponse = function (response) {
         $scope.bill = response.data;
         refreshOrder();
     };
 
+    /**
+     * Processes response from server after adding a new selection into order
+     * @param response
+     */
     var processAddResponse = function(response){
         $scope.bill = response.data;
         refreshOrder();
@@ -99,6 +135,10 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         );
     };
 
+    /**
+     * Processes response from server after removing an item from order
+     * @param response
+     */
     var processRemoveResponse = function (response) {
         $scope.bill = response.data;
         refreshOrder();
@@ -110,6 +150,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         );
     };
 
+    /**
+     * Refresh order according to data from server response
+     */
     var refreshOrder = function () {
         var itemArr = [];
         var itemGroup = [];
@@ -144,6 +187,12 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         $scope.orderPrice = totalPrice;
     };
 
+    /**
+     * Checks if array contains item
+     * @param item
+     * @param arr
+     * @returns {number} index of item in array
+     */
     var orderContainsItem = function(item, arr){
         for(var i = 0; i < arr.length; i++){
             if(arr[i].id === item.id){
@@ -153,6 +202,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         return -1;
     };
 
+    /**
+     * Shakes order button
+     */
     var shakeButton = function () {
         $("#basketButton").addClass("shake");
         setTimeout(function() {

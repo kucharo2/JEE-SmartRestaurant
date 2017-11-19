@@ -1,5 +1,7 @@
 /**
  * Angular controller for registration
+ * @type {angular.controller}
+ * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
 app.controller('RegistrationController', function LoginController($scope, RegistrationService) {
     $scope.errors = [];
@@ -9,6 +11,9 @@ app.controller('RegistrationController', function LoginController($scope, Regist
     $scope.password = "";
     $scope.passwordConfirm = "";
 
+    /**
+     * Registers user
+     */
     var registerUser = function () {
         //TODO
         RegistrationService.registerUser();
