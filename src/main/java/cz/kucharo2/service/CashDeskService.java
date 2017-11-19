@@ -20,14 +20,6 @@ public interface CashDeskService {
 	Bill createBillOnTable(RestaurantTable table);
 
 	/**
-	 * Create bill items of food
-	 *
-	 * @param billItemFoods list bill items to be created
-	 *
-	 */
-	void createBillItem(List<BillItem> billItemFoods);
-
-	/**
 	 * Create bill item of food
 	 *
 	 * @param billItemFoods bill item to be created

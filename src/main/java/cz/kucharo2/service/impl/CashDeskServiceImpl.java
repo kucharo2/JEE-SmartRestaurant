@@ -35,14 +35,6 @@ public class CashDeskServiceImpl implements CashDeskService {
 		return bill;
 	}
 
-
-	@Override
-	public void createBillItem(List<BillItem> billItem) {
-		for(BillItem billItemFood : billItem) {
-			billItemDao.createOrUpdate(billItemFood);
-		}
-	}
-
 	@Override
 	public void createBillItem(BillItem billItemFoods) {
 		billItemDao.createOrUpdate(billItemFoods);

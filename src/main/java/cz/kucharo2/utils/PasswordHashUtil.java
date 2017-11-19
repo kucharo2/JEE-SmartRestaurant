@@ -8,7 +8,11 @@ import java.security.NoSuchAlgorithmException;
  * Copyright 2017 IEAP CTU
  * Author: Jakub Begera (jakub.begera@cvut.cz)
  */
-public class PassHash {
+public class PasswordHashUtil {
+
+    private PasswordHashUtil() {
+        // util class should never be instanced
+    }
 
     public static String encrypt(@NotNull String passwordOriginal) {
         String password = "<|>?p!*&" + passwordOriginal + ".§";

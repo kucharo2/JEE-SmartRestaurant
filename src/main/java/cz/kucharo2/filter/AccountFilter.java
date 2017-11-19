@@ -3,7 +3,7 @@ package cz.kucharo2.filter;
 import cz.kucharo2.data.dao.AccountDao;
 import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.data.enums.AccountRole;
-import cz.kucharo2.utils.PassHash;
+import cz.kucharo2.utils.PasswordHashUtil;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -61,7 +61,7 @@ public class AccountFilter implements ContainerRequestFilter {
         }
 
         // password validation
-        if (!PassHash.encrypt(pass).equals(account.getPassword())) {
+        if (!PasswordHashUtil.encrypt(pass).equals(account.getPassword())) {
             abortOnUnauthorized(requestContext, "Invalid password for username %s", username);
             return;
         }
