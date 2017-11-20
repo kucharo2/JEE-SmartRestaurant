@@ -13,7 +13,7 @@ public interface AccountService {
      * @param model data model for create new Account
      * @return boolean true if was create user
      */
-    boolean createNewAccount(RegisterNewAccountModel model);
+    void createNewAccount(RegisterNewAccountModel model);
 
     /**
      * Checks account credentials.

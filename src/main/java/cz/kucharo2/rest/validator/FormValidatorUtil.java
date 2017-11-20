@@ -1,6 +1,5 @@
 package cz.kucharo2.rest.validator;
 
-import cz.kucharo2.common.model.RegisterNewAccountModel;
 import cz.kucharo2.rest.model.FieldError;
 
 import javax.validation.ConstraintViolation;

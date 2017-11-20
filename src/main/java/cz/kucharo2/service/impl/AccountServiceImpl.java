@@ -6,7 +6,6 @@ import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.data.enums.AccountRole;
 import cz.kucharo2.service.AccountService;
 import cz.kucharo2.utils.PasswordHashUtil;
-import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -18,13 +17,10 @@ import java.util.Base64;
 public class AccountServiceImpl implements AccountService {
 
     @Inject
-    private Logger logger;
-
-    @Inject
     AccountDao accountDao;
 
     @Override
-    public boolean createNewAccount(RegisterNewAccountModel model) {
+    public void createNewAccount(RegisterNewAccountModel model) {
         Account account = new Account();
         account.setAccountRole(AccountRole.REGISTERED_CUSTOMER);
         account.setUsername(model.getUsername());
@@ -35,9 +31,6 @@ public class AccountServiceImpl implements AccountService {
         account.setEmail(model.getEmail());
 
         accountDao.createOrUpdate(account);
-        logger.info("Creating new account " + model.getUsername());
-
-        return true;
     }
 
     @Override
@@ -59,6 +52,5 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account findAccountByUsername(String username) {
         return accountDao.findByUsername(username);
-
     }
 }

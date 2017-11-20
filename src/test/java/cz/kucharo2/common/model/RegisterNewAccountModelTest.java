@@ -188,7 +188,7 @@ public class RegisterNewAccountModelTest {
     }
 
     @Test
-    public void shouldDetectBadFormatEmail(){
+    public void shouldDetectNoDomainInEmail(){
         registerNewAccountModel.setPassword("123123");
         registerNewAccountModel.setUsername("Test");
         registerNewAccountModel.setPhone("+420147258369");
@@ -204,7 +204,7 @@ public class RegisterNewAccountModelTest {
     }
 
     @Test
-    public void shouldDetectBadFormatEmail2(){
+    public void shouldDetectNoAtInEmail(){
         registerNewAccountModel.setPassword("123123");
         registerNewAccountModel.setUsername("Test");
         registerNewAccountModel.setPhone("+420147258369");
