@@ -16,15 +16,15 @@ import java.util.Date;
 @Proxy(lazy = false)
 public class Order extends DtoEntity {
 
-    public static final String TABLE_NAME = "Order";
-    public static final String BILL_ID = "order_id";
+    public static final String TABLE_NAME = "O_Order";
+    public static final String ORDER_ID = "order_id";
     public static final String DATE = "date";
     public static final String STATUS = "status";
     public static final String TABLE_ID = "table_id";
     public static final String ACCOUNT_ID = "account_id";
 
     @Id
-    @Column(name = BILL_ID)
+    @Column(name = ORDER_ID)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 

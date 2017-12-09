@@ -22,11 +22,11 @@ app.service('OrderService', function ($http) {
     /**
      * Adds item into existing order on server
      * @param tableid id of table
-     * @param orderid id of order(order)
+     * @param billid id of bill(order)
      * @param orderItem item to be added
      * @returns {HttpPromise}
      */
-    this.addItemToOrder = function (tableid, orderid, orderItem) {
+    this.addItemToOrder = function (tableid, billid, orderItem) {
         var itemsIds = [];
         for (var i = 0; i < orderItem.length; i++) {
             for (var j = 0; j < orderItem[i].count; j++) {
@@ -35,7 +35,7 @@ app.service('OrderService', function ($http) {
         }
         var data = {
             "tableId": tableid,
-            "orderId": orderid,
+            "orderId": billid,
             "itemsToAdd": createItemIdsFromOrderItem(orderItem)
         };
         console.log(data);
@@ -53,29 +53,29 @@ app.service('OrderService', function ($http) {
 
     /**
      * Removes item from specified order
-     * @param orderItemId id of item on order
+     * @param billItemId id of item on order
      * @returns {HttpPromise}
      */
-    this.removeItemFromOrder = function (orderItemId) {
-        return $http.delete(apiPrefix + "/order/deleteItem/" + orderItemId);
+    this.removeItemFromOrder = function (billItemId) {
+        return $http.delete(apiPrefix + "/order/deleteItem/" + billItemId);
     };
 
     /**
      * Confirms order
-     * @param orderId order (order) id
+     * @param billId bill (order) id
      * @returns {HttpPromise}
      */
-    this.confirmOrder = function (orderId) {
-        return $http.post(apiPrefix + "/order/" + orderId + "/confirm", null);
+    this.confirmOrder = function (billId) {
+        return $http.post(apiPrefix + "/order/" + billId + "/confirm", null);
     };
 
     /**
      * Cancels order
-     * @param orderId order (order) id
+     * @param billId bill (order) id
      * @returns {HttpPromise}
      */
-    this.cancelOrder = function (orderId) {
-        return $http.post(apiPrefix + "/order/" + orderId + "/cancel", null);
+    this.cancelOrder = function (billId) {
+        return $http.post(apiPrefix + "/order/" + billId + "/cancel", null);
     };
 
     /**

@@ -6,6 +6,7 @@ import cz.kucharo2.data.dao.OrderItemDao;
 import cz.kucharo2.data.entity.*;
 import cz.kucharo2.data.enums.OrderStatus;
 import cz.kucharo2.data.enums.CategoryType;
+import cz.kucharo2.event.ConfirmOrderEvent;
 import cz.kucharo2.rest.model.SessionContext;
 import cz.kucharo2.service.CashDeskService;
 import cz.kucharo2.service.MenuService;
@@ -15,6 +16,7 @@ import cz.kucharo2.service.exception.ServiceException;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -48,6 +50,9 @@ public class OrderingServiceImpl implements OrderingService {
 
     @Inject
     private SessionContext sessionContext;
+
+    @Inject
+    private Event<ConfirmOrderEvent> confirmOrderEventEvent;
 
     @Override
     public Integer orderItem(AddOrderItemModel model) throws ServiceException {
@@ -119,6 +124,7 @@ public class OrderingServiceImpl implements OrderingService {
         }
         order.setStatus(OrderStatus.CONFIRMED);
         orderDao.createOrUpdate(order);
+        confirmOrderEventEvent.fire(new ConfirmOrderEvent(order));
         return order;
     }
 

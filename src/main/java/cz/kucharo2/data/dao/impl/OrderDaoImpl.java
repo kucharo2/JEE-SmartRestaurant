@@ -23,7 +23,7 @@ public class OrderDaoImpl extends AbstractGenericDaoImpl<Order> implements Order
     }
 
     public List<Order> getUnpaidOrderOnTable(int tableID) {
-        String query = Order.BILL_ID + " in (select " + OrderItem.ID_COLUMN + " from " + OrderItem.TABLE_NAME +
+        String query = Order.ORDER_ID + " in (select " + OrderItem.ID_COLUMN + " from " + OrderItem.TABLE_NAME +
                 " where " + OrderItem.PAID + " = :paid) and " + Order.TABLE_ID + " = :tableId";
 
         Map<String, Object> params = new HashMap<>();
@@ -35,7 +35,7 @@ public class OrderDaoImpl extends AbstractGenericDaoImpl<Order> implements Order
 
     @Override
     public Order getCreatedOrderByTableAndUser(int tableId, int accountId) {
-        Query query = getEntityManager().createQuery("select b from Order b left join fetch b.orderItems " +
+        Query query = getEntityManager().createQuery("select b from " + Order.class.getName() + " b left join fetch b.orderItems " +
                 "where b.table.id = :tableId and b.account.id = :accountId and b.status = :status")
                 .setParameter("tableId", tableId)
                 .setParameter("accountId", accountId)
