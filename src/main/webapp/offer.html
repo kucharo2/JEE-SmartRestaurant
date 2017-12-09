@@ -171,11 +171,11 @@
     <!-- Order -->
 </div>
 <div class="order" ng-controller="OrderController">
-    <div id="tableAndBillInfo" class="left-top-corner" >
+    <div id="tableAndOrderInfo" class="left-top-corner" >
         Číslo stolu: <b>{{tableId}}</b>
-        <span ng-if="bill !== undefined && bill !== null"> / Číslo objednávky: <b>{{bill.id}}</b></span>
-        <a ng-if="bill !== undefined && bill !== null" ng-click="cancelOrder()" href=""> Zrušit objednávku </a>
-        <a ng-if="bill === undefined || bill === null" href="#/tables">Vybrat jiný stůl</a>
+        <span ng-if="order !== undefined && order !== null"> / Číslo objednávky: <b>{{order.id}}</b></span>
+        <a ng-if="order !== undefined && order !== null" ng-click="cancelOrder()" href=""> Zrušit objednávku </a>
+        <a ng-if="order === undefined || order === null" href="#/tables">Vybrat jiný stůl</a>
     </div>
     <button id="basketButton" class="btn btn-success right-top-corner" ng-click="showOrderDialog()">
         <i class="fa fa-sticky-note-o" aria-hidden="true"></i> Vaše objednávka [{{order.length}}]

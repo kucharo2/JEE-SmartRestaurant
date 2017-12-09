@@ -48,14 +48,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!--<dependency>-->
-			<!--<groupId>org.jboss.spec</groupId>-->
-			<!--<artifactId>jboss-javaee-web-7.0</artifactId>-->
-			<!--<version>${javaee7.web.spec.version}</version>-->
-			<!--<scope>provided</scope>-->
-			<!--<type>pom</type>-->
-		<!--</dependency>-->
-
 		<!--Database connection dependencies-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -80,6 +72,13 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>5.2.4.Final</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- ActiveMQ - persistent message queue-->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-all</artifactId>
+			<version>5.14.1</version>
 		</dependency>
 
 		<!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->

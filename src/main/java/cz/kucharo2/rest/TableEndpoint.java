@@ -1,6 +1,6 @@
 package cz.kucharo2.rest;
 
-import cz.kucharo2.data.entity.Bill;
+import cz.kucharo2.data.entity.Order;
 import cz.kucharo2.data.entity.RestaurantTable;
 import cz.kucharo2.filter.Secured;
 import cz.kucharo2.service.OrderingService;
@@ -35,11 +35,11 @@ public class TableEndpoint {
     }
 
     @GET
-    @Path("{tableId}/createdBill")
+    @Path("{tableId}/createdOrder")
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
-    public Bill getCreatedBillOnTable(@PathParam("tableId") Integer tableId) {
-        return orderingService.getCreatedBillOnTable(tableId);
+    public Order getCreatedOrderOnTable(@PathParam("tableId") Integer tableId) {
+        return orderingService.getCreatedOrderOnTable(tableId);
     }
 
 

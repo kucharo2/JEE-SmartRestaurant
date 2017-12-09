@@ -1,7 +1,7 @@
 package cz.kucharo2.service;
 
 import cz.kucharo2.common.model.AddOrderItemModel;
-import cz.kucharo2.data.entity.Bill;
+import cz.kucharo2.data.entity.Order;
 import cz.kucharo2.service.exception.ServiceException;
 
 /**
@@ -13,40 +13,40 @@ public interface OrderingService {
 	 * Order a single item
 	 *
 	 * @param model
-	 * @return return bill id
+	 * @return return order id
 	 * @throws ServiceException
 	 */
 	Integer orderItem(AddOrderItemModel model) throws ServiceException;
 
 	/**
-	 * Deletes bill item
-	 * @param billItemId bill item id
+	 * Deletes order item
+	 * @param orderItemId order item id
 	 */
-	Integer removeItemFomOrder(int billItemId) throws ServiceException;
+	Integer removeItemFomOrder(int orderItemId) throws ServiceException;
 
 	/**
-	 * Confirms bill by id
-	 * @param billId bill id
+	 * Confirms order by id
+	 * @param orderId order id
 	 */
-	Bill confirmBill(int billId) throws ServiceException;
+	Order confirmOrder(int orderId) throws ServiceException;
 
 	/**
-	 * Cancels bill by id
-	 * @param billId bill id
+	 * Cancels order by id
+	 * @param orderId order id
 	 */
-	Bill cancelBIll(int billId) throws ServiceException;
+	Order cancelBIll(int orderId) throws ServiceException;
 
 	/**
-	 * Returns bill by id
-	 * @param billId bill id
+	 * Returns order by id
+	 * @param orderId order id
 	 */
-	Bill getBillById(int billId);
+	Order getOrderById(int orderId);
 
 	/**
-	 * Return bill in state CREATED on table for logged user.
+	 * Return order in state CREATED on table for logged user.
 	 *
 	 * @param tableId id of table
 	 */
-	Bill getCreatedBillOnTable(int tableId);
+	Order getCreatedOrderOnTable(int tableId);
 
 }

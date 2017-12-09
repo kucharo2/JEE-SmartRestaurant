@@ -1,7 +1,7 @@
 package cz.kucharo2.rest;
 
 import cz.kucharo2.common.model.AddOrderItemModel;
-import cz.kucharo2.data.entity.Bill;
+import cz.kucharo2.data.entity.Order;
 import cz.kucharo2.filter.Secured;
 import cz.kucharo2.service.OrderingService;
 import cz.kucharo2.service.exception.ServiceException;
@@ -24,16 +24,16 @@ public class OrderingEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
-    public Bill addItems(AddOrderItemModel model) throws ServiceException {
-        Integer billId = orderingService.orderItem(model);
-        return orderingService.getBillById(billId);
+    public Order addItems(AddOrderItemModel model) throws ServiceException {
+        Integer orderId = orderingService.orderItem(model);
+        return orderingService.getOrderById(orderId);
     }
 
     @POST
     @Path("{orderId}/confirm")
     @Secured
     public void confirmOrder(@PathParam("orderId") Integer orderId) throws ServiceException {
-        orderingService.confirmBill(orderId);
+        orderingService.confirmOrder(orderId);
     }
 
     @POST
@@ -44,11 +44,11 @@ public class OrderingEndpoint {
     }
 
     @DELETE
-    @Path("deleteItem/{billItemId}")
+    @Path("deleteItem/{orderItemId}")
     @Secured
-    public Bill deleteItems(@PathParam("billItemId") Integer billItemId) throws ServiceException {
-        Integer billId = orderingService.removeItemFomOrder(billItemId);
-        return orderingService.getBillById(billId);
+    public Order deleteItems(@PathParam("orderItemId") Integer orderItemId) throws ServiceException {
+        Integer orderId = orderingService.removeItemFomOrder(orderItemId);
+        return orderingService.getOrderById(orderId);
     }
 
 }

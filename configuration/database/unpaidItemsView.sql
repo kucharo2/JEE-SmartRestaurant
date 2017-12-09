@@ -1,15 +1,15 @@
 CREATE OR REPLACE VIEW "UnpaidItems" AS
- SELECT food.name, billfood.price, billfood.bill_item_food_id AS billitem_id, true AS is_dish, bill.bill_id
-   FROM "Bill" bill
-   JOIN "BillItemFood" billfood ON bill.bill_id = billfood.bill_id
-   JOIN "Dish" food ON billfood.dish_id = food.dish_id
-  WHERE billfood.paid = false
+ SELECT food.name, orderfood.price, orderfood.order_item_food_id AS orderitem_id, true AS is_dish, order.order_id
+   FROM "Order" order
+   JOIN "OrderItemFood" orderfood ON order.order_id = orderfood.order_id
+   JOIN "Dish" food ON orderfood.dish_id = food.dish_id
+  WHERE orderfood.paid = false
 UNION ALL
- SELECT item.name, billdrink.price, billdrink.bill_item_drink_id AS billitem_id, false AS is_dish, bill.bill_id
-   FROM "Bill" bill
-   JOIN "BillItemDrink" billdrink ON bill.bill_id = billdrink.bill_id
-   JOIN "Drink" item ON item.drink_id = billdrink.drink_id
-  WHERE billdrink.paid = false;
+ SELECT item.name, orderdrink.price, orderdrink.order_item_drink_id AS orderitem_id, false AS is_dish, order.order_id
+   FROM "Order" order
+   JOIN "OrderItemDrink" orderdrink ON order.order_id = orderdrink.order_id
+   JOIN "Drink" item ON item.drink_id = orderdrink.drink_id
+  WHERE orderdrink.paid = false;
 
 ALTER TABLE "UnpaidItems"
   OWNER TO student_db13_16;

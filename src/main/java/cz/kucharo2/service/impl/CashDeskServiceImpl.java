@@ -1,11 +1,11 @@
 package cz.kucharo2.service.impl;
 
-import cz.kucharo2.data.dao.BillDao;
-import cz.kucharo2.data.dao.BillItemDao;
-import cz.kucharo2.data.entity.Bill;
-import cz.kucharo2.data.entity.BillItem;
+import cz.kucharo2.data.dao.OrderDao;
+import cz.kucharo2.data.dao.OrderItemDao;
+import cz.kucharo2.data.entity.Order;
+import cz.kucharo2.data.entity.OrderItem;
 import cz.kucharo2.data.entity.RestaurantTable;
-import cz.kucharo2.data.enums.BillStatus;
+import cz.kucharo2.data.enums.OrderStatus;
 import cz.kucharo2.rest.model.SessionContext;
 import cz.kucharo2.service.CashDeskService;
 
@@ -22,40 +22,40 @@ import java.util.List;
 public class CashDeskServiceImpl implements CashDeskService {
 
 	@Inject
-	private BillDao billDao;
+	private OrderDao orderDao;
 
 	@Inject
-	private BillItemDao billItemDao;
+	private OrderItemDao orderItemDao;
 
 	@Inject
 	private SessionContext sessionContext;
 
 	@Override
-	public Bill createBillOnTable(RestaurantTable table) {
-		Bill bill = new Bill();
-		bill.setTable(table);
-		bill.setStatus(BillStatus.CREATED);
-		bill.setAccount(sessionContext.getLoggedAccount());
-		billDao.createOrUpdate(bill);
-		return bill;
+	public Order createOrderOnTable(RestaurantTable table) {
+		Order order = new Order();
+		order.setTable(table);
+		order.setStatus(OrderStatus.CREATED);
+		order.setAccount(sessionContext.getLoggedAccount());
+		orderDao.createOrUpdate(order);
+		return order;
 	}
 
 	@Override
-	public void createBillItem(BillItem billItemFoods) {
-		billItemDao.createOrUpdate(billItemFoods);
+	public void createOrderItem(OrderItem orderItemFoods) {
+		orderItemDao.createOrUpdate(orderItemFoods);
 	}
 
 	@Override
-	public List<BillItem> getUnpaidBillItemFoodByBill(Bill bill) {
-		return billItemDao.getUnpaidBillItemByBill(bill.getId());
+	public List<OrderItem> getUnpaidOrderItemFoodByOrder(Order order) {
+		return orderItemDao.getUnpaidOrderItemByOrder(order.getId());
 	}
 
 	@Override
-	public void pay(List<BillItem> billItems) {
-		if(billItems != null && billItems.size() > 0) {
-			for(BillItem billItemFood: billItems) {
-				billItemFood.setPaid(true);
-				billItemDao.createOrUpdate(billItemFood);
+	public void pay(List<OrderItem> orderItems) {
+		if(orderItems != null && orderItems.size() > 0) {
+			for(OrderItem orderItemFood: orderItems) {
+				orderItemFood.setPaid(true);
+				orderItemDao.createOrUpdate(orderItemFood);
 			}
 		}
 	}

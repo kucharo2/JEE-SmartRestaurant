@@ -11,15 +11,15 @@ import java.util.Date;
  * @Author Roman Kuchár <kucharrom@gmail.com>.
  */
 @Entity
-@Table(name = BillItem.TABLE_NAME)
+@Table(name = OrderItem.TABLE_NAME)
 @Proxy(lazy = false)
-public class BillItem extends DtoEntity {
+public class OrderItem extends DtoEntity {
 
-    public static final String TABLE_NAME = "Bill_item";
-    public static final String ID_COLUMN = "bill_item_id";
+    public static final String TABLE_NAME = "Order_item";
+    public static final String ID_COLUMN = "order_item_id";
     public static final String PAID = "paid";
     public static final String PRICE = "price";
-    public static final String BILL_ID = "bill_id";
+    public static final String BILL_ID = "order_id";
     public static final String ITEM_ID = "item_id";
     public static final String PARENT_ID = "parent_id";
     public static final String CREATED = "created";
@@ -32,7 +32,7 @@ public class BillItem extends DtoEntity {
     @ManyToOne
     @JoinColumn(name = BILL_ID)
     @JsonIgnore
-    private Bill bill;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = ITEM_ID)
@@ -46,11 +46,11 @@ public class BillItem extends DtoEntity {
 
     @ManyToOne
     @JoinColumn(name = PARENT_ID)
-    private BillItem parentBillItem;
+    private OrderItem parentOrderItem;
 
-    @OneToMany(mappedBy = "parentBillItem", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "parentOrderItem", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
-    private Collection<BillItem> childBillItems;
+    private Collection<OrderItem> childOrderItems;
 
     @JoinColumn(name = CREATED)
     private Date created;
@@ -64,12 +64,12 @@ public class BillItem extends DtoEntity {
         this.id = id;
     }
 
-    public Bill getBill() {
-        return bill;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setBill(Bill bill) {
-        this.bill = bill;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Item getItem() {
@@ -96,20 +96,20 @@ public class BillItem extends DtoEntity {
         this.price = price;
     }
 
-    public BillItem getParentBillItem() {
-        return parentBillItem;
+    public OrderItem getParentOrderItem() {
+        return parentOrderItem;
     }
 
-    public void setParentBillItem(BillItem parentBillItems) {
-        this.parentBillItem = parentBillItems;
+    public void setParentOrderItem(OrderItem parentOrderItems) {
+        this.parentOrderItem = parentOrderItems;
     }
 
-    public Collection<BillItem> getChildBillItems() {
-        return childBillItems;
+    public Collection<OrderItem> getChildOrderItems() {
+        return childOrderItems;
     }
 
-    public void setChildBillItems(Collection<BillItem> childBillItems) {
-        this.childBillItems = childBillItems;
+    public void setChildOrderItems(Collection<OrderItem> childOrderItems) {
+        this.childOrderItems = childOrderItems;
     }
 
     public Date getCreated() {
@@ -125,19 +125,19 @@ public class BillItem extends DtoEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BillItem billItem = (BillItem) o;
+        OrderItem orderItem = (OrderItem) o;
 
-        if (paid != billItem.paid) return false;
-        if (price != billItem.price) return false;
-        if (!id.equals(billItem.id)) return false;
-        if (!bill.equals(billItem.bill)) return false;
-        return item.equals(billItem.item);
+        if (paid != orderItem.paid) return false;
+        if (price != orderItem.price) return false;
+        if (!id.equals(orderItem.id)) return false;
+        if (!order.equals(orderItem.order)) return false;
+        return item.equals(orderItem.item);
     }
 
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + bill.hashCode();
+        result = 31 * result + order.hashCode();
         result = 31 * result + item.hashCode();
         result = 31 * result + (paid ? 1 : 0);
         result = 31 * result + price;

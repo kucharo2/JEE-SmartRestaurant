@@ -1,8 +1,8 @@
 package cz.kucharo2.data.dao.impl;
 
-import cz.kucharo2.data.dao.BillItemDao;
-import cz.kucharo2.data.entity.BillItem;
-import cz.kucharo2.data.enums.BillStatus;
+import cz.kucharo2.data.dao.OrderItemDao;
+import cz.kucharo2.data.entity.OrderItem;
+import cz.kucharo2.data.enums.OrderStatus;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -18,23 +18,23 @@ import javax.inject.Inject;
  * Author: Jakub Begera (jakub.begera@cvut.cz)
  */
 @RunWith(Arquillian.class)
-public class BillItemImplTest {
+public class OrderItemImplTest {
 
     @Inject
-    private BillItemDao billItemDao;
+    private OrderItemDao orderItemDao;
 
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)
-                .addPackages(true, BillItemDao.class.getPackage())
-                .addPackages(true, BillItem.class.getPackage())
-                .addPackages(true, BillStatus.class.getPackage())
+                .addPackages(true, OrderItemDao.class.getPackage())
+                .addPackages(true, OrderItem.class.getPackage())
+                .addPackages(true, OrderStatus.class.getPackage())
                 .addAsResource("META-INF/persistence.xml")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
     @Test
     public void testParentId() throws Exception {
-        billItemDao.getAll();
+        orderItemDao.getAll();
     }
 }

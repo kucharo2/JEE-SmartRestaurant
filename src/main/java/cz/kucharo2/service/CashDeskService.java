@@ -1,7 +1,7 @@
 package cz.kucharo2.service;
 
-import cz.kucharo2.data.entity.Bill;
-import cz.kucharo2.data.entity.BillItem;
+import cz.kucharo2.data.entity.Order;
+import cz.kucharo2.data.entity.OrderItem;
 import cz.kucharo2.data.entity.RestaurantTable;
 
 import java.util.List;
@@ -12,32 +12,32 @@ import java.util.List;
 public interface CashDeskService {
 
 	/**
-	 * Create bill for specific table
+	 * Create order for specific table
 	 *
 	 * @param table table
-	 * @return id of created bill
+	 * @return id of created order
 	 */
-	Bill createBillOnTable(RestaurantTable table);
+	Order createOrderOnTable(RestaurantTable table);
 
 	/**
-	 * Create bill item of food
+	 * Create order item of food
 	 *
-	 * @param billItemFoods bill item to be created
+	 * @param orderItemFoods order item to be created
 	 */
-	void createBillItem(BillItem billItemFoods);
+	void createOrderItem(OrderItem orderItemFoods);
 
 	/**
-	 * Returns unpaid bill items of food for specific bill
+	 * Returns unpaid order items of food for specific order
 	 *
-	 * @param bill bill
-	 * @return unpaid bill items
+	 * @param order order
+	 * @return unpaid order items
 	 */
-	List<BillItem> getUnpaidBillItemFoodByBill(Bill bill);
+	List<OrderItem> getUnpaidOrderItemFoodByOrder(Order order);
 
 	/**
-	 * Pay bill items
-	 * @param billItems bill items of foods to be paid
+	 * Pay order items
+	 * @param orderItems order items of foods to be paid
 	 */
-	void pay(List<BillItem> billItems);
+	void pay(List<OrderItem> orderItems);
 
 }

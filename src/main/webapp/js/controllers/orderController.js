@@ -9,10 +9,10 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         $location.path("/tables");
     }
 
-    //if there is a active bill on the table get it ...
+    //if there is a active order on the table get it ...
     OrderService.getActiveOrderOnTable($scope.tableId).then(function (response) {
         if(response.data !== ""){
-            processGetBillResponse(response);
+            processGetOrderResponse(response);
         }
     });
 
@@ -55,13 +55,13 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      */
     $scope.addToOrder = function (orderItem) {
         console.log(orderItem);
-        if($scope.bill === undefined || $scope.bill === null){
+        if($scope.order === undefined || $scope.order === null){
             OrderService.createAndAddItemToOrder($scope.tableId, orderItem).then(function (response) {
                 processAddResponse(response);
             })
 
         } else {
-            OrderService.addItemToOrder($scope.tableId, $scope.bill.id, orderItem).then(function (response) {
+            OrderService.addItemToOrder($scope.tableId, $scope.order.id, orderItem).then(function (response) {
                 processAddResponse(response);
             })
         }
@@ -72,9 +72,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      * Cancels order
      */
     $scope.cancelOrder = function () {
-        OrderService.cancelOrder($scope.bill.id).then(function (response) {
+        OrderService.cancelOrder($scope.order.id).then(function (response) {
             $scope.order = [];
-            $scope.bill = null;
+            $scope.order = null;
             $mdToast.show(
                 $mdToast.simple()
                     .textContent('Objednávka byla zrušena!')
@@ -89,9 +89,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      * Confirms and sends order
      */
     $scope.confirmOrder = function () {
-        OrderService.confirmOrder($scope.bill.id).then(function (response) {
+        OrderService.confirmOrder($scope.order.id).then(function (response) {
             $scope.order = [];
-            $scope.bill = null;
+            $scope.order = null;
             $scope.closeOrderDialog();
             $mdToast.show(
                 $mdToast.simple()
@@ -114,8 +114,8 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      * Processes active order on table if there is one
      * @param response
      */
-    var processGetBillResponse = function (response) {
-        $scope.bill = response.data;
+    var processGetOrderResponse = function (response) {
+        $scope.order = response.data;
         refreshOrder();
     };
 
@@ -124,7 +124,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      * @param response
      */
     var processAddResponse = function(response){
-        $scope.bill = response.data;
+        $scope.order = response.data;
         refreshOrder();
         shakeButton();
         $mdToast.show(
@@ -140,7 +140,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      * @param response
      */
     var processRemoveResponse = function (response) {
-        $scope.bill = response.data;
+        $scope.order = response.data;
         refreshOrder();
         $mdToast.show(
             $mdToast.simple()
@@ -157,9 +157,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         var itemArr = [];
         var itemGroup = [];
         var totalPrice = 0;
-        for(var i = 0; i < $scope.bill.billItems.length; i++){
-            var billItem = $scope.bill.billItems[i];
-            if(billItem.parentBillItem === null){
+        for(var i = 0; i < $scope.order.orderItems.length; i++){
+            var orderItem = $scope.order.orderItems[i];
+            if(orderItem.parentOrderItem === null){
                 //push existing and start new item group
                 if(itemGroup.length > 0){
                     itemArr.push(itemGroup);
@@ -167,16 +167,16 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
                 }
             }
             var index;
-            if((index = orderContainsItem(billItem.item, itemGroup)) >= 0){
+            if((index = orderContainsItem(orderItem.item, itemGroup)) >= 0){
                 itemGroup[index]["count"]++;
-                itemGroup[index]["ids"].push(billItem.id);
+                itemGroup[index]["ids"].push(orderItem.id);
             }else{
-                billItem.item["count"] = 1;
-                billItem.item["ids"] = [billItem.id];
-                billItem.item["main"] = billItem.parentBillItem === null;
-                itemGroup.push(billItem.item);
+                orderItem.item["count"] = 1;
+                orderItem.item["ids"] = [orderItem.id];
+                orderItem.item["main"] = orderItem.parentOrderItem === null;
+                itemGroup.push(orderItem.item);
             }
-            totalPrice += billItem.item.price;
+            totalPrice += orderItem.item.price;
         }
         //push last item group
         if(itemGroup.length !== 0){

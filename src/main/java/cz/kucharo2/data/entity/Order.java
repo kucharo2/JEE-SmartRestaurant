@@ -1,6 +1,6 @@
 package cz.kucharo2.data.entity;
 
-import cz.kucharo2.data.enums.BillStatus;
+import cz.kucharo2.data.enums.OrderStatus;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -12,12 +12,12 @@ import java.util.Date;
  * @Author Roman Kuchár <kucharrom@gmail.com>.
  */
 @Entity
-@Table(name = Bill.TABLE_NAME)
+@Table(name = Order.TABLE_NAME)
 @Proxy(lazy = false)
-public class Bill extends DtoEntity {
+public class Order extends DtoEntity {
 
-    public static final String TABLE_NAME = "Bill";
-    public static final String BILL_ID = "bill_id";
+    public static final String TABLE_NAME = "Order";
+    public static final String BILL_ID = "order_id";
     public static final String DATE = "date";
     public static final String STATUS = "status";
     public static final String TABLE_ID = "table_id";
@@ -37,15 +37,15 @@ public class Bill extends DtoEntity {
 
     @Column(name = STATUS)
     @Enumerated(EnumType.STRING)
-    private BillStatus status;
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = ACCOUNT_ID)
     private Account account;
 
-    @OneToMany(mappedBy = "bill")
-    @OrderBy(BillItem.CREATED + " asc")
-    private Collection<BillItem> billItems;
+    @OneToMany(mappedBy = "order")
+    @OrderBy(OrderItem.CREATED + " asc")
+    private Collection<OrderItem> orderItems;
 
     @Override
     public Integer getId() {
@@ -72,11 +72,11 @@ public class Bill extends DtoEntity {
         this.date = date;
     }
 
-    public BillStatus getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(BillStatus status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -88,12 +88,12 @@ public class Bill extends DtoEntity {
         this.account = account;
     }
 
-    public Collection<BillItem> getBillItems() {
-        return billItems;
+    public Collection<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setBillItems(Collection<BillItem> billItems) {
-        this.billItems = billItems;
+    public void setOrderItems(Collection<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
     @Override
@@ -101,13 +101,13 @@ public class Bill extends DtoEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Bill bill = (Bill) o;
+        Order order = (Order) o;
 
-        if (id != null ? !id.equals(bill.id) : bill.id != null) return false;
-        if (table != null ? !table.equals(bill.table) : bill.table != null) return false;
-        if (date != null ? !date.equals(bill.date) : bill.date != null) return false;
-        if (account != null ? !account.equals(bill.account) : bill.account != null) return false;
-        return billItems != null ? billItems.equals(bill.billItems) : bill.billItems == null;
+        if (id != null ? !id.equals(order.id) : order.id != null) return false;
+        if (table != null ? !table.equals(order.table) : order.table != null) return false;
+        if (date != null ? !date.equals(order.date) : order.date != null) return false;
+        if (account != null ? !account.equals(order.account) : order.account != null) return false;
+        return orderItems != null ? orderItems.equals(order.orderItems) : order.orderItems == null;
     }
 
     @Override
@@ -116,18 +116,18 @@ public class Bill extends DtoEntity {
         result = 31 * result + (table != null ? table.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (account != null ? account.hashCode() : 0);
-        result = 31 * result + (billItems != null ? billItems.hashCode() : 0);
+        result = 31 * result + (orderItems != null ? orderItems.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Bill{" +
+        return "Order{" +
                 "id=" + id +
                 ", table=" + table +
                 ", date=" + date +
                 ", account=" + account +
-                ", billItems=" + billItems +
+                ", orderItems=" + orderItems +
                 '}';
     }
 }

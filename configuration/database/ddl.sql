@@ -3,10 +3,10 @@
 DROP SEQUENCE IF EXISTS Account_SEQ
 ;
 
-DROP SEQUENCE IF EXISTS Bill_SEQ
+DROP SEQUENCE IF EXISTS Order_SEQ
 ;
 
-DROP SEQUENCE IF EXISTS Bill_item_SEQ
+DROP SEQUENCE IF EXISTS Order_item_SEQ
 ;
 
 DROP SEQUENCE IF EXISTS category_seq
@@ -38,10 +38,10 @@ DROP TABLE IF EXISTS Account CASCADE
 DROP TABLE IF EXISTS Account_role CASCADE
 ;
 
-DROP TABLE IF EXISTS Bill CASCADE
+DROP TABLE IF EXISTS "Order" CASCADE
 ;
 
-DROP TABLE IF EXISTS Bill_item CASCADE
+DROP TABLE IF EXISTS Order_item CASCADE
 ;
 
 DROP TABLE IF EXISTS Category CASCADE
@@ -84,9 +84,9 @@ CREATE TABLE Account_role
 )
 ;
 
-CREATE TABLE Bill
+CREATE TABLE "Order" 
 (
-	bill_id integer NOT NULL   DEFAULT NEXTVAL(('Bill_SEQ'::text)::regclass),
+	order_id integer NOT NULL   DEFAULT NEXTVAL(('Order_SEQ'::text)::regclass),
 	date date NOT NULL   DEFAULT now(),
 	status varchar(50) NOT NULL DEFAULT 'CREATED',
 	table_id integer NULL,
@@ -94,15 +94,15 @@ CREATE TABLE Bill
 )
 ;
 
-CREATE TABLE Bill_item
+CREATE TABLE Order_item
 (
-	bill_item_id integer NOT NULL   DEFAULT NEXTVAL(('Bill_item_SEQ'::text)::regclass),
+	order_item_id integer NOT NULL   DEFAULT NEXTVAL(('Order_item_SEQ'::text)::regclass),
 	paid boolean NOT NULL   DEFAULT false,
 	price numeric NOT NULL,
-	bill_id integer NULL,
+	order_id integer NULL,
 	item_id integer NULL,
 	parent_id integer NULL,
-	created TIMESTAMP DEFAULT now();
+	created TIMESTAMP DEFAULT now()
 )
 ;
 
@@ -122,8 +122,8 @@ CREATE TABLE Item
 	price numeric NOT NULL,
 	category_id integer NOT NULL,
 	description varchar(255) NULL,
-	code varchar(50) NOT NULL,
-	image varchar(150) NOT NULL
+	code varchar(50) NOT NULL
+-- 	,image varchar(150) NOT NULL
 )
 ;
 
@@ -189,24 +189,24 @@ ALTER TABLE Account_role ADD CONSTRAINT PK_Account_table
 	PRIMARY KEY (role_id)
 ;
 
-ALTER TABLE Bill ADD CONSTRAINT PK_Bill
-	PRIMARY KEY (bill_id)
+ALTER TABLE "Order" ADD CONSTRAINT PK_Order
+	PRIMARY KEY (order_id)
 ;
 
-CREATE INDEX IXFK_Bill_Account ON Bill (account_id ASC)
+CREATE INDEX IXFK_Order_Account ON "Order" (account_id ASC)
 ;
 
-CREATE INDEX IXFK_Bill_Table ON Bill (table_id ASC)
+CREATE INDEX IXFK_Order_Table ON "Order" (table_id ASC)
 ;
 
-ALTER TABLE Bill_item ADD CONSTRAINT PK_BillItem
-	PRIMARY KEY (bill_item_id)
+ALTER TABLE Order_item ADD CONSTRAINT PK_OrderItem
+	PRIMARY KEY (order_item_id)
 ;
 
-CREATE INDEX IXFK_Bill_item_Item ON Bill_item (item_id ASC)
+CREATE INDEX IXFK_Order_item_Item ON Order_item (item_id ASC)
 ;
 
-CREATE INDEX IXFK_BillItem_Bill ON Bill_item (bill_id ASC)
+CREATE INDEX IXFK_OrderItem_Order ON Order_item (order_id ASC)
 ;
 
 ALTER TABLE Category ADD CONSTRAINT PK_Category
@@ -270,20 +270,20 @@ ALTER TABLE Account ADD CONSTRAINT FK_Account_Account_table
 	FOREIGN KEY (role_id) REFERENCES Account_role (role_id) ON DELETE No Action ON UPDATE No Action
 ;
 
-ALTER TABLE Bill ADD CONSTRAINT FK_Bill_Account
+ALTER TABLE "Order" ADD CONSTRAINT FK_Order_Account
 	FOREIGN KEY (account_id) REFERENCES Account (account_id) ON DELETE No Action ON UPDATE No Action
 ;
 
-ALTER TABLE Bill ADD CONSTRAINT FK_Bill_Table
+ALTER TABLE "Order" ADD CONSTRAINT FK_Order_Table
 	FOREIGN KEY (table_id) REFERENCES Restaurant_table (table_id) ON DELETE Restrict ON UPDATE No Action
 ;
 
-ALTER TABLE Bill_item ADD CONSTRAINT FK_Bill_item_Item
+ALTER TABLE Order_item ADD CONSTRAINT FK_Order_item_Item
 	FOREIGN KEY (item_id) REFERENCES Item (item_id) ON DELETE No Action ON UPDATE No Action
 ;
 
-ALTER TABLE Bill_item ADD CONSTRAINT FK_BillItem_Bill
-	FOREIGN KEY (bill_id) REFERENCES Bill (bill_id) ON DELETE Restrict ON UPDATE No Action
+ALTER TABLE Order_item ADD CONSTRAINT FK_OrderItem_Order
+	FOREIGN KEY (order_id) REFERENCES "Order" (order_id) ON DELETE Restrict ON UPDATE No Action
 ;
 
 ALTER TABLE Category ADD CONSTRAINT FK_Category_Category
@@ -314,8 +314,8 @@ ALTER TABLE Review ADD CONSTRAINT FK_Review_Item
 	FOREIGN KEY (item_id) REFERENCES Item (item_id) ON DELETE No Action ON UPDATE No Action
 ;
 
-ALTER TABLE Bill_item ADD CONSTRAINT FK_Bill_item_parent
-	FOREIGN KEY (parent_id) REFERENCES Bill_item (bill_item_id) ON DELETE No Action ON UPDATE No Action
+ALTER TABLE Order_item ADD CONSTRAINT FK_Order_item_parent
+	FOREIGN KEY (parent_id) REFERENCES Order_item (order_item_id) ON DELETE No Action ON UPDATE No Action
 ;
 
 /* Create Table Comments, Sequences for Autonumber Columns */
@@ -323,10 +323,10 @@ ALTER TABLE Bill_item ADD CONSTRAINT FK_Bill_item_parent
 CREATE SEQUENCE Account_SEQ INCREMENT 1 START 1
 ;
 
-CREATE SEQUENCE Bill_SEQ INCREMENT 1 START 1
+CREATE SEQUENCE Order_SEQ INCREMENT 1 START 1
 ;
 
-CREATE SEQUENCE Bill_item_SEQ INCREMENT 1 START 1
+CREATE SEQUENCE Order_item_SEQ INCREMENT 1 START 1
 ;
 
 CREATE SEQUENCE category_seq INCREMENT 1 START 1

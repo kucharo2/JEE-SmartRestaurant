@@ -1,10 +1,10 @@
 package cz.kucharo2.service.impl;
 
 import cz.kucharo2.common.model.AddOrderItemModel;
-import cz.kucharo2.data.dao.BillDao;
-import cz.kucharo2.data.dao.BillItemDao;
+import cz.kucharo2.data.dao.OrderDao;
+import cz.kucharo2.data.dao.OrderItemDao;
 import cz.kucharo2.data.entity.*;
-import cz.kucharo2.data.enums.BillStatus;
+import cz.kucharo2.data.enums.OrderStatus;
 import cz.kucharo2.data.enums.CategoryType;
 import cz.kucharo2.rest.model.SessionContext;
 import cz.kucharo2.service.CashDeskService;
@@ -41,10 +41,10 @@ public class OrderingServiceImpl implements OrderingService {
     private MenuService menuService;
 
     @Inject
-    private BillItemDao billItemDao;
+    private OrderItemDao orderItemDao;
 
     @Inject
-    private BillDao billDao;
+    private OrderDao orderDao;
 
     @Inject
     private SessionContext sessionContext;
@@ -54,110 +54,110 @@ public class OrderingServiceImpl implements OrderingService {
         if (model.getItemsToAdd().length < 1) {
             throw new IllegalArgumentException("At least one item id must be set.");
         }
-        Bill bill;
-        if (model.getBillId() == null) {
+        Order order;
+        if (model.getOrderId() == null) {
             // check opened order on table
-            bill = getCreatedBillOnTable(model.getTableId());
-            if (bill == null) {
-                // create new bill
+            order = getCreatedOrderOnTable(model.getTableId());
+            if (order == null) {
+                // create new order
                 logger.info("Creating new order on table " + model.getTableId());
                 RestaurantTable table = tableService.getTable(model.getTableId());
-                bill = cashDeskService.createBillOnTable(table);
+                order = cashDeskService.createOrderOnTable(table);
             }
         } else {
-            bill = getBillById(model.getBillId());
+            order = getOrderById(model.getOrderId());
             Account loggedAccount = sessionContext.getLoggedAccount();
-            if(bill.getAccount().isAnnonymousAccount() && !loggedAccount.isAnnonymousAccount()) {
-                bill.setAccount(loggedAccount);
-                billDao.createOrUpdate(bill);
-            } else if (!bill.getAccount().getId().equals(loggedAccount.getId())) {
-                throw new ServiceException("Cannot add bill item into bill that belongs to another account");
+            if(order.getAccount().isAnnonymousAccount() && !loggedAccount.isAnnonymousAccount()) {
+                order.setAccount(loggedAccount);
+                orderDao.createOrUpdate(order);
+            } else if (!order.getAccount().getId().equals(loggedAccount.getId())) {
+                throw new ServiceException("Cannot add order item into order that belongs to another account");
             }
         }
-        if (bill.getStatus() != BillStatus.CREATED) {
+        if (order.getStatus() != OrderStatus.CREATED) {
             throw new ServiceException("Not able to add another item on already confirmed order.");
         }
-        List<Item> itemsToBeAddToBill = new ArrayList<>();
-        BillItem mainFood = null;
+        List<Item> itemsToBeAddToOrder = new ArrayList<>();
+        OrderItem mainFood = null;
         for (Integer itemId : model.getItemsToAdd()) {
             Item item = menuService.getItemById(itemId);
 
             if (mainFood == null && item.getCategory().getParentCategory().getCode() == CategoryType.MAIN_FOOD
                     && item.getCategory().getCode() != CategoryType.PRILOHA) {
-                mainFood = createBillItem(item, bill);
-                cashDeskService.createBillItem(mainFood);
+                mainFood = createOrderItem(item, order);
+                cashDeskService.createOrderItem(mainFood);
             } else {
-                itemsToBeAddToBill.add(item);
+                itemsToBeAddToOrder.add(item);
             }
         }
-        for (Item item : itemsToBeAddToBill) {
-            BillItem billItem = createBillItem(item, bill);
+        for (Item item : itemsToBeAddToOrder) {
+            OrderItem orderItem = createOrderItem(item, order);
 
             if (mainFood != null) {
-                billItem.setParentBillItem(mainFood);
+                orderItem.setParentOrderItem(mainFood);
             }
-            cashDeskService.createBillItem(billItem);
+            cashDeskService.createOrderItem(orderItem);
         }
-        return bill.getId();
+        return order.getId();
     }
 
     @Override
-    public Integer removeItemFomOrder(int billItemId) throws ServiceException {
-        Bill bill = billItemDao.getById(billItemId).getBill();
-        if (bill.getStatus() != BillStatus.CREATED) {
+    public Integer removeItemFomOrder(int orderItemId) throws ServiceException {
+        Order order = orderItemDao.getById(orderItemId).getOrder();
+        if (order.getStatus() != OrderStatus.CREATED) {
             throw new ServiceException("Cannot delete item from order, because it's in different state than CREATED");
         }
-        billItemDao.delete(billItemDao.getById(billItemId));
-        return bill.getId();
+        orderItemDao.delete(orderItemDao.getById(orderItemId));
+        return order.getId();
     }
 
     @Override
-    public Bill confirmBill(int billId) throws ServiceException {
-        Bill bill = billDao.getById(billId);
-        if (bill.getStatus() != BillStatus.CREATED) {
+    public Order confirmOrder(int orderId) throws ServiceException {
+        Order order = orderDao.getById(orderId);
+        if (order.getStatus() != OrderStatus.CREATED) {
             throw new ServiceException("Cannot confirm order in different state than CREATED");
         }
-        bill.setStatus(BillStatus.CONFIRMED);
-        billDao.createOrUpdate(bill);
-        return bill;
+        order.setStatus(OrderStatus.CONFIRMED);
+        orderDao.createOrUpdate(order);
+        return order;
     }
 
     @Override
-    public Bill cancelBIll(int billId) throws ServiceException {
-        Bill bill = billDao.getById(billId);
-        if (bill.getStatus() != BillStatus.CREATED) {
+    public Order cancelBIll(int orderId) throws ServiceException {
+        Order order = orderDao.getById(orderId);
+        if (order.getStatus() != OrderStatus.CREATED) {
             throw new ServiceException("Cannot cancel order in different state than CREATED");
         }
-        bill.setStatus(BillStatus.CANCELED);
-        billDao.createOrUpdate(bill);
-        return bill;
+        order.setStatus(OrderStatus.CANCELED);
+        orderDao.createOrUpdate(order);
+        return order;
     }
 
     @Override
-    public Bill getBillById(int billId) {
-        return billDao.getBillWithItems(billId);
+    public Order getOrderById(int orderId) {
+        return orderDao.getOrderWithItems(orderId);
     }
 
     @Override
-    public Bill getCreatedBillOnTable(int tableId) {
+    public Order getCreatedOrderOnTable(int tableId) {
         Account loggedAccount = sessionContext.getLoggedAccount();
-        return billDao.getCreatedBillByTableAndUser(tableId, loggedAccount.getId());
+        return orderDao.getCreatedOrderByTableAndUser(tableId, loggedAccount.getId());
     }
 
     /**
-     * Creates a bill item from item
+     * Creates a order item from item
      *
      * @param item item
-     * @param bill bill on witch is ordered
-     * @return created bill item food
+     * @param order order on witch is ordered
+     * @return created order item food
      */
-    private BillItem createBillItem(Item item, Bill bill) {
-        BillItem billItemFood = new BillItem();
-        billItemFood.setItem(item);
-        billItemFood.setPrice(item.getPrice());
-        billItemFood.setBill(bill);
-        billItemFood.setCreated(new Date());
-        return billItemFood;
+    private OrderItem createOrderItem(Item item, Order order) {
+        OrderItem orderItemFood = new OrderItem();
+        orderItemFood.setItem(item);
+        orderItemFood.setPrice(item.getPrice());
+        orderItemFood.setOrder(order);
+        orderItemFood.setCreated(new Date());
+        return orderItemFood;
     }
 
 }
