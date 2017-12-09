@@ -13,11 +13,22 @@
                         <h4 class="modal-title">Profil uživatele</h4>
                     </div>
                     <div class="modal-body text-center">
-                        <b> Uživatelské jméno:</b> {{loggedUser.username}}<br>
-                        <b> Křestní jméno:</b>{{loggedUser.firstName}}<br>
-                        <b> Příjmení:</b> {{loggedUser.lastName}}<br>
-                        <b> Email:</b> {{loggedUser.email}}<br>
-                        <b> Telefon:</b> {{loggedUser.phone}}<br><br>
+                        <span ng-if="loggedUser.username !== null && loggedUser.username !== undefined && loggedUser.username.length !== 0">
+                            <b> Uživatelské jméno:</b> {{loggedUser.username}}<br>
+                        </span>
+                        <span ng-if="loggedUser.firstName !== null && loggedUser.firstName !== undefined && loggedUser.firstName.length !== 0">
+                            <b> Křestní jméno:</b>{{loggedUser.firstName}}<br>
+                        </span>
+                        <span ng-if="loggedUser.lastName !== null && loggedUser.lastName !== undefined && loggedUser.lastName.length !== 0">
+                            <b> Příjmení:</b> {{loggedUser.lastName}}<br>
+                        </span>
+                        <span ng-if="loggedUser.email !== null && loggedUser.email !== undefined && loggedUser.email.length !== 0">
+                            <b> Email:</b> {{loggedUser.email}}<br>
+                        </span>
+                        <span ng-if="loggedUser.phone !== null && loggedUser.phone !== undefined && loggedUser.phone.length !== 0">
+                            <b> Telefon:</b> {{loggedUser.phone}}<br>
+                        </span>
+                        <br>
                         <button ng-click="logout()" class="btn btn-danger">Odhlásit se</button>
                     </div>
                     <div class="modal-footer">
@@ -173,12 +184,12 @@
 <div class="order" ng-controller="OrderController">
     <div id="tableAndBillInfo" class="left-top-corner" >
         Číslo stolu: <b>{{tableId}}</b>
-        <span ng-if="bill !== undefined && bill !== null"> / Číslo objednávky: <b>{{bill.id}}</b></span>
-        <a ng-if="bill !== undefined && bill !== null" ng-click="cancelOrder()" href=""> Zrušit objednávku </a>
-        <a ng-if="bill === undefined || bill === null" href="#/tables">Vybrat jiný stůl</a>
+        <span ng-if="order !== undefined && order !== null"> / Číslo objednávky: <b>{{order.id}}</b></span>
+        <a ng-if="order !== undefined && order !== null" ng-click="cancelOrder()" href=""> Zrušit objednávku </a>
+        <a ng-if="order === undefined || order === null" href="#/tables">Vybrat jiný stůl</a>
     </div>
     <button id="basketButton" class="btn btn-success right-top-corner" ng-click="showOrderDialog()">
-        <i class="fa fa-sticky-note-o" aria-hidden="true"></i> Vaše objednávka [{{order.length}}]
+        <i class="fa fa-sticky-note-o" aria-hidden="true"></i> Vaše objednávka [{{orderItems.length}}]
     </button>
     <div id="orderModal" class="modal">
         <div class="modal-dialog modal-lg">
@@ -196,7 +207,7 @@
                                     <th>Cena</th>
                                     <th>Akce</th>
                                 </tr>
-                                <tbody ng-repeat="orderItem in order">
+                                <tbody ng-repeat="orderItem in orderItems">
                                 <tr ng-repeat="dish in orderItem track by $index">
                                     <td>{{dish.count}}</td>
                                     <td>

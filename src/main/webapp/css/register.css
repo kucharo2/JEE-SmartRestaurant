@@ -6,7 +6,6 @@ STYLES FOR REGISTER PAGE
     margin-left : -20px;
     margin-right: -20px;
     padding-top: 20px;
-    height: 100%;
     align-items: center;
     display: flex;
 }
@@ -21,7 +20,7 @@ STYLES FOR REGISTER PAGE
 }
 
 #register .card {
-    max-width: 350px;
+    width: 550px;
     padding: 20px;
     background-color: #F7F7F7;
     /* just in case there no content*/
@@ -36,7 +35,7 @@ STYLES FOR REGISTER PAGE
 }
 
 #register .card-container.card {
-    max-width: 350px;
+    width: 550px;
     padding: 40px 40px;
 }
 
@@ -65,6 +64,7 @@ STYLES FOR REGISTER PAGE
 
 #register .btn.btn-signin {
     /*background-color: #4d90fe; */
+    cursor: pointer;
     background-color: rgb(104, 145, 162);
     /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
     padding: 0px;

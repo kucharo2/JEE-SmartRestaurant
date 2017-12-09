@@ -164,3 +164,11 @@ body {
         transform: translate3d(4px, 0, 0);
     }
 }
+
+.md-toast-content.error {
+    background-color: #ab161c;
+}
+
+.input-error {
+    color:red;
+}

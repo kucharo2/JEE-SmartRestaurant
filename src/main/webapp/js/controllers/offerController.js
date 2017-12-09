@@ -3,18 +3,17 @@
  * @type {angular.controller}
  * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
-app.controller('MenuListController', function MenuListController($rootScope, $scope, $location, $mdToast, $cookies, MenuListService) {
+app.controller('MenuListController', function MenuListController($rootScope, $scope, $location, $mdToast, $cookies, MenuListService, ErrorService) {
     if(($scope.tableId = $cookies.get("table")) === undefined) {
         $location.path("/tables");
     }
     $scope.selectedDishes = [];
-    $scope.order = [];
+    $scope.orderItems = [];
     $scope.selectionPrice = 0;
-
 
     MenuListService.getAllDishesGroupedByCategories().then(function (response) {
         $scope.items = response.data;
-    });
+    }, ErrorService.serverErrorCallback);
 
     /**
      * Starts to select main dish - if previous selection was not commited provides modal window with solution
@@ -125,7 +124,7 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
         $scope.selectionPrice += dish.price;
         MenuListService.fetchCombinationsForItem(dish.id).then(function (response) {
             $scope.sideDishes = response.data;
-        });
+        }, ErrorService.serverErrorCallback);
     };
 
     /**

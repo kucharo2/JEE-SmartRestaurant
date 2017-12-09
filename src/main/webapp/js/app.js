@@ -3,7 +3,8 @@
  * @type {angular.Module}
  * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
-var app = angular.module('smartRestaurantApp', ['ngRoute', 'base64', 'ngCookies', 'ngMaterial', 'ngAria']).config(function($routeProvider, $httpProvider, $base64) {
+var app = angular.module('smartRestaurantApp', ['ngRoute', 'base64', 'ngCookies', 'ngMaterial', 'ngAria']).config(function($routeProvider, $httpProvider, $base64, $mdToastProvider) {
+
     var auth = $base64.encode("anonymous:cvut2017");
     $httpProvider.defaults.headers.common.Authorization = 'Basic ' + auth;
     $routeProvider
@@ -22,8 +23,28 @@ var app = angular.module('smartRestaurantApp', ['ngRoute', 'base64', 'ngCookies'
         .otherwise({
             templateUrl : "notFound.html"
         });
+
+    $mdToastProvider.addPreset('error500', {
+        options: function() {
+            return {
+                template:
+                '<md-toast>' +
+                '<div class="md-toast-content error">' +
+                'Při požadavku na server nastala chyba! Zkuste opakovat akci později.' +
+                '</div>' +
+                '</md-toast>',
+                controllerAs: 'toast',
+                bindToController: true,
+                position: 'bottom right',
+                hideDelay: 3500
+            };
+        }
+    });
 });
 var apiPrefix = "api/v1";
+
+
+
 
 
 

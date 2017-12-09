@@ -9,10 +9,15 @@ app.service('RegistrationService', function ($http) {
      * Registers user
      * @returns {null}
      */
-    this.registerUser = function () {
-        //TODO;
-        console.log("Register user - implement me");
-        return null;
+    this.registerUser = function (user) {
+        return $http({
+            url: apiPrefix + "/account/register",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: user
+        });
     }
 
 });

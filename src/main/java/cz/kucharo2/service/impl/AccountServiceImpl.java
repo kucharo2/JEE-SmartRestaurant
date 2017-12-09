@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
         account.setAccountRole(AccountRole.REGISTERED_CUSTOMER);
         account.setUsername(model.getUsername());
 
-        String password = new String(Base64.getDecoder().decode(model.getPassword()));
+        String password = model.getPassword();
         account.setPassword(PasswordHashUtil.encrypt(password));
 
         account.setPhone(model.getPhone());

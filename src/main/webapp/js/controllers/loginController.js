@@ -3,7 +3,7 @@
  * @type {angular.controller}
  * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
-app.controller('LoginController', function LoginController($scope, $mdToast, $base64, $location, LoginService) {
+app.controller('LoginController', function LoginController($scope, $mdToast, $base64, $location, LoginService, ErrorService) {
     $scope.errors = [];
     $scope.username = "";
     $scope.password = "";
@@ -22,7 +22,7 @@ app.controller('LoginController', function LoginController($scope, $mdToast, $ba
                 $scope.password = "";
                 $scope.errors.push("Nesprávné uživatelské jméno nebo heslo.");
             }
-        });
+        }, ErrorService.serverErrorCallback);
     };
 
     /**
@@ -62,7 +62,7 @@ app.controller('LoginController', function LoginController($scope, $mdToast, $ba
                 if(response.data !== ""){
                     $scope.loggedUser = response.data;
                 }
-            })
+            }, ErrorService.serverErrorCallback)
         }else {
             //no user logged in
         }

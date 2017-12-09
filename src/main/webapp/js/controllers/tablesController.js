@@ -3,7 +3,7 @@
  * @type {angular.controller}
  * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
-app.controller('TablesController', function TablesController($rootScope, $location, $scope, $cookies, TablesService) {
+app.controller('TablesController', function TablesController($rootScope, $location, $scope, $cookies, TablesService, ErrorService) {
     var tablesCount = 0;
 
     /**
@@ -13,7 +13,7 @@ app.controller('TablesController', function TablesController($rootScope, $locati
         $scope.tables = response.data;
         tablesCount = $scope.tables.length;
         fillTablesInfo();
-    });
+    }, ErrorService.serverErrorCallback);
 
     $scope.confirmTableSelection = function () {
         $cookies.put("table", $scope.selectedTable.id);

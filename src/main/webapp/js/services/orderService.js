@@ -22,11 +22,11 @@ app.service('OrderService', function ($http) {
     /**
      * Adds item into existing order on server
      * @param tableid id of table
-     * @param billid id of bill(order)
+     * @param orderId id of order(order)
      * @param orderItem item to be added
      * @returns {HttpPromise}
      */
-    this.addItemToOrder = function (tableid, billid, orderItem) {
+    this.addItemToOrder = function (tableid, orderId, orderItem) {
         var itemsIds = [];
         for (var i = 0; i < orderItem.length; i++) {
             for (var j = 0; j < orderItem[i].count; j++) {
@@ -35,7 +35,7 @@ app.service('OrderService', function ($http) {
         }
         var data = {
             "tableId": tableid,
-            "orderId": billid,
+            "orderId": orderId,
             "itemsToAdd": createItemIdsFromOrderItem(orderItem)
         };
         console.log(data);
@@ -62,20 +62,20 @@ app.service('OrderService', function ($http) {
 
     /**
      * Confirms order
-     * @param billId bill (order) id
+     * @param orderId order (order) id
      * @returns {HttpPromise}
      */
-    this.confirmOrder = function (billId) {
-        return $http.post(apiPrefix + "/order/" + billId + "/confirm", null);
+    this.confirmOrder = function (orderId) {
+        return $http.post(apiPrefix + "/order/" + orderId + "/confirm", null);
     };
 
     /**
      * Cancels order
-     * @param billId bill (order) id
+     * @param orderId order (order) id
      * @returns {HttpPromise}
      */
-    this.cancelOrder = function (billId) {
-        return $http.post(apiPrefix + "/order/" + billId + "/cancel", null);
+    this.cancelOrder = function (orderId) {
+        return $http.post(apiPrefix + "/order/" + orderId + "/cancel", null);
     };
 
     /**
