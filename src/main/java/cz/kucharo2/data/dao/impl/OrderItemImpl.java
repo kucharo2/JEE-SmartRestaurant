@@ -20,7 +20,7 @@ public class OrderItemImpl extends AbstractGenericDaoImpl<OrderItem> implements 
 
     @Override
     public List<OrderItem> getUnpaidOrderItemByOrder(int orderId) {
-        String query = OrderItem.BILL_ID + " = :orderId and " + OrderItem.PAID + " = :paid";
+        String query = OrderItem.ORDER_ID + " = :orderId and " + OrderItem.PAID + " = :paid";
         Map<String, Object> params = new HashMap<>();
 
         params.put("orderId", orderId);

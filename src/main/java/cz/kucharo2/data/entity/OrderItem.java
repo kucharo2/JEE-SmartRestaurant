@@ -19,7 +19,7 @@ public class OrderItem extends DtoEntity {
     public static final String ID_COLUMN = "order_item_id";
     public static final String PAID = "paid";
     public static final String PRICE = "price";
-    public static final String BILL_ID = "order_id";
+    public static final String ORDER_ID = "order_id";
     public static final String ITEM_ID = "item_id";
     public static final String PARENT_ID = "parent_id";
     public static final String CREATED = "created";
@@ -30,7 +30,7 @@ public class OrderItem extends DtoEntity {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = BILL_ID)
+    @JoinColumn(name = ORDER_ID)
     @JsonIgnore
     private Order order;
 

@@ -38,3 +38,6 @@ alter table account ALTER COLUMN role_id SET NOT NULL;
 delete from account_role where role_id = 'COOKER';
 INSERT INTO account_role (role_id) VALUES ('WAITER');
 ALTER TABLE Account ADD CONSTRAINT UQ_Username UNIQUE (username);
+
+-- 9.12
+alter table "Order" rename to o_order
