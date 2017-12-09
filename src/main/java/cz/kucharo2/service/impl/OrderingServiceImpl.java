@@ -129,6 +129,11 @@ public class OrderingServiceImpl implements OrderingService {
     }
 
     @Override
+    public void saveOrder(Order order) {
+        orderDao.createOrUpdate(order);
+    }
+
+    @Override
     public Order cancelBIll(int orderId) throws ServiceException {
         Order order = orderDao.getById(orderId);
         if (order.getStatus() != OrderStatus.CREATED) {

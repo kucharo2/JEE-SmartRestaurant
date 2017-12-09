@@ -31,6 +31,13 @@ public interface OrderingService {
 	Order confirmOrder(int orderId) throws ServiceException;
 
 	/**
+	 * Save order.
+	 *
+	 * @param order order to be saved.
+	 */
+	void saveOrder(Order order);
+
+	/**
 	 * Cancels order by id
 	 * @param orderId order id
 	 */

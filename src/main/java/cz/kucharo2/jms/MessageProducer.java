@@ -16,7 +16,7 @@ import javax.jms.*;
 @Singleton
 public class MessageProducer {
 
-    public static final String BILLS_QUEUE_NAME = "ordersQueue";
+    public static final String ORDERS_QUEUE_NAME = "confirmedOrdersQueue";
 
     @Inject
     private Logger logger;
@@ -28,15 +28,10 @@ public class MessageProducer {
             connection = connectionFactory.createConnection();
             connection.start();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Queue queue = session.createQueue(BILLS_QUEUE_NAME);
+            Queue queue = session.createQueue(ORDERS_QUEUE_NAME);
             javax.jms.MessageProducer producer = session.createProducer(queue);
             MapMessage message = session.createMapMessage();
-//            message.setInt("seat", reservation.getSeat());
-//            Flight flight = reservation.getFlight();
-//            message.setDouble("price", flight.getPrice());
-//            message.setString("from", flight.getFrom().getName());
-//            message.setString("to", flight.getTo().getName());
-//            message.setString("date", flight.getDate().toString());
+            message.setInt("orderId", event.getOrder().getId());
             producer.send(queue, message);
         } catch (JMSException e) {
             logger.error("Cannot open JMS connection", e);

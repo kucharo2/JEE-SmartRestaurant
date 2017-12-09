@@ -1,7 +1,9 @@
 package cz.kucharo2.websocket;
 
+import cz.kucharo2.event.OrderStatusChange;
 import org.jboss.logging.Logger;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -15,15 +17,22 @@ import java.util.Set;
 /**
  * @Author Pavel Štíbal <stibapa1@fel.cvut.cz>.
  */
-@ServerEndpoint("/newWebSocket")
-public class WebSocket {
+@ServerEndpoint("/orderStatusWebSocket")
+public class OrderStatusWebSocket {
 
     @Inject
     private Logger logger;
 
     private static final Set<Session> SESSIONS = Collections.synchronizedSet(new HashSet<Session>());
 
-    public void handleOrderStatusChange(/*@Observes */ ) {
+    /**
+     * Handle order status change and notify all webSocket consumers.
+     * Message template: <orderId>-<orderStatus>
+     *
+     * @param orderStatusChange order status change event
+     */
+    public void handleOrderStatusChange(@Observes OrderStatusChange orderStatusChange) {
+        final String message = orderStatusChange.getOrder().getId() + "-" + orderStatusChange.getOrder().getStatus().name();
         sendAll(message);
     }
 
