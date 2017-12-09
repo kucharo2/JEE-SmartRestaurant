@@ -5,7 +5,7 @@ import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.filter.Secured;
 import cz.kucharo2.rest.model.FieldError;
 import cz.kucharo2.rest.model.FormResponse;
-import cz.kucharo2.rest.validator.ValidatorForRegistration;
+import cz.kucharo2.rest.validator.RegistrationValidator;
 import cz.kucharo2.service.AccountService;
 
 import javax.inject.Inject;
@@ -26,7 +26,7 @@ public class AccountEndpoint {
     private AccountService accountService;
 
     @Inject
-    private ValidatorForRegistration validatorForRegistration;
+    private RegistrationValidator registrationValidator;
 
     @POST
     @Path("register")
@@ -34,7 +34,7 @@ public class AccountEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public FormResponse registerNewAccount(RegisterNewAccountModel model) {
-        List<FieldError> errors = validatorForRegistration.validate(model);
+        List<FieldError> errors = registrationValidator.validate(model);
 
         if (!errors.isEmpty()) {
             return new FormResponse(null, errors);

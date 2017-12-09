@@ -1,5 +1,6 @@
 package cz.kucharo2.common.model;
 
+import cz.kucharo2.common.constants.ErrorValidationMessages;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +40,7 @@ public class RegisterNewAccountModelTest {
     @Test
     public void shouldHaveNoViolations(){
         registerNewAccountModel.setPassword("heslo123");
-        registerNewAccountModel.setUsername("Test");
+        registerNewAccountModel.setUsername("TestTest");
         registerNewAccountModel.setPhone("+420123456789");
         registerNewAccountModel.setEmail("a@a.aa");
 
@@ -56,14 +57,14 @@ public class RegisterNewAccountModelTest {
         assertEquals(1, violations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = violations.iterator().next();
-        assertEquals("Username must be fill", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_EMPTY_USERNAME, violation.getMessage());
         assertEquals("username", violation.getPropertyPath().toString());
         assertEquals(null, violation.getInvalidValue());
     }
 
     @Test
-    public void shouldDetectShortPassword(){
-        registerNewAccountModel.setPassword("123");
+    public void shouldDetectShortUsername(){
+        registerNewAccountModel.setPassword("heslo123");
         registerNewAccountModel.setUsername("Test");
         registerNewAccountModel.setPhone("+420123456789");
 
@@ -71,7 +72,22 @@ public class RegisterNewAccountModelTest {
         assertEquals(1, violations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = violations.iterator().next();
-        assertEquals("Size of password must be minimum 6", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_LENGTH_USERNAME, violation.getMessage());
+        assertEquals("username", violation.getPropertyPath().toString());
+        assertEquals("Test", violation.getInvalidValue());
+    }
+
+    @Test
+    public void shouldDetectShortPassword(){
+        registerNewAccountModel.setPassword("123");
+        registerNewAccountModel.setUsername("TestTest");
+        registerNewAccountModel.setPhone("+420123456789");
+
+        Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
+        assertEquals(1, violations.size());
+
+        ConstraintViolation<RegisterNewAccountModel> violation = violations.iterator().next();
+        assertEquals(ErrorValidationMessages.ERR_LENGTH_PASSWORD, violation.getMessage());
         assertEquals("password", violation.getPropertyPath().toString());
         assertEquals("123", violation.getInvalidValue());
     }
@@ -79,14 +95,14 @@ public class RegisterNewAccountModelTest {
 
     @Test
     public void shouldDetectEmptyPassword(){
-        registerNewAccountModel.setUsername("Test");
+        registerNewAccountModel.setUsername("TestTest");
         registerNewAccountModel.setPhone("+420123456789");
 
         Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
         assertEquals(1, violations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = violations.iterator().next();
-        assertEquals("Password must be fill", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_EMPTY_PASSWORD, violation.getMessage());
         assertEquals("password", violation.getPropertyPath().toString());
         assertEquals(null, violation.getInvalidValue());
     }
@@ -94,13 +110,13 @@ public class RegisterNewAccountModelTest {
     @Test
     public void shouldDetectEmptyPhoneNumber(){
         registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("Test");
+        registerNewAccountModel.setUsername("TestTest");
 
         Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
         assertEquals(1, violations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = violations.iterator().next();
-        assertEquals("Phone must be fill", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_EMPTY_PHONE, violation.getMessage());
         assertEquals("phone", violation.getPropertyPath().toString());
         assertEquals(null, violation.getInvalidValue());
     }
@@ -108,7 +124,7 @@ public class RegisterNewAccountModelTest {
     @Test
     public void shouldDetectShortPhoneNumber(){
         registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("Test");
+        registerNewAccountModel.setUsername("TestTest");
         registerNewAccountModel.setPhone("+4201321");
 
         Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
@@ -117,12 +133,12 @@ public class RegisterNewAccountModelTest {
         assertEquals(2, listViolations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = listViolations.get(0);
-        assertEquals("Size of phone must be between 9 and 13", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_BAD_FORMAT_PHONE, violation.getMessage());
         assertEquals("phone", violation.getPropertyPath().toString());
         assertEquals("+4201321", violation.getInvalidValue());
 
         violation = listViolations.get(1);
-        assertEquals("The specified phone number has bad format. Please enter in a similar format +420123456789", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_LENGTH_PHONE, violation.getMessage());
         assertEquals("phone", violation.getPropertyPath().toString());
         assertEquals("+4201321", violation.getInvalidValue());
     }
@@ -130,7 +146,7 @@ public class RegisterNewAccountModelTest {
     @Test
     public void shouldDetectLongPhoneNumber(){
         registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("Test");
+        registerNewAccountModel.setUsername("TestTest");
         registerNewAccountModel.setPhone("+420132147258369");
 
         Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
@@ -139,12 +155,12 @@ public class RegisterNewAccountModelTest {
         assertEquals(2, listViolations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = listViolations.get(0);
-        assertEquals("Size of phone must be between 9 and 13", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_BAD_FORMAT_PHONE, violation.getMessage());
         assertEquals("phone", violation.getPropertyPath().toString());
         assertEquals("+420132147258369", violation.getInvalidValue());
 
         violation = listViolations.get(1);
-        assertEquals("The specified phone number has bad format. Please enter in a similar format +420123456789", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_LENGTH_PHONE, violation.getMessage());
         assertEquals("phone", violation.getPropertyPath().toString());
         assertEquals("+420132147258369", violation.getInvalidValue());
     }
@@ -152,14 +168,14 @@ public class RegisterNewAccountModelTest {
     @Test
     public void shouldDetectBadFormatPhoneNumber(){
         registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("Test");
+        registerNewAccountModel.setUsername("TestTest");
         registerNewAccountModel.setPhone("132147258369");
 
         Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
         assertEquals(1, violations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = violations.iterator().next();
-        assertEquals("The specified phone number has bad format. Please enter in a similar format +420123456789", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_BAD_FORMAT_PHONE, violation.getMessage());
         assertEquals("phone", violation.getPropertyPath().toString());
         assertEquals("132147258369", violation.getInvalidValue());
     }
@@ -167,7 +183,7 @@ public class RegisterNewAccountModelTest {
     @Test
     public void shouldDetectShortEmail(){
         registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("Test");
+        registerNewAccountModel.setUsername("TestTest");
         registerNewAccountModel.setPhone("+420147258369");
         registerNewAccountModel.setEmail("@a.aa");
 
@@ -177,12 +193,12 @@ public class RegisterNewAccountModelTest {
         assertEquals(2, listViolations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = listViolations.get(0);
-        assertEquals("Size of email must be minimum 6", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_BAD_FORMAT_EMAIL, violation.getMessage());
         assertEquals("email", violation.getPropertyPath().toString());
         assertEquals("@a.aa", violation.getInvalidValue());
 
         violation = listViolations.get(1);
-        assertEquals("The specified email has bad format. Please enter in a similar format a@a.cz", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_LENGTH_EMAIL, violation.getMessage());
         assertEquals("email", violation.getPropertyPath().toString());
         assertEquals("@a.aa", violation.getInvalidValue());
     }
@@ -190,7 +206,7 @@ public class RegisterNewAccountModelTest {
     @Test
     public void shouldDetectNoDomainInEmail(){
         registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("Test");
+        registerNewAccountModel.setUsername("TestTest");
         registerNewAccountModel.setPhone("+420147258369");
         registerNewAccountModel.setEmail("aaa@aaa");
 
@@ -198,7 +214,7 @@ public class RegisterNewAccountModelTest {
         assertEquals(1, violations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = violations.iterator().next();
-        assertEquals("The specified email has bad format. Please enter in a similar format a@a.cz", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_BAD_FORMAT_EMAIL, violation.getMessage());
         assertEquals("email", violation.getPropertyPath().toString());
         assertEquals("aaa@aaa", violation.getInvalidValue());
     }
@@ -206,7 +222,7 @@ public class RegisterNewAccountModelTest {
     @Test
     public void shouldDetectNoAtInEmail(){
         registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("Test");
+        registerNewAccountModel.setUsername("TestTest");
         registerNewAccountModel.setPhone("+420147258369");
         registerNewAccountModel.setEmail("aa.aa.aa");
 
@@ -214,7 +230,7 @@ public class RegisterNewAccountModelTest {
         assertEquals(1, violations.size());
 
         ConstraintViolation<RegisterNewAccountModel> violation = violations.iterator().next();
-        assertEquals("The specified email has bad format. Please enter in a similar format a@a.cz", violation.getMessage());
+        assertEquals(ErrorValidationMessages.ERR_BAD_FORMAT_EMAIL, violation.getMessage());
         assertEquals("email", violation.getPropertyPath().toString());
         assertEquals("aa.aa.aa", violation.getInvalidValue());
     }

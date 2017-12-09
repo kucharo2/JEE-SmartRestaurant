@@ -24,7 +24,10 @@ public class AccountServiceImpl implements AccountService {
         Account account = new Account();
         account.setAccountRole(AccountRole.REGISTERED_CUSTOMER);
         account.setUsername(model.getUsername());
-        account.setPassword(PasswordHashUtil.encrypt(model.getPassword()));
+
+        String password = new String(Base64.getDecoder().decode(model.getPassword()));
+        account.setPassword(PasswordHashUtil.encrypt(password));
+
         account.setPhone(model.getPhone());
         account.setFirstName(model.getFirstName());
         account.setLastName(model.getLastName());

@@ -1,5 +1,7 @@
 package cz.kucharo2.common.model;
 
+import cz.kucharo2.common.constants.ErrorValidationMessages;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -8,24 +10,25 @@ import javax.validation.constraints.Size;
  * @Author Pavel Štíbal <stibapa1@fel.cvut.cz>.
  */
 public class RegisterNewAccountModel {
-    @NotNull(message = "Username must be fill")
+    @NotNull(message = ErrorValidationMessages.ERR_EMPTY_USERNAME)
+    @Size(min = 6, message = ErrorValidationMessages.ERR_LENGTH_USERNAME)
     private String username;
 
-    @NotNull(message = "Password must be fill")
-    @Size(min = 6, message = "Size of password must be minimum 6")
+    @NotNull(message = ErrorValidationMessages.ERR_EMPTY_PASSWORD)
+    @Size(min = 6, message = ErrorValidationMessages.ERR_LENGTH_PASSWORD)
     private String password;
 
     private String firstName;
 
     private String lastName;
 
-    @Size(min = 6, message = "Size of email must be minimum 6")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$", message = "The specified email has bad format. Please enter in a similar format a@a.cz")
+    @Size(min = 6, message = ErrorValidationMessages.ERR_LENGTH_EMAIL)
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$", message = ErrorValidationMessages.ERR_BAD_FORMAT_EMAIL)
     private String email;
 
-    @NotNull(message = "Phone must be fill")
-    @Size(min=9, max=13, message = "Size of phone must be between 9 and 13")
-    @Pattern(regexp = "\\+420[0-9]{9}$", message = "The specified phone number has bad format. Please enter in a similar format +420123456789")
+    @NotNull(message = ErrorValidationMessages.ERR_EMPTY_PHONE)
+    @Size(min=9, max=13, message = ErrorValidationMessages.ERR_LENGTH_PHONE)
+    @Pattern(regexp = "\\+420[0-9]{9}$", message = ErrorValidationMessages.ERR_BAD_FORMAT_PHONE)
     private String phone;
 
     public String getUsername() {
