@@ -7,12 +7,21 @@ body {
 }
 
 #loggedUser {
-    right: 200px;
     width: 300px;
+    top: 10px;
 }
 
 #userLogin {
-    right: 200px;
+    width: 300px;
+    top: 10px;
+}
+
+#ordersInPreparation {
+    top: 60px;
+}
+
+#basketButton {
+    top: 60px;
     width: 300px;
 }
 
@@ -36,7 +45,7 @@ body {
     position: absolute;
     left: 40%;
     bottom: 0px;
-    top: 60px;
+    top: 120px;
     display: flex;
     flex-direction: column;
     background-color: rgba(255, 255, 255, 0.9);
@@ -48,7 +57,7 @@ body {
     position: absolute;
     left: 80%;
     bottom: 0px;
-    top: 60px;
+    top: 120px;
     display: flex;
     flex-direction: column;
     width: 20%;
@@ -69,14 +78,14 @@ body {
 }
 
 .header {
-    height: 50px;
+    height: 110px;
     background-color: rgba(255, 255, 255, 0.9);
     width: 100%;
 }
 
 .content-absolute {
     position: absolute;
-    top: 60px;
+    top: 120px;
     bottom: 0px;
     left: 0;
     right: 0;
@@ -170,6 +179,10 @@ body {
 
 .md-toast-content.error {
     background-color: #ab161c;
+}
+
+.md-toast-content.offerReady {
+    background-color: #09ab00;
 }
 
 .input-error {

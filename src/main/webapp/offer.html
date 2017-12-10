@@ -231,6 +231,10 @@
     </div>
 </div>
 <div class="order" ng-controller="OrderController">
+    <span ng-if="preparedOrders.length > 0" id="ordersInPreparation" class="left-top-corner">
+        Objednávek v přípravě: {{preparedOrders.length}} ( <span ng-repeat="order in preparedOrders">č. {{order.id}}<span
+            ng-if="$index < preparedOrders.length - 1">, </span></span> )
+    </span>
     <div id="tableAndBillInfo" class="left-top-corner">
         Číslo stolu: <b>{{tableId}}</b>
         <span ng-if="order !== undefined && order !== null"> / Číslo objednávky: <b>{{order.id}}</b></span>
@@ -260,9 +264,10 @@
                                 <tbody ng-repeat="orderItem in orderItems">
                                 <tr ng-repeat="dish in orderItem track by $index">
                                     <td>
-                                        <i ng-if="dish.main && !dish.drink" class="fa fa-cutlery"
+                                        <i ng-if="dish.main && !dish.drink" class="fa fa-cutlery fa-lg"
                                            aria-hidden="true"></i>
-                                        <i ng-if="dish.drink" class="fa fa-glass" aria-hidden="true"></i>
+                                        <img ng-if="!dish.main && !dish.drink" width="35px" height="35px" src="img/priloha.png"></img>
+                                        <i ng-if="dish.drink" class="fa fa-glass fa-lg" aria-hidden="true"></i>
                                     </td>
                                     <td>{{dish.count}}</td>
                                     <td>
@@ -282,8 +287,8 @@
                         </div>
                     </div>
                 </div>
+                <h3 class="text-center"> Celková cena: {{orderPrice}} Kč</h3>
                 <div class="modal-footer">
-                    <h3 class="text-center"> Celková cena: {{orderPrice}} Kč ] </h3>
                     <button type="button" class="btn btn-default" ng-click="closeOrderDialog()">Zavřít</button>
                     <button type="button" class="btn btn-primary" ng-click="confirmOrder()">Odeslat objednávku</button>
                 </div>

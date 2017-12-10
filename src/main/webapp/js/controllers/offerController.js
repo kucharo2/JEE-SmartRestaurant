@@ -112,7 +112,7 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
                 if($scope.selectedDishes[index].count === 0){
                     $scope.selectedDishes.splice(index, 1);
                 }
-                $scope.selectionPrice -= sideDish.price;
+                $scope.selectionPrice -= dish.price;
             }
         }
     };

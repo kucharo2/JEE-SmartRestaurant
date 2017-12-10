@@ -38,7 +38,6 @@ app.service('OrderService', function ($http) {
             "orderId": orderId,
             "itemsToAdd": createItemIdsFromOrderItem(orderItem)
         };
-        console.log(data);
         return $http.post(apiPrefix + "/order/addItems", data)
     };
 

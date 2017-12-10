@@ -5,13 +5,13 @@
  */
 app.controller('OrderController', function MenuListController($scope, $rootScope, $mdToast, $cookies, OrderService, ErrorService) {
     //get table id from cookies
-    if(($scope.tableId = $cookies.get("table")) === undefined) {
+    if (($scope.tableId = $cookies.get("table")) === undefined) {
         $location.path("/tables");
     }
 
     //if there is a active order on the table get it ...
     OrderService.getActiveOrderOnTable($scope.tableId).then(function (response) {
-        if(response.data !== ""){
+        if (response.data !== "") {
             $("#basketButton").prop('disabled', false);
             processGetBillResponse(response);
         } else {
@@ -19,8 +19,47 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         }
     }, ErrorService.serverErrorCallback);
 
+    $scope.preparedOrders = [];
     $scope.orderItems = [];
     $scope.orderPrice = 0;
+
+    function initializeOrderWebsocket() {
+        var orderSocket = new WebSocket("ws://localhost:8080/SmartRestaurant/orderStatusWebSocket");
+        var browserSupport = ("WebSocket" in window) ? true : false;
+        if (browserSupport) {
+            orderSocket.onopen = function () {
+                orderSocket.send("ping");
+            };
+            orderSocket.onmessage = function (event) {
+                var data = event.data;
+                var orderId = data.split("-")[0];
+                for (var i in $scope.preparedOrders) {
+                    if ($scope.preparedOrders[i].id === parseInt(orderId)) {
+                        $scope.preparedOrders.splice(i, 1);
+                        $mdToast.show(
+                            {
+                                template:
+                                '<md-toast>' +
+                                '<div class="md-toast-content offerReady">' +
+                                'Objednávka číslo '+ orderId +' je připravena!'+
+                                '</div>' +
+                                '</md-toast>',
+                                controllerAs: 'toast',
+                                bindToController: true,
+                                position: 'bottom right',
+                                hideDelay: 10000
+                            }
+                        )
+                    }
+                }
+
+            }
+        } else {
+            alert("WebSocket is NOT supported by your Browser!");
+        }
+    }
+
+    initializeOrderWebsocket();
 
     /**
      * Shows order in dialog
@@ -42,9 +81,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      */
     $scope.decreaseAmount = function (dish) {
         var idToRemove = dish.ids[0];
-        dish.count --;
-        dish.ids.splice(0,1);
-        if(dish.count === 0){
+        dish.count--;
+        dish.ids.splice(0, 1);
+        if (dish.count === 0) {
             $scope.orderItems.slice($scope.orderItems.indexOf(dish), 1);
         }
         OrderService.removeItemFromOrder(idToRemove).then(function (response) {
@@ -57,8 +96,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      * @param orderItem
      */
     $scope.addToOrder = function (orderItem) {
-        console.log(orderItem);
-        if($scope.order === undefined || $scope.order === null){
+        if ($scope.order === undefined || $scope.order === null) {
             OrderService.createAndAddItemToOrder($scope.tableId, orderItem).then(function (response) {
                 processAddResponse(response);
             }, ErrorService.serverErrorCallback)
@@ -84,7 +122,6 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
                     .position('bottom right')
                     .hideDelay(1500)
             );
-            console.log(response);
         }, ErrorService.serverErrorCallback);
     };
 
@@ -94,6 +131,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     $scope.confirmOrder = function () {
         OrderService.confirmOrder($scope.order.id).then(function (response) {
             $scope.orderItems = [];
+            $scope.preparedOrders.push($scope.order);
             $scope.order = null;
             $scope.closeOrderDialog();
             $mdToast.show(
@@ -102,14 +140,13 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
                     .position('bottom right')
                     .hideDelay(1500)
             );
-            console.log(response);
         }, ErrorService.serverErrorCallback);
     };
 
     /**
      * Reacts on add to order event from offer controller and adds current selection into order
      */
-    $rootScope.$on('addToOrder', function(event, args) {
+    $rootScope.$on('addToOrder', function (event, args) {
         $scope.addToOrder(args.orderItem);
     });
 
@@ -119,7 +156,6 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      */
     var processGetBillResponse = function (response) {
         $scope.order = response.data;
-        console.log(response.data);
         refreshOrder();
     };
 
@@ -127,7 +163,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      * Processes response from server after adding a new selection into order
      * @param response
      */
-    var processAddResponse = function(response){
+    var processAddResponse = function (response) {
         $scope.order = response.data;
         refreshOrder();
         shakeButton();
@@ -160,53 +196,67 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     var refreshOrder = function () {
         var itemArr = [];
         var drinksArr = [];
+        var lonelySideDishesArr = [];
         var itemGroup = [];
         var totalPrice = 0;
-        if($scope.order.orderItems.length === 0){
+        if ($scope.order.orderItems.length === 0) {
             $("#basketButton").prop('disabled', true);
         } else {
             $("#basketButton").prop('disabled', false);
         }
-        for(var i = 0; i < $scope.order.orderItems.length; i++){
+        for (var i = 0; i < $scope.order.orderItems.length; i++) {
             var orderItem = $scope.order.orderItems[i];
             var index;
-            if(orderItem.item.category.parentCategory.code !== "DRINKS"){
-                if(orderItem.parentOrderItem === null){
-                    //push existing and start new item group
-                    if(itemGroup.length > 0){
-                        itemArr.push(itemGroup);
-                        itemGroup = [];
-                    }
-                }
-                if((index = orderContainsItem(orderItem.item, itemGroup)) >= 0){
-                    itemGroup[index]["count"]++;
-                    itemGroup[index]["ids"].push(orderItem.id);
-                }else{
-                    orderItem.item["count"] = 1;
-                    orderItem.item["ids"] = [orderItem.id];
-                    orderItem.item["main"] = orderItem.parentOrderItem === null;
-                    itemGroup.push(orderItem.item);
-                }
-            } else {
-                if((index = orderContainsItem(orderItem.item, drinksArr)) >= 0){
+            if (orderItem.item.category.parentCategory.code === "DRINKS") {
+                if ((index = orderContainsItem(orderItem.item, drinksArr)) >= 0) {
                     drinksArr[index]["count"]++;
                     drinksArr[index]["ids"].push(orderItem.id);
-                }else{
+                } else {
                     orderItem.item["count"] = 1;
                     orderItem.item["ids"] = [orderItem.id];
                     orderItem.item["drink"] = true;
                     drinksArr.push(orderItem.item);
                 }
+            } else if(orderItem.item.category.code === "PRILOHA" && orderItem.parentOrderItem === null){
+                if ((index = orderContainsItem(orderItem.item, lonelySideDishesArr)) >= 0) {
+                    lonelySideDishesArr[index]["count"]++;
+                    lonelySideDishesArr[index]["ids"].push(orderItem.id);
+                } else {
+                    orderItem.item["count"] = 1;
+                    orderItem.item["ids"] = [orderItem.id];
+                    lonelySideDishesArr.push(orderItem.item);
+                }
+            } else {
+                if (orderItem.parentOrderItem === null) {
+                    //push existing and start new item group
+                    if (itemGroup.length > 0) {
+                        itemArr.push(itemGroup);
+                        itemGroup = [];
+                    }
+                }
+                if ((index = orderContainsItem(orderItem.item, itemGroup)) >= 0) {
+                    itemGroup[index]["count"]++;
+                    itemGroup[index]["ids"].push(orderItem.id);
+                } else {
+                    orderItem.item["count"] = 1;
+                    orderItem.item["ids"] = [orderItem.id];
+                    orderItem.item["main"] = orderItem.parentOrderItem === null;
+                    itemGroup.push(orderItem.item);
+                }
             }
             totalPrice += orderItem.item.price;
         }
         //push last item group
-        if(itemGroup.length !== 0){
+        if (itemGroup.length !== 0) {
             itemArr.push(itemGroup);
         }
-        if(drinksArr.length !== 0){
+        if (lonelySideDishesArr.length !== 0){
+            itemArr.push(lonelySideDishesArr);
+        }
+        if (drinksArr.length !== 0) {
             itemArr.push(drinksArr);
         }
+
 
         $scope.orderItems = itemArr;
         $scope.orderPrice = totalPrice;
@@ -218,9 +268,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      * @param arr
      * @returns {number} index of item in array
      */
-    var orderContainsItem = function(item, arr){
-        for(var i = 0; i < arr.length; i++){
-            if(arr[i].id === item.id){
+    var orderContainsItem = function (item, arr) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].id === item.id) {
                 return i;
             }
         }
@@ -232,7 +282,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      */
     var shakeButton = function () {
         $("#basketButton").addClass("shake");
-        setTimeout(function() {
+        setTimeout(function () {
             $("#basketButton").removeClass("shake");
         }, 800);
     };
