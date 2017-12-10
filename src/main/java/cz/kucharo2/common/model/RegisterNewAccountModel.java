@@ -22,13 +22,11 @@ public class RegisterNewAccountModel {
 
     private String lastName;
 
-    @Size(min = 6, message = ErrorValidationMessages.ERR_LENGTH_EMAIL)
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}$", message = ErrorValidationMessages.ERR_BAD_FORMAT_EMAIL)
     private String email;
 
     @NotNull(message = ErrorValidationMessages.ERR_EMPTY_PHONE)
-    @Size(min=9, max=13, message = ErrorValidationMessages.ERR_LENGTH_PHONE)
-    @Pattern(regexp = "\\+420[0-9]{9}$", message = ErrorValidationMessages.ERR_BAD_FORMAT_PHONE)
+    @Pattern(regexp = "(\\+[0-9]{2,3})? ?[0-9]{3} ?[0-9]{3} ?[0-9]{3}$", message = ErrorValidationMessages.ERR_BAD_FORMAT_PHONE)
     private String phone;
 
     public String getUsername() {
