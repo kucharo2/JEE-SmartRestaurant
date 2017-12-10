@@ -26,6 +26,10 @@ body {
     background-color: rgba(255, 255, 255, 0.9);
 }
 
+.modal {
+    overflow-y: auto;
+}
+
 .right-side {
     float: right;
     padding: 25px;
@@ -33,7 +37,6 @@ body {
     left: 40%;
     bottom: 0px;
     top: 60px;
-    height: 90%;
     display: flex;
     flex-direction: column;
     background-color: rgba(255, 255, 255, 0.9);
@@ -46,7 +49,6 @@ body {
     left: 80%;
     bottom: 0px;
     top: 60px;
-    height: 93%;
     display: flex;
     flex-direction: column;
     width: 20%;
@@ -78,12 +80,13 @@ body {
     bottom: 0px;
     left: 0;
     right: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
+    border-right: 2px solid black;
 }
 
 .right-bottom-quarter {
     height: 45%;
-    overflow-y: scroll;
+    overflow-y: auto;
     flex-grow: 1;
 }
 
@@ -171,4 +174,9 @@ body {
 
 .input-error {
     color:red;
+}
+
+.nav-item {
+    text-align: center;
+    width: 50%;
 }

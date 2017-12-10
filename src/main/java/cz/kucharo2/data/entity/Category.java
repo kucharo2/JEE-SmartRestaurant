@@ -40,7 +40,6 @@ public class Category extends DtoEntity {
 
     @ManyToOne
     @JoinColumn(name = PARENT_ID)
-    @JsonIgnore
     private Category parentCategory;
 
     @OneToMany(mappedBy = "parentCategory")

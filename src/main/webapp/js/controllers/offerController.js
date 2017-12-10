@@ -3,7 +3,7 @@
  * @type {angular.controller}
  * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
-app.controller('MenuListController', function MenuListController($rootScope, $scope, $location, $mdToast, $cookies, MenuListService, ErrorService) {
+app.controller('MenuListController', function MenuListController($rootScope, $scope, $location, $mdToast, $cookies, OfferService, ErrorService) {
     if(($scope.tableId = $cookies.get("table")) === undefined) {
         $location.path("/tables");
     }
@@ -11,9 +11,25 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
     $scope.orderItems = [];
     $scope.selectionPrice = 0;
 
-    MenuListService.getAllDishesGroupedByCategories().then(function (response) {
-        $scope.items = response.data;
+    OfferService.getAllDishesGroupedByCategories().then(function (response) {
+        $scope.food = response.data;
     }, ErrorService.serverErrorCallback);
+
+    OfferService.getDrinksGroupedByCategories().then(function (response) {
+        $scope.drinks = response.data;
+    });
+    initOffer();
+
+    function initOffer() {
+        $("#foodOffer").click(function () {
+            displayOffer("FOOD");
+        });
+
+        $("#drinksOffer").click(function () {
+            displayOffer("DRINKS");
+        });
+        displayOffer("FOOD");
+    }
 
     /**
      * Starts to select main dish - if previous selection was not commited provides modal window with solution
@@ -58,10 +74,10 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
             var dish = $scope.selectedDishes[i];
             orderItem.push(dish);
         }
-        $rootScope.$emit("addToOrder", {orderItem : orderItem});
         $scope.selectedDishes = [];
         $scope.detailItem = null;
         $scope.selectionPrice = 0;
+        $rootScope.$emit("addToOrder", {orderItem : orderItem});
     };
 
     /**
@@ -102,11 +118,19 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
     };
 
     /**
-     * Toggles items in category
+     * Toggles food items in category
      * @param categoryIndex
      */
-    $scope.toggleCategoryItems = function (categoryIndex) {
-        $('.category' + categoryIndex).toggleClass('invisibleElement')
+    $scope.toggleFoodCategoryItems = function (categoryIndex) {
+        $('.food-category' + categoryIndex).toggleClass('invisibleElement')
+    };
+
+    /**
+     * Toggles drink items in category
+     * @param categoryIndex
+     */
+    $scope.toggleDrinkCategoryItems = function (categoryIndex) {
+        $('.drink-category' + categoryIndex).toggleClass('invisibleElement')
     };
 
 
@@ -122,9 +146,21 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
         $scope.selectedDishes = [];
         $scope.selectedDishes.push(dish);
         $scope.selectionPrice += dish.price;
-        MenuListService.fetchCombinationsForItem(dish.id).then(function (response) {
+        OfferService.fetchCombinationsForItem(dish.id).then(function (response) {
             $scope.sideDishes = response.data;
         }, ErrorService.serverErrorCallback);
+    };
+
+    $scope.addDrink = function(category, drink) {
+        var index;
+        if((index = $scope.selectedDishes.indexOf(drink)) >= 0){
+            $scope.selectedDishes[index].count++;
+        }else {
+            drink["count"] = 1;
+            drink["main"] = false;
+            $scope.selectedDishes.push(drink);
+        }
+        $scope.selectionPrice += drink.price;
     };
 
     /**
@@ -141,5 +177,23 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
         $("#unconfirmedSelectionModal").hide();
     };
 
-
+    function displayOffer (type) {
+        var foodTab = $("#foodOffer");
+        var drinkTab = $("#drinksOffer");
+        var drinksTable = $("#drinksTable");
+        var foodTable = $("#dishesTable");
+        if(type === "FOOD"){
+            foodTab.addClass("active");
+            drinkTab.removeClass("active");
+            drinksTable.addClass("invisibleElement");
+            foodTable.removeClass("invisibleElement");
+        } else if(type === "DRINKS"){
+            foodTab.removeClass("active");
+            drinkTab.addClass("active");
+            drinksTable.removeClass("invisibleElement");
+            foodTable.addClass("invisibleElement");
+        } else {
+            console.error("Unknown type of offer");
+        }
+    }
 });

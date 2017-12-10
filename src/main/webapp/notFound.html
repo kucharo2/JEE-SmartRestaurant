@@ -1,17 +1,19 @@
 <!-- NOT FOUND VIEW -->
-<div id="notfoundview">
-    <div>
-        <img id="yodaimg" src="img/yoda.jpg" data-video="https://www.youtube.com/embed/U9t-slLl30E?autoplay=1">
-        <h1>
-            May the <span style="color: limegreen"><b>404</b></span> be with you <br><br>
-            Looks like the SEAGULLS came and poke this PAGE you are loooking for into COCONUT... Or maybe the page grew older and got hit by a boulder ....
-        </h1>
+<div class="container-fluid">
+    <div id="notfoundview">
+        <div>
+            <img id="yodaimg" src="img/yoda.jpg" data-video="https://www.youtube.com/embed/U9t-slLl30E?autoplay=1">
+            <h1>
+                May the <span style="color: limegreen"><b>404</b></span> be with you <br><br>
+                Looks like the SEAGULLS came and poke this PAGE you are loooking for into COCONUT... Or maybe the page grew older and got hit by a boulder ....
+            </h1>
+        </div>
+        <br>
+        <script>
+            $('#yodaimg').click(function(){
+                var video = '<iframe width="750" height="455" src="'+ $(this).attr('data-video') +'"></iframe>';
+                $(this).replaceWith(video);
+            });
+        </script>
     </div>
-    <br>
-    <script>
-        $('#yodaimg').click(function(){
-            var video = '<iframe width="750" height="455" src="'+ $(this).attr('data-video') +'"></iframe>';
-            $(this).replaceWith(video);
-        });
-    </script>
 </div>

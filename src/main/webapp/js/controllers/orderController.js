@@ -119,6 +119,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      */
     var processGetBillResponse = function (response) {
         $scope.order = response.data;
+        console.log(response.data);
         refreshOrder();
     };
 
@@ -158,6 +159,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
      */
     var refreshOrder = function () {
         var itemArr = [];
+        var drinksArr = [];
         var itemGroup = [];
         var totalPrice = 0;
         if($scope.order.orderItems.length === 0){
@@ -167,28 +169,43 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         }
         for(var i = 0; i < $scope.order.orderItems.length; i++){
             var orderItem = $scope.order.orderItems[i];
-            if(orderItem.parentOrderItem === null){
-                //push existing and start new item group
-                if(itemGroup.length > 0){
-                    itemArr.push(itemGroup);
-                    itemGroup = [];
-                }
-            }
             var index;
-            if((index = orderContainsItem(orderItem.item, itemGroup)) >= 0){
-                itemGroup[index]["count"]++;
-                itemGroup[index]["ids"].push(orderItem.id);
-            }else{
-                orderItem.item["count"] = 1;
-                orderItem.item["ids"] = [orderItem.id];
-                orderItem.item["main"] = orderItem.parentOrderItem === null;
-                itemGroup.push(orderItem.item);
+            if(orderItem.item.category.parentCategory.code !== "DRINKS"){
+                if(orderItem.parentOrderItem === null){
+                    //push existing and start new item group
+                    if(itemGroup.length > 0){
+                        itemArr.push(itemGroup);
+                        itemGroup = [];
+                    }
+                }
+                if((index = orderContainsItem(orderItem.item, itemGroup)) >= 0){
+                    itemGroup[index]["count"]++;
+                    itemGroup[index]["ids"].push(orderItem.id);
+                }else{
+                    orderItem.item["count"] = 1;
+                    orderItem.item["ids"] = [orderItem.id];
+                    orderItem.item["main"] = orderItem.parentOrderItem === null;
+                    itemGroup.push(orderItem.item);
+                }
+            } else {
+                if((index = orderContainsItem(orderItem.item, drinksArr)) >= 0){
+                    drinksArr[index]["count"]++;
+                    drinksArr[index]["ids"].push(orderItem.id);
+                }else{
+                    orderItem.item["count"] = 1;
+                    orderItem.item["ids"] = [orderItem.id];
+                    orderItem.item["drink"] = true;
+                    drinksArr.push(orderItem.item);
+                }
             }
             totalPrice += orderItem.item.price;
         }
         //push last item group
         if(itemGroup.length !== 0){
             itemArr.push(itemGroup);
+        }
+        if(drinksArr.length !== 0){
+            itemArr.push(drinksArr);
         }
 
         $scope.orderItems = itemArr;

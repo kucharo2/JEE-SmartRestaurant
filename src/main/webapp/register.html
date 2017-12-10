@@ -1,14 +1,16 @@
 <!-- LOGIN VIEW -->
-<div id="register" ng-controller="RegistrationController">
-    <div class="card card-container">
-        <a href="#/">< Zpět ke stolu</a>
+<div class="container-fluid">
+    <div id="register" ng-controller="RegistrationController">
+        <div class="card card-container">
+            <a href="#/">< Zpět ke stolu</a>
             <form class="form-horizontal" id="registrationForm">
                 <div class="form-group">
                     <label for="username" class="cols-sm-2 control-label">Uživatelské jméno *</label>
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="username" id="username" ng-model="username" autofocus/>
+                            <input type="text" class="form-control" name="username" id="username" ng-model="username"
+                                   autofocus/>
                         </div>
                         <div class="input-error">
                             <span id="username-error"></span>
@@ -21,7 +23,8 @@
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="firstName" ng-model="firstName" id="firstName"/>
+                            <input type="text" class="form-control" name="firstName" ng-model="firstName"
+                                   id="firstName"/>
                         </div>
                         <div class="input-error">
                             <span id="firstName-error"></span>
@@ -34,7 +37,7 @@
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="lastName" ng-model="lastName" id="lastName" />
+                            <input type="text" class="form-control" name="lastName" ng-model="lastName" id="lastName"/>
                         </div>
                         <div class="input-error">
                             <span id="lastName-error"></span>
@@ -46,8 +49,9 @@
                     <label for="email" class="cols-sm-2 control-label">E-mail *</label>
                     <div class="cols-sm-10">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope-o fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="email" ng-model="email" id="email" />
+                            <span class="input-group-addon"><i class="fa fa-envelope-o fa"
+                                                               aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" name="email" ng-model="email" id="email"/>
                         </div>
                         <div class="input-error">
                             <span id="email-error"></span>
@@ -61,7 +65,7 @@
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-phone fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="phone" ng-model="phone" id="phone" />
+                            <input type="text" class="form-control" name="phone" ng-model="phone" id="phone"/>
                         </div>
                         <div class="input-error">
                             <span id="phone-error"></span>
@@ -74,7 +78,8 @@
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                            <input type="password" class="form-control" name="password" ng-model="password" id="password"/>
+                            <input type="password" class="form-control" name="password" ng-model="password"
+                                   id="password"/>
                         </div>
                         <div class="input-error">
                             <span id="password-error"></span>
@@ -87,7 +92,8 @@
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                            <input type="password" class="form-control" name="confirm" ng-model="passwordConfirm" id="confirm"/>
+                            <input type="password" class="form-control" name="confirm" ng-model="passwordConfirm"
+                                   id="confirm"/>
                         </div>
                         <div class="input-error">
                             <span id="passwordRetype-error"></span>
@@ -99,5 +105,6 @@
             </form>
             <br>
             Už máte účet? <a href="#/login">Přihlašte se zde</a>
+        </div>
     </div>
 </div>

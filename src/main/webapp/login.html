@@ -1,15 +1,19 @@
 <!-- LOGIN VIEW -->
-<div id="login" ng-controller="LoginController">
-    <div class="card card-container">
-        <a href="#/">< Zpět ke stolu</a><br>
-        <span ng-repeat="error in errors" class="input-error">{{error}}</span><br>
-        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
-        <p id="profile-name" class="profile-name-card"></p>
-        <form class="form-signin" id="loginForm">
-            <input type="text" id="inputUsername" class="form-control" placeholder="Uživatelské jméno" required autofocus ng-model="username">
-            <input type="password" id="inputPassword" class="form-control" placeholder="Heslo" required ng-model="password">
-            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Přihlásit se</button>
-        </form><!-- /form -->
-        Nemáte účet? <a href="#/register">Registrujte se</a>
+<div class="container-fluid">
+    <div id="login" ng-controller="LoginController">
+        <div class="card card-container">
+            <a href="#/">< Zpět ke stolu</a><br>
+            <span ng-repeat="error in errors" class="input-error">{{error}}</span><br>
+            <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
+            <p id="profile-name" class="profile-name-card"></p>
+            <form class="form-signin" id="loginForm">
+                <input type="text" id="inputUsername" class="form-control" placeholder="Uživatelské jméno" required
+                       autofocus ng-model="username">
+                <input type="password" id="inputPassword" class="form-control" placeholder="Heslo" required
+                       ng-model="password">
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Přihlásit se</button>
+            </form><!-- /form -->
+            Nemáte účet? <a href="#/register">Registrujte se</a>
+        </div>
     </div>
 </div>
