@@ -9,9 +9,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -122,50 +119,6 @@ public class RegisterNewAccountModelTest {
     }
 
     @Test
-    public void shouldDetectShortPhoneNumber(){
-        registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("TestTest");
-        registerNewAccountModel.setPhone("+4201321");
-
-        Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
-        List<ConstraintViolation<RegisterNewAccountModel>> listViolations = new ArrayList(violations);
-        listViolations.sort(Comparator.comparing(ConstraintViolation::getMessage));
-        assertEquals(2, listViolations.size());
-
-        ConstraintViolation<RegisterNewAccountModel> violation = listViolations.get(0);
-        assertEquals(ErrorValidationMessages.ERR_BAD_FORMAT_PHONE, violation.getMessage());
-        assertEquals("phone", violation.getPropertyPath().toString());
-        assertEquals("+4201321", violation.getInvalidValue());
-
-        violation = listViolations.get(1);
-        assertEquals(ErrorValidationMessages.ERR_LENGTH_PHONE, violation.getMessage());
-        assertEquals("phone", violation.getPropertyPath().toString());
-        assertEquals("+4201321", violation.getInvalidValue());
-    }
-
-    @Test
-    public void shouldDetectLongPhoneNumber(){
-        registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("TestTest");
-        registerNewAccountModel.setPhone("+420132147258369");
-
-        Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
-        List<ConstraintViolation<RegisterNewAccountModel>> listViolations = new ArrayList(violations);
-        listViolations.sort(Comparator.comparing(ConstraintViolation::getMessage));
-        assertEquals(2, listViolations.size());
-
-        ConstraintViolation<RegisterNewAccountModel> violation = listViolations.get(0);
-        assertEquals(ErrorValidationMessages.ERR_BAD_FORMAT_PHONE, violation.getMessage());
-        assertEquals("phone", violation.getPropertyPath().toString());
-        assertEquals("+420132147258369", violation.getInvalidValue());
-
-        violation = listViolations.get(1);
-        assertEquals(ErrorValidationMessages.ERR_LENGTH_PHONE, violation.getMessage());
-        assertEquals("phone", violation.getPropertyPath().toString());
-        assertEquals("+420132147258369", violation.getInvalidValue());
-    }
-
-    @Test
     public void shouldDetectBadFormatPhoneNumber(){
         registerNewAccountModel.setPassword("123123");
         registerNewAccountModel.setUsername("TestTest");
@@ -180,28 +133,6 @@ public class RegisterNewAccountModelTest {
         assertEquals("132147258369", violation.getInvalidValue());
     }
 
-    @Test
-    public void shouldDetectShortEmail(){
-        registerNewAccountModel.setPassword("123123");
-        registerNewAccountModel.setUsername("TestTest");
-        registerNewAccountModel.setPhone("+420147258369");
-        registerNewAccountModel.setEmail("@a.aa");
-
-        Set<ConstraintViolation<RegisterNewAccountModel>> violations = validator.validate(registerNewAccountModel);
-        List<ConstraintViolation<RegisterNewAccountModel>> listViolations = new ArrayList(violations);
-        listViolations.sort(Comparator.comparing(ConstraintViolation::getMessage));
-        assertEquals(2, listViolations.size());
-
-        ConstraintViolation<RegisterNewAccountModel> violation = listViolations.get(0);
-        assertEquals(ErrorValidationMessages.ERR_BAD_FORMAT_EMAIL, violation.getMessage());
-        assertEquals("email", violation.getPropertyPath().toString());
-        assertEquals("@a.aa", violation.getInvalidValue());
-
-        violation = listViolations.get(1);
-        assertEquals(ErrorValidationMessages.ERR_LENGTH_EMAIL, violation.getMessage());
-        assertEquals("email", violation.getPropertyPath().toString());
-        assertEquals("@a.aa", violation.getInvalidValue());
-    }
 
     @Test
     public void shouldDetectNoDomainInEmail(){
