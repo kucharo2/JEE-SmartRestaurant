@@ -2,15 +2,12 @@ package cz.kucharo2.data.dao.impl;
 
 import cz.kucharo2.data.dao.OrderDao;
 import cz.kucharo2.data.entity.Order;
-import cz.kucharo2.data.entity.OrderItem;
 import cz.kucharo2.data.enums.OrderStatus;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author Roman Kuchár <kucharrom@gmail.com>.
@@ -23,14 +20,17 @@ public class OrderDaoImpl extends AbstractGenericDaoImpl<Order> implements Order
     }
 
     public List<Order> getUnpaidOrderOnTable(int tableID) {
-        String query = Order.ORDER_ID + " in (select " + OrderItem.ID_COLUMN + " from " + OrderItem.TABLE_NAME +
-                " where " + OrderItem.PAID + " = :paid) and " + Order.TABLE_ID + " = :tableId";
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("paid", false);
-        params.put("tableId", tableID);
+        Query query = getEntityManager().createQuery("select e from Order e where e.id  in (select i.order.id " +
+                "from OrderItem i where i.paid = :paid) and e.table.id = :tableId")
+                .setParameter("paid", false)
+                .setParameter("tableId", tableID);
 
-        return getByWhereCondition(query, params);
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

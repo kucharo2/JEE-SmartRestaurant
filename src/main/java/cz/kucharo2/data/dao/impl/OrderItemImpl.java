@@ -4,9 +4,9 @@ import cz.kucharo2.data.dao.OrderItemDao;
 import cz.kucharo2.data.entity.OrderItem;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.HashMap;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author Roman Kuchár <kucharrom@gmail.com>.
@@ -20,12 +20,14 @@ public class OrderItemImpl extends AbstractGenericDaoImpl<OrderItem> implements 
 
     @Override
     public List<OrderItem> getUnpaidOrderItemByOrder(int orderId) {
-        String query = OrderItem.ORDER_ID + " = :orderId and " + OrderItem.PAID + " = :paid";
-        Map<String, Object> params = new HashMap<>();
+        Query query = getEntityManager().createQuery("select e from OrderItem e where e.order.id = :orderId and e.paid = :paid")
+                .setParameter("paid", false)
+                .setParameter("orderId", orderId);
 
-        params.put("orderId", orderId);
-        params.put("paid", false);
-
-        return getByWhereCondition(query, params);
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

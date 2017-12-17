@@ -44,11 +44,11 @@ public class ItemDaoImpl extends AbstractGenericDaoImpl<Item> implements ItemDao
 
     @Override
     public Long getItemsByCategoryCount(CategoryType categoryType) {
-        String query = Item.CATEGORY_ID + " = (select " + Category.CATEGORY_ID + " from " + Category.TABLE_NAME +
-                " where " + Category.CODE + " = :categoryType)";
+        String query = "e.category.id = (select i.id from " + Category.TABLE_NAME + " i where i."
+                + Category.CODE + " = :categoryType)";
 
         Map<String, Object> params = new HashMap<>();
-        params.put("categoryType", categoryType.name());
+        params.put("categoryType", categoryType);
 
         return getCountByCondition(query, params);
     }

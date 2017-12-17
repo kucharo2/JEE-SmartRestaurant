@@ -60,15 +60,15 @@ public abstract class AbstractGenericDaoImpl<T extends DtoEntity> implements Abs
     }
 
     @Override
-    public Long getAllCount() {
-        Query query = getEntityManager().createQuery("select count(*) from " + clazz.getAnnotation(Table.class).name());
+    public Long getAllCount(T dtoEntity) {
+        Query query = getEntityManager().createQuery("select count(e) from " + dtoEntity.getClass().getName() + " e" );
         return (Long) query.getSingleResult();
     }
 
     protected Long getCountByCondition(String whereCondition, Map<String, Object> sqlParams) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select count(*) from " + clazz.getAnnotation(Table.class).name());
-        sb.append(" " + whereCondition);
+        sb.append("select count(e) from " + clazz.getAnnotation(Table.class).name()).append(" e WHERE ");
+        sb.append(whereCondition);
         Query query = getEntityManager().createQuery(sb.toString());
 
         for (String key : sqlParams.keySet()) {

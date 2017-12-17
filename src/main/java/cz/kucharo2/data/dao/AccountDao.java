@@ -10,5 +10,11 @@ import javax.validation.constraints.NotNull;
  */
 public interface AccountDao extends AbstractGenericDao<Account> {
 
+    /**
+     * Return {@link Account} by specific username
+     *
+     * @param username string as username
+     * @return {@link Account}
+     */
     Account findByUsername(@NotNull String username);
 }

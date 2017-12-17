@@ -17,6 +17,6 @@ public interface AbstractGenericDao<T extends DtoEntity> {
 
     List<T> getAll();
 
-    Long getAllCount();
+    Long getAllCount(T dtoEntity);
 
 }
