@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Tests for {@link RestaurantTableDao} and {@link AbstractGenericDao}
@@ -86,7 +87,14 @@ public class RestaurantTableDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testGetAllElements() throws Exception{
-        Assert.assertEquals(numberOfRestaurantTable + 1, restaurantTableDao.getAll().size());
+        List<RestaurantTable> restaurantTableList = restaurantTableDao.getAll();
+        Assert.assertEquals(numberOfRestaurantTable + 1, restaurantTableList.size());
+
+        RestaurantTable testRestaurantTable = restaurantTableList.stream().filter(x -> restaurantTable.getId().equals(x.getId()))
+                .findAny().orElse(null);
+
+        Assert.assertNotNull(testRestaurantTable);
+        Assert.assertEquals(restaurantTable.getId(), testRestaurantTable.getId());
     }
 
     @Test

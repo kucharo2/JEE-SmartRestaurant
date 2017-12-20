@@ -48,7 +48,16 @@ public class ItemDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistItemsByCategory() throws Exception {
-        Assert.assertTrue(0 < itemDao.getItemsByCategory(CategoryType.MASO).size());
+        Item item = new Item();
+        item.setId(3);
+
+        List<Item> itemList = itemDao.getItemsByCategory(CategoryType.MASO);
+        Assert.assertTrue(0 < itemList.size());
+
+        Item testItem = itemList.stream().filter(x -> item.getId().equals(x.getId())).findAny().orElse(null);
+
+        Assert.assertNotNull(testItem);
+        Assert.assertEquals(item.getId(), testItem.getId());
     }
 
     @Test
@@ -69,7 +78,16 @@ public class ItemDaoImplTest {
         categoryTypes.add(CategoryType.PANAKY);
         categoryTypes.add(CategoryType.PIVO);
 
-        Assert.assertTrue(0 < itemDao.getItemsByListCategories(categoryTypes).size());
+        Item item = new Item();
+        item.setId(27);
+
+        List<Item> itemList = itemDao.getItemsByListCategories(categoryTypes);
+        Assert.assertTrue(0 < itemList.size());
+
+        Item testItem = itemList.stream().filter(x -> item.getId().equals(x.getId())).findAny().orElse(null);
+
+        Assert.assertNotNull(testItem);
+        Assert.assertEquals(item.getId(), testItem.getId());
     }
 
     @Test

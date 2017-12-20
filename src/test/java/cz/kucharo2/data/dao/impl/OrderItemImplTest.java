@@ -77,6 +77,12 @@ public class OrderItemImplTest {
 
         orderDao.createOrUpdate(order);
 
-        Assert.assertTrue(0 < orderItemDao.getUnpaidOrderItemByOrder(order.getId()).size());;
+        List<OrderItem> orderItemList = orderItemDao.getUnpaidOrderItemByOrder(order.getId());
+        Assert.assertTrue(0 < orderItemList.size());
+
+        OrderItem testOrderItem = orderItemList.stream().filter(x -> orderItem.getId().equals(x.getId())).findAny().orElse(null);
+
+        Assert.assertNotNull(testOrderItem);
+        Assert.assertEquals(orderItem.getId(), testOrderItem.getId());
     }
 }
