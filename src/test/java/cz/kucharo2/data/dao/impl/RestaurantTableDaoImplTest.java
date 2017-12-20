@@ -64,7 +64,12 @@ public class RestaurantTableDaoImplTest {
     @Transactional(TransactionMode.ROLLBACK)
     public void testGetElementById() throws Exception{
         int id = restaurantTable.getId();
-        Assert.assertEquals(restaurantTable, restaurantTableDao.getById(id));
+
+        RestaurantTable testRestaurantTable = restaurantTableDao.getById(id);
+
+        Assert.assertNotNull(testRestaurantTable);
+        Assert.assertEquals(restaurantTable.getId(), testRestaurantTable.getId());
+        Assert.assertEquals(restaurantTable.getName(), testRestaurantTable.getName());
     }
 
     @Test
@@ -74,6 +79,7 @@ public class RestaurantTableDaoImplTest {
         Assert.assertEquals(restaurantTable, restaurantTableDao.getById(id));
 
         restaurantTableDao.delete(restaurantTable);
+
         Assert.assertNull(restaurantTableDao.getById(id));
     }
 

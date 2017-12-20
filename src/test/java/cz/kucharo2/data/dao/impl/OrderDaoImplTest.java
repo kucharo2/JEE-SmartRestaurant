@@ -104,8 +104,12 @@ public class OrderDaoImplTest {
 
         orderDao.createOrUpdate(order);
 
-        Assert.assertNotNull(orderDao.getCreatedOrderByTableAndUser(2, 1));
-        Assert.assertEquals(order, orderDao.getCreatedOrderByTableAndUser(2, 1));
+        Order testOrder = orderDao.getCreatedOrderByTableAndUser(2, 1);
+
+        Assert.assertNotNull(testOrder);
+        Assert.assertEquals(order.getId(), testOrder.getId());
+        Assert.assertEquals(order.getStatus(), testOrder.getStatus());
+        Assert.assertEquals(order.getDate(), testOrder.getDate());
     }
 
     @Test
@@ -135,7 +139,11 @@ public class OrderDaoImplTest {
 
         orderDao.createOrUpdate(order);
 
-        Assert.assertNotNull(orderDao.getOrderWithItems(order.getId()));
-        Assert.assertEquals(order, orderDao.getOrderWithItems(order.getId()));
+        Order testOrder = orderDao.getOrderWithItems(order.getId());
+
+        Assert.assertNotNull(testOrder);
+        Assert.assertEquals(order.getId(), testOrder.getId());
+        Assert.assertEquals(order.getStatus(), testOrder.getStatus());
+        Assert.assertEquals(order.getDate(), testOrder.getDate());
     }
 }

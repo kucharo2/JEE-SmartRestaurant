@@ -56,11 +56,11 @@ public class AccountDaoImplTest {
     public void testAccountFindByUsername() throws Exception {
         Account account = new Account();
         account.setUsername("anonymous");
-        account.setAccountRole(AccountRole.ANONYMOUS_CUSTOMER);
-        account.setPhone("123");
-        account.setPassword(PasswordHashUtil.encrypt("cvut2017"));
         account.setId(1);
 
-        Assert.assertEquals(account, accountDao.findByUsername("anonymous"));
+        Account testAccount = accountDao.findByUsername("anonymous");
+
+        Assert.assertEquals(account.getId(), testAccount.getId());
+        Assert.assertEquals(account.getUsername(), testAccount.getUsername());
     }
 }
