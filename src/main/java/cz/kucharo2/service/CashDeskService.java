@@ -1,5 +1,6 @@
 package cz.kucharo2.service;
 
+import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.data.entity.Order;
 import cz.kucharo2.data.entity.OrderItem;
 import cz.kucharo2.data.entity.RestaurantTable;
@@ -29,10 +30,25 @@ public interface CashDeskService {
 	/**
 	 * Returns unpaid order items of food for specific order
 	 *
-	 * @param order order
+	 * @param orderId order id
 	 * @return unpaid order items
 	 */
-	List<OrderItem> getUnpaidOrderItemFoodByOrder(Order order);
+	List<OrderItem> getUnpaidOrderItemFoodByOrder(Integer orderId);
+
+	/**
+	 * Returns unpaid finished order items for specific table and specific user
+	 *
+	 * @param tableId table id
+	 * @return unpaid finished orders on given table
+	 */
+	List<OrderItem> getUnpaidFinishedOrderItemsOnTable(Integer tableId, Integer userId);
+
+	/**
+	 * Returns users which have unpaid order items on specific table
+	 * @param tableId table id
+	 * @return users having unpaid order items on table
+	 */
+	List<Account> getUsersHavingUnpaidFinishedOrdersOnTable(Integer tableId);
 
 	/**
 	 * Pay order items

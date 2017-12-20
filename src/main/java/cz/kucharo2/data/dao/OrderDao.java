@@ -19,6 +19,13 @@ public interface OrderDao extends AbstractGenericDao<Order> {
 	List<Order> getUnpaidOrderOnTable(int tableID);
 
 	/**
+	 * Get all unpaid FINISHED orders for specific table and specific user
+	 * @param tableID
+	 * @return given user's list of unpaid finished orders
+	 */
+	List<Order> getUnpaidFinishedOrdersOnTableByUser(int tableID, int accountID);
+
+	/**
 	 * Get CREATED order on table.
 	 *
 	 * @param tableId table id
