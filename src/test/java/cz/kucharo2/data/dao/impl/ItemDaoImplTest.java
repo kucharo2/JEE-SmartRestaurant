@@ -1,5 +1,6 @@
 package cz.kucharo2.data.dao.impl;
 
+import cz.kucharo2.data.dao.CategoryDao;
 import cz.kucharo2.data.dao.ItemDao;
 import cz.kucharo2.data.entity.Item;
 import cz.kucharo2.data.enums.CategoryType;
@@ -29,6 +30,9 @@ public class ItemDaoImplTest {
     @Inject
     private ItemDao itemDao;
 
+    @Inject
+    private CategoryDao categoryDao;
+
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)
@@ -49,9 +53,14 @@ public class ItemDaoImplTest {
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistItemsByCategory() throws Exception {
         Item item = new Item();
-        item.setId(3);
+        item.setName("Vepřový řízek");
+        item.setCode("VEPROVY_STEAK");
+        item.setCategory(categoryDao.getCategoryByCode(CategoryType.MAIN_FOOD));
+        item.setPrice(80);
 
-        List<Item> itemList = itemDao.getItemsByCategory(CategoryType.MASO);
+        itemDao.createOrUpdate(item);
+
+        List<Item> itemList = itemDao.getItemsByCategory(CategoryType.MAIN_FOOD);
         Assert.assertTrue(0 < itemList.size());
 
         Item testItem = itemList.stream().filter(x -> item.getId().equals(x.getId())).findAny().orElse(null);
@@ -73,13 +82,19 @@ public class ItemDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistItemsByListCategories() throws Exception {
+        Item item = new Item();
+        item.setName("Plzeň 12° 0,5L");
+        item.setCode("PLZEN_12_VELKA");
+        item.setCategory(categoryDao.getCategoryByCode(CategoryType.DRINKS));
+        item.setPrice(35);
+
+        itemDao.createOrUpdate(item);
+
         List<CategoryType> categoryTypes = new ArrayList<>();
         categoryTypes.add(CategoryType.NEALKOHOLICKE_NAPOJE);
         categoryTypes.add(CategoryType.PANAKY);
         categoryTypes.add(CategoryType.PIVO);
-
-        Item item = new Item();
-        item.setId(27);
+        categoryTypes.add(CategoryType.DRINKS);
 
         List<Item> itemList = itemDao.getItemsByListCategories(categoryTypes);
         Assert.assertTrue(0 < itemList.size());
