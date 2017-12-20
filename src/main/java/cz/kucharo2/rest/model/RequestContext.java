@@ -2,14 +2,14 @@ package cz.kucharo2.rest.model;
 
 import cz.kucharo2.data.entity.Account;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import java.io.Serializable;
 
 /**
  * @Author Roman Kuchár <kucharrom@gmail.com>.
  */
-@SessionScoped
-public class SessionContext implements Serializable{
+@RequestScoped
+public class RequestContext implements Serializable{
 
     private static final long serialVersionUID = -5039880007004887337L;
 

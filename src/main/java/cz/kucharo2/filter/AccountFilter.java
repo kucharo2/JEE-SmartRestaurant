@@ -2,7 +2,7 @@ package cz.kucharo2.filter;
 
 import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.data.enums.AccountRole;
-import cz.kucharo2.rest.model.SessionContext;
+import cz.kucharo2.rest.model.RequestContext;
 import cz.kucharo2.service.AccountService;
 import org.jboss.logging.Logger;
 
@@ -37,7 +37,7 @@ public class AccountFilter implements ContainerRequestFilter {
     private Logger logger;
 
     @Inject
-    private SessionContext sessionContext;
+    private RequestContext requestContext;
 
     @Context
     private ResourceInfo resourceInfo;
@@ -74,7 +74,7 @@ public class AccountFilter implements ContainerRequestFilter {
                 return;
             }
         }
-        this.sessionContext.setLoggedAccount(account);
+        this.requestContext.setLoggedAccount(account);
     }
 
     private void abortOnUnauthorized(ContainerRequestContext context, String reason, Object... reasonArgs) {

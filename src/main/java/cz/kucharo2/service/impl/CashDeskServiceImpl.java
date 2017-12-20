@@ -6,7 +6,7 @@ import cz.kucharo2.data.entity.Order;
 import cz.kucharo2.data.entity.OrderItem;
 import cz.kucharo2.data.entity.RestaurantTable;
 import cz.kucharo2.data.enums.OrderStatus;
-import cz.kucharo2.rest.model.SessionContext;
+import cz.kucharo2.rest.model.RequestContext;
 import cz.kucharo2.service.CashDeskService;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -28,14 +28,14 @@ public class CashDeskServiceImpl implements CashDeskService {
 	private OrderItemDao orderItemDao;
 
 	@Inject
-	private SessionContext sessionContext;
+	private RequestContext requestContext;
 
 	@Override
 	public Order createOrderOnTable(RestaurantTable table) {
 		Order order = new Order();
 		order.setTable(table);
 		order.setStatus(OrderStatus.CREATED);
-		order.setAccount(sessionContext.getLoggedAccount());
+		order.setAccount(requestContext.getLoggedAccount());
 		orderDao.createOrUpdate(order);
 		return order;
 	}

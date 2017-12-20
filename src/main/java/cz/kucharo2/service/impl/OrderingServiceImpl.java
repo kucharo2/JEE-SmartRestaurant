@@ -7,7 +7,7 @@ import cz.kucharo2.data.entity.*;
 import cz.kucharo2.data.enums.OrderStatus;
 import cz.kucharo2.data.enums.CategoryType;
 import cz.kucharo2.event.ConfirmOrderEvent;
-import cz.kucharo2.rest.model.SessionContext;
+import cz.kucharo2.rest.model.RequestContext;
 import cz.kucharo2.service.CashDeskService;
 import cz.kucharo2.service.MenuService;
 import cz.kucharo2.service.OrderingService;
@@ -49,7 +49,7 @@ public class OrderingServiceImpl implements OrderingService {
     private OrderDao orderDao;
 
     @Inject
-    private SessionContext sessionContext;
+    private RequestContext requestContext;
 
     @Inject
     private Event<ConfirmOrderEvent> confirmOrderEventEvent;
@@ -71,7 +71,7 @@ public class OrderingServiceImpl implements OrderingService {
             }
         } else {
             order = getOrderById(model.getOrderId());
-            Account loggedAccount = sessionContext.getLoggedAccount();
+            Account loggedAccount = requestContext.getLoggedAccount();
             if(order.getAccount().isAnnonymousAccount() && !loggedAccount.isAnnonymousAccount()) {
                 order.setAccount(loggedAccount);
                 orderDao.createOrUpdate(order);
@@ -151,7 +151,7 @@ public class OrderingServiceImpl implements OrderingService {
 
     @Override
     public Order getCreatedOrderOnTable(int tableId) {
-        Account loggedAccount = sessionContext.getLoggedAccount();
+        Account loggedAccount = requestContext.getLoggedAccount();
         return orderDao.getCreatedOrderByTableAndUser(tableId, loggedAccount.getId());
     }
 
