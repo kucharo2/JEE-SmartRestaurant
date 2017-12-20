@@ -83,11 +83,12 @@ public class CashDeskServiceImpl implements CashDeskService {
     }
 
     @Override
-    public void pay(List<OrderItem> orderItems) {
-        if (orderItems != null && orderItems.size() > 0) {
-            for (OrderItem orderItemFood : orderItems) {
-                orderItemFood.setPaid(true);
-                orderItemDao.createOrUpdate(orderItemFood);
+    public void pay(List<Integer> orderItemsIds) {
+        if (orderItemsIds != null && orderItemsIds.size() > 0) {
+            for (Integer orderItemId : orderItemsIds) {
+                OrderItem orderItem = orderItemDao.getById(orderItemId);
+                orderItem.setPaid(true);
+                orderItemDao.createOrUpdate(orderItem);
             }
         }
     }

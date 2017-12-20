@@ -52,8 +52,8 @@ public interface CashDeskService {
 
 	/**
 	 * Pay order items
-	 * @param orderItems order items of foods to be paid
+	 * @param orderItemsIds order item ids of dishes to be paid
 	 */
-	void pay(List<OrderItem> orderItems);
+	void pay(List<Integer> orderItemsIds);
 
 }

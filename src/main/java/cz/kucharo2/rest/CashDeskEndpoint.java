@@ -6,10 +6,7 @@ import cz.kucharo2.filter.Secured;
 import cz.kucharo2.service.CashDeskService;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -44,5 +41,14 @@ public class CashDeskEndpoint {
     @Secured
     public List<OrderItem> getUnpaidFinishedOrdersOnTable(@PathParam("table_id") Integer tableId, @PathParam("user_id") Integer userId) {
         return cashDeskService.getUnpaidFinishedOrderItemsOnTable(tableId, userId);
+    }
+
+    @POST
+    @Path("/pay")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    public void payOrderItems(List<Integer> orderItemIds) {
+        cashDeskService.pay(orderItemIds);
     }
 }
