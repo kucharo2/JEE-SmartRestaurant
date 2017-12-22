@@ -1,0 +1,35 @@
+/*******************************************
+STYLES FOR CASH DESK PAGE
+ *******************************************/
+#cash-desk {
+    background-color: #ffffff;
+    width: 70%;
+    position: absolute;
+    top: 120px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    border-right: 2px solid black;
+}
+
+#cash-desk-actions-column {
+    width: 100px;
+}
+
+#cash-desk h1 {
+    padding: 10px;
+}
+
+.to-be-payed {
+    float: right;
+    padding: 25px;
+    position: absolute;
+    left: 70%;
+    width: 30%;
+    bottom: 0;
+    top: 120px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.9);
+}

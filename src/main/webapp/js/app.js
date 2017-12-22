@@ -17,6 +17,9 @@ var app = angular.module('smartRestaurantApp', ['ngRoute', 'base64', 'ngCookies'
         .when("/tables", {
             templateUrl : "tables.html"
         })
+        .when("/cashDesk", {
+            templateUrl : "cashDesk.html"
+        })
         .when("/register", {
             templateUrl : "register.html"
         })

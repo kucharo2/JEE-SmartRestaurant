@@ -232,14 +232,19 @@
 </div>
 <div class="order" ng-controller="OrderController">
     <span ng-if="preparedOrders.length > 0" id="ordersInPreparation" class="left-top-corner">
-        Objednávek v přípravě: {{preparedOrders.length}} ( <span ng-repeat="order in preparedOrders">č. {{order.id}}<span
+        Objednávek v přípravě: {{preparedOrders.length}} ( <span
+            ng-repeat="order in preparedOrders">č. {{order.id}}<span
             ng-if="$index < preparedOrders.length - 1">, </span></span> )
     </span>
     <div id="tableAndBillInfo" class="left-top-corner">
-        Číslo stolu: <b>{{tableId}}</b>
-        <span ng-if="order !== undefined && order !== null"> / Číslo objednávky: <b>{{order.id}}</b></span>
-        <a ng-if="order !== undefined && order !== null" ng-click="cancelOrder()" href=""> Zrušit objednávku </a>
-        <a ng-if="order === undefined || order === null" href="#/tables">Vybrat jiný stůl</a>
+        Číslo stolu: <b>{{tableId}}</b>&nbsp;
+        <span ng-if="order !== undefined && order !== null"> / Číslo objednávky: <b>{{order.id}}</b></span>&nbsp;
+        <a ng-if="order !== undefined && order !== null" ng-click="cancelOrder()" href="">
+            <button class="btn btn-danger">Zrušit objednávku</button>
+        </a>
+        <a ng-if="order === undefined || order === null" href="#/tables">
+            <button class="btn btn-secondary">Vybrat jiný stůl</button>
+        </a>
     </div>
     <button id="basketButton" class="btn btn-success right-top-corner" ng-click="showOrderDialog()">
         <i class="fa fa-sticky-note-o" aria-hidden="true"></i> Vaše objednávka [{{orderItems.length}}]
@@ -266,7 +271,8 @@
                                     <td>
                                         <i ng-if="dish.main && !dish.drink" class="fa fa-cutlery fa-lg"
                                            aria-hidden="true"></i>
-                                        <img ng-if="!dish.main && !dish.drink" width="35px" height="35px" src="img/priloha.png"></img>
+                                        <img ng-if="!dish.main && !dish.drink" width="35px" height="35px"
+                                             src="img/priloha.png"></img>
                                         <i ng-if="dish.drink" class="fa fa-glass fa-lg" aria-hidden="true"></i>
                                     </td>
                                     <td>{{dish.count}}</td>
@@ -295,4 +301,9 @@
             </div>
         </div>
     </div>
+</div>
+<div id="cash-desk-button">
+    <a href="#/cashDesk">
+        <button class="btn btn-primary"><i class="fa fa-money" aria-hidden="true"></i> Pokladna</button>
+    </a>
 </div>

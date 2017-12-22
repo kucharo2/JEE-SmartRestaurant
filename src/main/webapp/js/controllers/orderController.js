@@ -116,6 +116,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         OrderService.cancelOrder($scope.order.id).then(function (response) {
             $scope.orderItems = [];
             $scope.order = null;
+            $("#basketButton").prop('disabled', true);
             $mdToast.show(
                 $mdToast.simple()
                     .textContent('Objednávka byla zrušena!')
@@ -134,6 +135,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
             $scope.preparedOrders.push($scope.order);
             $scope.order = null;
             $scope.closeOrderDialog();
+            $("#basketButton").prop('disabled', true);
             $mdToast.show(
                 $mdToast.simple()
                     .textContent('Vaše objednávka byla odeslána!')

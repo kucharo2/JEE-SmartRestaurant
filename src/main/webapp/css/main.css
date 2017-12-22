@@ -193,3 +193,15 @@ body {
     text-align: center;
     width: 50%;
 }
+#cash-desk-button {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    top: 60px;
+}
+
+#cash-desk-button button {
+    width: 300px;
+}
