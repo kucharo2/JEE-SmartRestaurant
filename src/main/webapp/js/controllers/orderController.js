@@ -9,21 +9,29 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         $location.path("/tables");
     }
 
-    //if there is a active order on the table get it ...
-    OrderService.getActiveOrderOnTable($scope.tableId).then(function (response) {
-        if (response.data !== "") {
-            $("#basketButton").prop('disabled', false);
-            processGetBillResponse(response);
-        } else {
-            $("#basketButton").prop('disabled', true);
-        }
-    }, ErrorService.serverErrorCallback);
-
     $scope.preparedOrders = [];
     $scope.orderItems = [];
     $scope.orderPrice = 0;
 
-    function initializeOrderWebsocket() {
+    var getActiveOrderOnTable = function () {
+        OrderService.getActiveOrderOnTable($scope.tableId).then(function (response) {
+            if (response.data !== "") {
+                $("#basketButton").prop('disabled', false);
+                processGetBillResponse(response);
+            } else {
+                $("#basketButton").prop('disabled', true);
+            }
+        }, ErrorService.serverErrorCallback);
+    };
+
+    $rootScope.$on("getActiveOrder", function (event) {
+        //if there is a active order on the table get it ...
+        getActiveOrderOnTable();
+    });
+
+    getActiveOrderOnTable();
+
+    var initializeOrderWebsocket = function() {
         var orderSocket = new WebSocket("ws://localhost:8080/SmartRestaurant/orderStatusWebSocket");
         var browserSupport = ("WebSocket" in window) ? true : false;
         if (browserSupport) {
@@ -57,7 +65,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         } else {
             alert("WebSocket is NOT supported by your Browser!");
         }
-    }
+    };
 
     initializeOrderWebsocket();
 

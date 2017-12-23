@@ -33,3 +33,16 @@ STYLES FOR CASH DESK PAGE
     flex-direction: column;
     background-color: rgba(255, 255, 255, 0.9);
 }
+
+#cash-desk-button {
+    position: absolute;
+    margin: auto;
+    left: 310px;
+    right: 310px;
+    text-align: center;
+    top: 60px;
+}
+
+#cash-desk-button button {
+    width: 300px;
+}

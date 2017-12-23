@@ -3,7 +3,7 @@
  * @type {angular.controller}
  * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
-app.controller('LoginController', function LoginController($scope, $mdToast, $base64, $location, LoginService, ErrorService) {
+app.controller('LoginController', function LoginController($scope, $rootScope, $http, $mdToast, $base64, $location, LoginService, ErrorService) {
     $scope.errors = [];
     $scope.username = "";
     $scope.password = "";
@@ -16,7 +16,9 @@ app.controller('LoginController', function LoginController($scope, $mdToast, $ba
         LoginService.loginUser(base64credentials).then(function (response) {
             if(response.data !== ""){
                 localStorage.setItem("loggedUser", base64credentials);
-                $location.path('/')
+                $location.path('/');
+                $http.defaults.headers.common.Authorization = 'Basic ' + base64credentials;
+                $rootScope.$emit("getActiveOrder");
             } else {
                 $scope.username = "";
                 $scope.password = "";
@@ -30,6 +32,8 @@ app.controller('LoginController', function LoginController($scope, $mdToast, $ba
      */
     $scope.logout = function () {
         LoginService.logout();
+        $http.defaults.headers.common.Authorization = 'Basic ' + $base64.encode("anonymous:cvut2017");
+        $rootScope.$emit("getActiveOrder");
         $scope.loggedUser = null;
         $scope.toggleUsersProfile();
         $mdToast.show(
@@ -61,10 +65,13 @@ app.controller('LoginController', function LoginController($scope, $mdToast, $ba
             promise.then(function (response) {
                 if(response.data !== ""){
                     $scope.loggedUser = response.data;
+                    var loggedUserBase64 = localStorage.getItem("loggedUser");
+                    if(loggedUserBase64 !== null && loggedUserBase64 !== undefined ) {
+                        $http.defaults.headers.common.Authorization = 'Basic ' + loggedUserBase64;
+                    }
                 }
-            }, ErrorService.serverErrorCallback)
-        }else {
-            //no user logged in
+                $rootScope.$emit("getActiveOrder");
+            }, ErrorService.serverErrorCallback);
         }
     };
 

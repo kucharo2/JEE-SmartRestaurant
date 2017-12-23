@@ -18,7 +18,7 @@ app.service('CashDeskService', function ($http) {
      * @param orderItemsIds - array of integers representing order item ids
      * @returns {*}
      */
-    this.payOrderItems = function (orderItemsIds) {
+    this.payItems = function (orderItemsIds) {
         return $http({
             url: apiPrefix + "/cashDesk/pay",
             method: "POST",

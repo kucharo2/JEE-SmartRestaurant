@@ -17,7 +17,7 @@ app.controller('MenuListController', function MenuListController($rootScope, $sc
 
     OfferService.getDrinksGroupedByCategories().then(function (response) {
         $scope.drinks = response.data;
-    });
+    }, ErrorService.serverErrorCallback);
     initOffer();
 
     function initOffer() {
