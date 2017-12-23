@@ -162,43 +162,46 @@
         <!-- Additional info -->
         <div class="half-of-parent right-side" ng-if="detailItem != undefined && detailItem != null">
             <div class="dish-info">
-                <img class="dish-image" src="img/rizek.jpg" alt="A tasty image of a {{detailItem.name}}"/>
+                <img class="dish-image" src="{{detailItem.image}}" alt="A tasty image of a {{detailItem.name}}"/>
                 <h1>{{detailItem.name}}</h1>
                 <p><strong>Kategorie:</strong> {{detailItem.category.name}}</p>
                 <p><strong>Popis:</strong>
                     <span ng-if="detailItem.description != null">{{detailItem.description}}</span>
                     <span ng-if="detailItem.description == null">
-                        Hodor, hodor. Hodor. Hodor, hodor hodor - hodor; hodor hodor hodor hodor. Hodor. Hodor hodor HODOR! Hodor hodor, hodor. Hodor HODOR hodor, hodor hodor... Hodor hodor hodor?! Hodor. Hodor hodor hodor, hodor. Hodor hodor, hodor, hodor hodor. Hodor hodor - hodor, hodor. Hodor hodor - hodor. Hodor hodor - HODOR hodor, hodor hodor - hodor, hodor. Hodor hodor. Hodor! Hodor hodor, hodor - hodor hodor hodor hodor. Hodor.
+                        K této položce nemáme žádné dodatečné informace.
                     </span>
                 </p>
             </div>
             <!-- Combinations -->
+            <div ng-if="sideDishes.length > 0">
             <h3>Toto jídlo lze kombinovat s těmito položkami</h3>
-            <div class="right-bottom-quarter">
-                <div class="table-responsive ">
-                    <table class="table table-hover">
-                        <tr>
-                            <th>Název</th>
-                            <th>Cena</th>
-                            <th class="text-center">Akce</th>
-                        </tr>
-                        <tr ng-repeat="sideDish in sideDishes">
-                            <td>{{sideDish.name}}</a></td>
-                            <td>{{sideDish.price}} Kč</td>
-                            <td class="text-center">
-                                <button class="btn btn-success" ng-click="addSideDish(sideDish)">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </table>
+                <div class="right-bottom-quarter">
+                    <div class="table-responsive ">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>Název</th>
+                                <th>Cena</th>
+                                <th class="text-center">Akce</th>
+                            </tr>
+                            <tr ng-repeat="sideDish in sideDishes">
+                                <td>{{sideDish.name}}</a></td>
+                                <td>{{sideDish.price}} Kč</td>
+                                <td class="text-center">
+                                    <button class="btn btn-success" ng-click="addSideDish(sideDish)">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="actualSelection">
             <div class="dish-info">
-                <h3>Aktuální výběr [Celková cena: {{selectionPrice}} Kč ]</h3>
+                <h3>Aktuální výběr </h3>
+                <h4>Cena výběru: {{selectionPrice}} Kč</h4>
                 <div class="table-responsive ">
                     <table class="table table-hover">
                         <tr>
@@ -304,6 +307,7 @@
 </div>
 <div id="cash-desk-button">
     <a href="#/cashDesk">
-        <button class="btn btn-primary"><i class="fa fa-money" aria-hidden="true"></i> Pokladna</button>
+        <button class="btn btn-primary"><i class="fa fa-money" aria-hidden="true"></i> Pokladna
+        </button>
     </a>
 </div>

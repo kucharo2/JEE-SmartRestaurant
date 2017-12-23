@@ -61,10 +61,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
                                 position: 'bottom right',
                                 hideDelay: 10000
                             }
-                        )
+                        );
                     }
                 }
-
             }
         } else {
             alert("WebSocket is NOT supported by your Browser!");
