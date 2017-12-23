@@ -23,10 +23,10 @@ public class OrderDaoImpl extends AbstractGenericDaoImpl<Order> implements Order
     public List<Order> getUnpaidOrderOnTable(int tableID) {
 
         Query query = getEntityManager().createQuery("select e from Order e left join fetch e.orderItems where e.id  in (select i.order.id " +
-                "from OrderItem i where i.paid = :paid) and e.table.id = :tableId")
+                "from OrderItem i where i.paid = :paid) and e.table.id = :tableId and e.status = :status")
                 .setParameter("paid", false)
-                .setParameter("tableId", tableID);
-
+                .setParameter("tableId", tableID)
+                .setParameter("status", OrderStatus.FINISHED);
         try {
             return query.getResultList();
         } catch (NoResultException e) {
