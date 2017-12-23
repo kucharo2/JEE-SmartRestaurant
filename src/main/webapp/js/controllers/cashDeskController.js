@@ -112,7 +112,13 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
         return -1;
     };
 
-    var selectedDishesContainsItem = function (item, arr) {
+    /**
+     * Checks if array items which is in array of objects contains specified item
+     * @param item
+     * @param arr
+     * @returns {*} index in array of objects and index in items array separated with :, or -1 if the item was not found
+     */
+    var itemsContainsItem = function (item, arr) {
         for (var i = 0; i < arr.length; i++) {
             for(var j = 0; j < arr[i].items.length; j++){
                 if (arr[i].items[j].id === item.id) {
@@ -123,6 +129,14 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
         return -1;
     };
 
+    /**
+     * Adds dish into array of dishes which will be payed
+     *
+     * Main food and side dishes are added together
+     * Lonely side dishes and drinks are added separately
+     * @param index
+     * @param dish
+     */
     $scope.addToPayed = function (index, dish) {
         for (var i = 0; i < $scope.unpaidItems.length; i++) {
             if ($scope.unpaidItems[i].id === index) {
@@ -141,17 +155,18 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
                     return;
                 } else if (itemArr.items[0].drink || itemArr.items[0].lonelySideDish) {
                     //add only this item into selection
-                    var indexOfItem = -1;
-                    var itemFromArray = itemArr.items[itemArr.items.indexOf(dish)];
-                    if ((indexOfItem = selectedDishesContainsItem(itemFromArray, $scope.selectedDishes)) === -1) {
+                    var indexOfItemInSelected = -1;
+                    var indexOfItemInUnpaid = itemArr.items.indexOf(dish);
+                    var itemFromUnpaid = itemArr.items[indexOfItemInUnpaid];
+                    if ((indexOfItemInSelected = itemsContainsItem(itemFromUnpaid, $scope.selectedDishes)) === -1) {
                         var item = {
-                            name: itemFromArray.name,
-                            price: itemFromArray.price,
-                            drink: itemFromArray.drink,
-                            lonelySideDish: itemFromArray.lonelySideDish,
-                            ids: [].concat(itemFromArray.ids[0]),
+                            name: itemFromUnpaid.name,
+                            price: itemFromUnpaid.price,
+                            drink: itemFromUnpaid.drink,
+                            lonelySideDish: itemFromUnpaid.lonelySideDish,
+                            ids: [].concat(itemFromUnpaid.ids[0]),
                             count: 1,
-                            id: itemFromArray.id
+                            id: itemFromUnpaid.id
                         };
                         $scope.selectedDishes.push({
                             index : i,
@@ -160,16 +175,16 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
                         $scope.selectionPrice += item.price;
 
                     } else {
-                        var ii = parseInt(indexOfItem.split(":")[0]);
-                        var jj = parseInt(indexOfItem.split(":")[1]);
-                        $scope.selectedDishes[ii].items[jj].ids.push(itemFromArray.ids[0])
+                        var ii = parseInt(indexOfItemInSelected.split(":")[0]);
+                        var jj = parseInt(indexOfItemInSelected.split(":")[1]);
+                        $scope.selectedDishes[ii].items[jj].ids.push(itemFromUnpaid.ids[0])
                         $scope.selectedDishes[ii].items[jj].count++;
                         $scope.selectionPrice += $scope.selectedDishes[ii].items[jj].price;
                     }
-                    $scope.unpaidItems[i].items[itemArr.items.indexOf(dish)].count--;
-                    $scope.unpaidItems[i].items[itemArr.items.indexOf(dish)].ids.splice(0, 1);
-                    if ($scope.unpaidItems[i].items[itemArr.items.indexOf(dish)].count === 0) {
-                        $scope.unpaidItems[i].items.splice(itemArr.items.indexOf(dish), 1);
+                    $scope.unpaidItems[i].items[indexOfItemInUnpaid].count--; //lower count
+                    $scope.unpaidItems[i].items[indexOfItemInUnpaid].ids.splice(0, 1); //remove added id
+                    if ($scope.unpaidItems[i].items[indexOfItemInUnpaid].count === 0) {
+                        $scope.unpaidItems[i].items.splice(indexOfItemInUnpaid, 1);
                     }
                     return;
                 }
@@ -177,6 +192,10 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
         }
     };
 
+    /**
+     * Removes dish from array of dishes which will be payed
+     * @param selectedDish
+     */
     $scope.removeFromPayed = function (selectedDish) {
         console.log($scope.unpaidItems);
         console.log(selectedDish);
@@ -184,32 +203,34 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
             $scope.unpaidItems[selectedDish.index].items = $scope.unpaidItems[selectedDish.index].items.concat(selectedDish.items);
             $scope.selectedDishes.splice($scope.selectedDishes.indexOf(selectedDish), 1);
         } else if (selectedDish.items[0].drink || selectedDish.items[0].lonelySideDish){
-            var indexOfItem = -1;
-            if((indexOfItem = selectedDishesContainsItem(selectedDish.items[0], $scope.unpaidItems)) === -1){
+            var indexOfItemInUnpaid;
+            var itemFromSelected = selectedDish.items[0];
+            if((indexOfItemInUnpaid = itemsContainsItem(itemFromSelected, $scope.unpaidItems)) === -1){
                 //insert that item
                 var item = {
-                    name: selectedDish.items[0].name,
-                    price: selectedDish.items[0].price,
-                    drink: selectedDish.items[0].drink,
-                    lonelySideDish: selectedDish.items[0].lonelySideDish,
-                    ids: [].concat(selectedDish.items[0].ids[0]),
+                    name: itemFromSelected.name,
+                    price: itemFromSelected.price,
+                    drink: itemFromSelected.drink,
+                    lonelySideDish: itemFromSelected.lonelySideDish,
+                    ids: [].concat(itemFromSelected.ids[0]),
                     count: 1,
-                    id: selectedDish.items[0].id
+                    id: itemFromSelected.id
                 };
                 $scope.unpaidItems[selectedDish.index].items = $scope.unpaidItems[selectedDish.index].items.concat(item);
                 $scope.selectionPrice -= item.price;
             } else {
                 //only increase count
-                var ii = parseInt(indexOfItem.split(":")[0]);
-                var jj = parseInt(indexOfItem.split(":")[1]);
+                var ii = parseInt(indexOfItemInUnpaid.split(":")[0]);
+                var jj = parseInt(indexOfItemInUnpaid.split(":")[1]);
                 $scope.unpaidItems[ii].items[jj].ids.push(selectedDish.items[0].ids[0])
                 $scope.unpaidItems[ii].items[jj].count++;
                 $scope.selectionPrice -= $scope.unpaidItems[ii].items[jj].price;
             }
-            $scope.selectedDishes[$scope.selectedDishes.indexOf(selectedDish)].items[0].count--;
-            $scope.selectedDishes[$scope.selectedDishes.indexOf(selectedDish)].items[0].ids.splice(0, 1);
-            if( $scope.selectedDishes[$scope.selectedDishes.indexOf(selectedDish)].items[0].count === 0){
-                $scope.selectedDishes.splice($scope.selectedDishes.indexOf(selectedDish), 1);
+            var indexOfItemInSelected = $scope.selectedDishes.indexOf(selectedDish);
+            $scope.selectedDishes[indexOfItemInSelected].items[0].count--;
+            $scope.selectedDishes[indexOfItemInSelected].items[0].ids.splice(0, 1);
+            if( $scope.selectedDishes[indexOfItemInSelected].items[0].count === 0){
+                $scope.selectedDishes.splice(indexOfItemInSelected, 1);
             }
         }
     }
