@@ -29,4 +29,9 @@ public interface AccountService {
      * @return user account
      */
     Account findAccountByUsername(String username);
+
+    /**
+     * Logs user out
+     */
+    void logout();
 }

@@ -21,7 +21,10 @@ app.service('LoginService', function ($http) {
     };
 
     this.logout = function () {
-        localStorage.removeItem("loggedUser");
+        return $http({
+            url: apiPrefix + "/account/logout",
+            method: "POST"
+        });
     };
 
     /**

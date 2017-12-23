@@ -4,6 +4,7 @@ import cz.kucharo2.common.model.RegisterNewAccountModel;
 import cz.kucharo2.data.dao.AccountDao;
 import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.data.enums.AccountRole;
+import cz.kucharo2.rest.model.RequestContext;
 import cz.kucharo2.service.AccountService;
 import cz.kucharo2.utils.PasswordHashUtil;
 
@@ -12,12 +13,17 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.Base64;
 
+import static java.util.stream.Collectors.toList;
+
 @ApplicationScoped
 @Transactional(rollbackOn = Exception.class)
 public class AccountServiceImpl implements AccountService {
 
     @Inject
     AccountDao accountDao;
+
+    @Inject
+    private RequestContext requestContext;
 
     @Override
     public void createNewAccount(RegisterNewAccountModel model) {
@@ -55,5 +61,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account findAccountByUsername(String username) {
         return accountDao.findByUsername(username);
+    }
+
+    @Override
+    public void logout() {
+        Account anonymous = accountDao.getAll().stream()
+                .filter(account -> account.getAccountRole() == AccountRole.ANONYMOUS_CUSTOMER)
+                .limit(1)
+                .collect(toList())
+                .get(0);
+        if(anonymous != null) {
+            requestContext.setLoggedAccount(anonymous);
+        }
     }
 }

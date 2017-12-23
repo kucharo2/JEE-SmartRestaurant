@@ -4,6 +4,7 @@
  * @author Pavel Matyáš (matyapav@fel.cvut.cz)
  */
 app.controller('OrderController', function MenuListController($scope, $rootScope, $mdToast, $cookies, OrderService, ErrorService) {
+
     //get table id from cookies
     if (($scope.tableId = $cookies.get("table")) === undefined) {
         $location.path("/tables");
@@ -14,6 +15,9 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     $scope.orderPrice = 0;
 
     var getActiveOrderOnTable = function () {
+        $scope.orderItems = [];
+        $scope.orderPrice = 0;
+        $scope.order = null;
         OrderService.getActiveOrderOnTable($scope.tableId).then(function (response) {
             if (response.data !== "") {
                 $("#basketButton").prop('disabled', false);
@@ -24,7 +28,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
         }, ErrorService.serverErrorCallback);
     };
 
-    $rootScope.$on("getActiveOrder", function (event) {
+    var getActiveOrderListener = $rootScope.$on("getActiveOrder", function (event) {
         //if there is a active order on the table get it ...
         getActiveOrderOnTable();
     });
@@ -108,7 +112,6 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
             OrderService.createAndAddItemToOrder($scope.tableId, orderItem).then(function (response) {
                 processAddResponse(response);
             }, ErrorService.serverErrorCallback)
-
         } else {
             OrderService.addItemToOrder($scope.tableId, $scope.order.id, orderItem).then(function (response) {
                 processAddResponse(response);
@@ -156,7 +159,7 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
     /**
      * Reacts on add to order event from offer controller and adds current selection into order
      */
-    $rootScope.$on('addToOrder', function (event, args) {
+    var addToOrderListener = $rootScope.$on('addToOrder', function (event, args) {
         $scope.addToOrder(args.orderItem);
     });
 
@@ -296,5 +299,10 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
             $("#basketButton").removeClass("shake");
         }, 800);
     };
+
+    $scope.$on('$destroy', function() {
+        getActiveOrderListener();
+        addToOrderListener();
+    });
 
 });
