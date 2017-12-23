@@ -63,15 +63,4 @@ public class AccountServiceImpl implements AccountService {
         return accountDao.findByUsername(username);
     }
 
-    @Override
-    public void logout() {
-        Account anonymous = accountDao.getAll().stream()
-                .filter(account -> account.getAccountRole() == AccountRole.ANONYMOUS_CUSTOMER)
-                .limit(1)
-                .collect(toList())
-                .get(0);
-        if(anonymous != null) {
-            requestContext.setLoggedAccount(anonymous);
-        }
-    }
 }

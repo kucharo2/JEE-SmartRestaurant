@@ -31,19 +31,17 @@ app.controller('LoginController', function LoginController($scope, $rootScope, $
      * Logouts user
      */
     $scope.logout = function () {
-        LoginService.logout().then(function (response) {
-            localStorage.removeItem("loggedUser");
-            $http.defaults.headers.common.Authorization = 'Basic ' + $base64.encode("anonymous:cvut2017");
-            $scope.loggedUser = null;
-            $scope.toggleUsersProfile();
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent('Uživatel byl odhlášen!')
-                    .position('bottom right')
-                    .hideDelay(1500)
-            );
-            $rootScope.$emit("getActiveOrder");
-        }, ErrorService.serverErrorCallback);
+        LoginService.logout();
+        $http.defaults.headers.common.Authorization = 'Basic ' + $base64.encode("anonymous:cvut2017");
+        $scope.loggedUser = null;
+        $scope.toggleUsersProfile();
+        $mdToast.show(
+            $mdToast.simple()
+                .textContent('Uživatel byl odhlášen!')
+                .position('bottom right')
+                .hideDelay(1500)
+        );
+        $rootScope.$emit("getActiveOrder");
     };
 
     /**

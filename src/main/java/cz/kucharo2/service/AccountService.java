@@ -30,8 +30,4 @@ public interface AccountService {
      */
     Account findAccountByUsername(String username);
 
-    /**
-     * Logs user out
-     */
-    void logout();
 }

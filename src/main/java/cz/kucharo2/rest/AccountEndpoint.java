@@ -52,11 +52,4 @@ public class AccountEndpoint {
     public Account checkCredentials(String base64credentials) {
         return accountService.checkCorrectCredentials(base64credentials);
     }
-
-    @POST
-    @Path("logout")
-    @Secured
-    public void logout() {
-        accountService.logout();
-    }
 }
