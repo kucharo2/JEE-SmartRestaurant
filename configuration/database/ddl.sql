@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS Account CASCADE
 DROP TABLE IF EXISTS Account_role CASCADE
 ;
 
-DROP TABLE IF EXISTS "Order" CASCADE
+DROP TABLE IF EXISTS o_order CASCADE
 ;
 
 DROP TABLE IF EXISTS Order_item CASCADE
@@ -84,7 +84,7 @@ CREATE TABLE Account_role
 )
 ;
 
-CREATE TABLE "Order" 
+CREATE TABLE o_order 
 (
 	order_id integer NOT NULL   DEFAULT NEXTVAL(('Order_SEQ'::text)::regclass),
 	date date NOT NULL   DEFAULT now(),
@@ -189,14 +189,14 @@ ALTER TABLE Account_role ADD CONSTRAINT PK_Account_table
 	PRIMARY KEY (role_id)
 ;
 
-ALTER TABLE "Order" ADD CONSTRAINT PK_Order
+ALTER TABLE o_order ADD CONSTRAINT PK_Order
 	PRIMARY KEY (order_id)
 ;
 
-CREATE INDEX IXFK_Order_Account ON "Order" (account_id ASC)
+CREATE INDEX IXFK_Order_Account ON o_order (account_id ASC)
 ;
 
-CREATE INDEX IXFK_Order_Table ON "Order" (table_id ASC)
+CREATE INDEX IXFK_Order_Table ON o_order (table_id ASC)
 ;
 
 ALTER TABLE Order_item ADD CONSTRAINT PK_OrderItem
@@ -270,11 +270,11 @@ ALTER TABLE Account ADD CONSTRAINT FK_Account_Account_table
 	FOREIGN KEY (role_id) REFERENCES Account_role (role_id) ON DELETE No Action ON UPDATE No Action
 ;
 
-ALTER TABLE "Order" ADD CONSTRAINT FK_Order_Account
+ALTER TABLE o_order ADD CONSTRAINT FK_Order_Account
 	FOREIGN KEY (account_id) REFERENCES Account (account_id) ON DELETE No Action ON UPDATE No Action
 ;
 
-ALTER TABLE "Order" ADD CONSTRAINT FK_Order_Table
+ALTER TABLE o_order ADD CONSTRAINT FK_Order_Table
 	FOREIGN KEY (table_id) REFERENCES Restaurant_table (table_id) ON DELETE Restrict ON UPDATE No Action
 ;
 
@@ -283,7 +283,7 @@ ALTER TABLE Order_item ADD CONSTRAINT FK_Order_item_Item
 ;
 
 ALTER TABLE Order_item ADD CONSTRAINT FK_OrderItem_Order
-	FOREIGN KEY (order_id) REFERENCES "Order" (order_id) ON DELETE Restrict ON UPDATE No Action
+	FOREIGN KEY (order_id) REFERENCES o_order (order_id) ON DELETE Restrict ON UPDATE No Action
 ;
 
 ALTER TABLE Category ADD CONSTRAINT FK_Category_Category
