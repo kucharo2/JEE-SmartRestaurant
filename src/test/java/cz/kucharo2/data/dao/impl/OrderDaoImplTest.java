@@ -65,7 +65,7 @@ public class OrderDaoImplTest {
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistUnpaidOrderOnTable() throws Exception {
         Order order = new Order();
-        order.setStatus(OrderStatus.CREATED);
+        order.setStatus(OrderStatus.FINISHED);
         order.setDate(new Date());
         order.setTable(restaurantTableDao.getById(1));
 
@@ -94,7 +94,46 @@ public class OrderDaoImplTest {
     }
 
     @Test
+    @Transactional(TransactionMode.ROLLBACK)
+    public void testShouldNotExistUnpaidFinishedOrdersOnTableByUser(){
+        Assert.assertEquals(0, orderDao.getUnpaidFinishedOrdersOnTableByUser(0, 0).size());
+    }
 
+    @Test
+    @Transactional(TransactionMode.ROLLBACK)
+    public void testShouldExistUnpaidFinishedOrdersOnTableByUser(){
+        Order order = new Order();
+        order.setStatus(OrderStatus.FINISHED);
+        order.setDate(new Date());
+        order.setTable(restaurantTableDao.getById(1));
+        order.setAccount(accountDao.getById(1));
+
+        OrderItem orderItem = new OrderItem();
+        orderItem.setCreated(new Date());
+        orderItem.setOrder(order);
+        orderItem.setPaid(false);
+        orderItem.setPrice(100);
+        orderItem.setItem(itemDao.getById(1));
+
+        orderItemDao.createOrUpdate(orderItem);
+
+        List<OrderItem> orderItems = new ArrayList<>();
+        orderItems.add(orderItem);
+        order.setOrderItems(orderItems);
+
+        orderDao.createOrUpdate(order);
+
+        List<Order> orderList = orderDao.getUnpaidFinishedOrdersOnTableByUser(1, 1);
+        Assert.assertTrue(0 < orderList.size());
+
+        Order testOrder = orderList.stream().filter(x -> order.getId().equals(x.getId())).findAny().orElse(null);
+
+        Assert.assertNotNull(testOrder);
+        Assert.assertEquals(order.getId(), testOrder.getId());
+    }
+
+    @Test
+    @Transactional(TransactionMode.ROLLBACK)
     public void testShouldNotExistOrderByTableAndUser() throws Exception {
         Assert.assertNull(orderDao.getCreatedOrderByTableAndUser(0, 0));
     }
