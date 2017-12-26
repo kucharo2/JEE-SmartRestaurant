@@ -1,7 +1,7 @@
 /*******************************************
 STYLES FOR CASH DESK PAGE
  *******************************************/
-#cash-desk {
+.cash-desk {
     background-color: #ffffff;
     width: 70%;
     position: absolute;
@@ -34,6 +34,13 @@ STYLES FOR CASH DESK PAGE
     background-color: rgba(255, 255, 255, 0.9);
 }
 
+.cash-desk-compact {
+    width: 50%;
+    margin: auto;
+    border: 2px solid black;
+    padding: 20px;
+}
+
 #cash-desk-button {
     position: absolute;
     margin: auto;
@@ -45,4 +52,16 @@ STYLES FOR CASH DESK PAGE
 
 #cash-desk-button button {
     width: 300px;
+}
+
+#add-all-btn {
+    position: absolute;
+    right: 14px;
+    top: 15px;
+    width: 200px;
+}
+#remove-all-btn {
+    position: absolute;
+    right: 15px;
+    top: 35px;
 }

@@ -6,8 +6,12 @@
 var app = angular.module('smartRestaurantApp', ['ngRoute', 'base64', 'ngCookies', 'ngMaterial', 'ngAria']).config(function($routeProvider, $httpProvider, $base64, $mdToastProvider) {
 
     var defaultAuth = $base64.encode("anonymous:cvut2017");
-    $httpProvider.defaults.headers.common.Authorization = 'Basic ' + defaultAuth;
-
+    var loggedUserBase64 = localStorage.getItem("loggedUser");
+    if(loggedUserBase64 !== null && loggedUserBase64 !== undefined ) {
+        $httpProvider.defaults.headers.common.Authorization = 'Basic ' + loggedUserBase64;
+    }else{
+        $httpProvider.defaults.headers.common.Authorization = 'Basic ' + defaultAuth;
+    }
     $routeProvider
         .when("/", {
             templateUrl : "offer.html"

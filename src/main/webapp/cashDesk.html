@@ -1,7 +1,19 @@
 <!-- TABLES VIEW -->
 <div class="container-fluid" ng-controller="CashDeskController">
-    <div id="cash-desk">
-        <h1>Nezaplacené položky</h1>
+    <div id="loggedUser" class="right-top-corner text-right" style="padding-right: 10px">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        <span ng-if="loggedUser === null || loggedUser === undefined"> Anonymní uživatel</span>
+        <span ng-if="loggedUser !== null && loggedUser !== undefined"> {{loggedUser.username}}</span>
+    </div>
+    <div id="tableAndBillInfo" class="left-top-corner">
+        Číslo stolu: <b>{{tableId}}</b>
+    </div>
+    <div id="cash-desk" class="cash-desk">
+        <h1>Nezaplacené položky - Zbývá zaplatit: {{unpaidTotalPrice}} Kč
+            <button ng-if="isWaiter() && unpaidItems.length > 0" id="add-all-btn" class="btn btn-lg btn-primary" ng-click="addAllToPayed()">Přidat vše
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+            </button>
+        </h1>
         <div class="table-responsive">
             <table class="table table-hover" id="actualChoiceTable">
                 <tr>
@@ -9,7 +21,7 @@
                     <th>Ks</th>
                     <th>Název</th>
                     <th>Cena</th>
-                    <th>Akce</th>
+                    <th ng-if="isWaiter()">Akce</th>
                 </tr>
                 <tbody ng-repeat="unpaidItem in unpaidItems">
                 <tr ng-repeat="dish in unpaidItem.items track by $index">
@@ -26,7 +38,7 @@
                         <span ng-if="dish.drink">{{dish.name}}</span>
                     </td>
                     <td>{{dish.price}} Kč</td>
-                    <td id="cash-desk-actions-column">
+                    <td id="cash-desk-actions-column" ng-if="isWaiter()">
                         <button class="btn btn-success" ng-click="addToPayed(unpaidItem.id, dish)"
                                 ng-if="dish.main || dish.drink || dish.lonelySideDish">
                             <i class="fa fa-plus" aria-hidden="true"></i> Přidat
@@ -37,16 +49,21 @@
             </table>
         </div>
     </div>
-    <div class="to-be-payed">
+    <div class="to-be-payed" ng-if="isWaiter()">
         <div class="dish-info">
-            <h3>K zaplacení <br>Cena: {{selectionPrice}} Kč </h3>
+            <h3>K zaplacení <br>Cena: {{selectionPrice}} Kč
+                <button ng-if="selectedDishes.length > 0" id="remove-all-btn" class="btn btn-danger" ng-click="removeAllFromPayed()">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    Odebrat vše
+                </button>
+            </h3>
             <div class="table-responsive ">
                 <table class="table">
                     <tr>
                         <th>Ks</th>
                         <th>Název</th>
                         <th>Cena</th>
-                        <th>Akce</th>
+                        <th ng-if="isWaiter()">Akce</th>
                     </tr>
                         <tr ng-repeat="selectedDish in selectedDishes track by $index">
                             <!-- TODO styles to css file -->
@@ -85,3 +102,4 @@
         </button>
     </a>
 </div>
+

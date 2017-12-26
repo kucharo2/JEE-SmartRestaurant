@@ -12,6 +12,7 @@ app.controller('LoginController', function LoginController($scope, $rootScope, $
      * Logs user into application
      */
     var loginUser = function () {
+        $scope.errors = [];
         var base64credentials = $base64.encode($scope.username+":"+$scope.password);
         LoginService.loginUser(base64credentials).then(function (response) {
             if(response.data !== ""){
@@ -65,10 +66,6 @@ app.controller('LoginController', function LoginController($scope, $rootScope, $
             promise.then(function (response) {
                 if(response.data !== ""){
                     $scope.loggedUser = response.data;
-                    var loggedUserBase64 = localStorage.getItem("loggedUser");
-                    if(loggedUserBase64 !== null && loggedUserBase64 !== undefined ) {
-                        $http.defaults.headers.common.Authorization = 'Basic ' + loggedUserBase64;
-                    }
                 }
                 $rootScope.$emit("getActiveOrder");
             }, ErrorService.serverErrorCallback);

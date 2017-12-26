@@ -6,11 +6,30 @@
 app.service('CashDeskService', function ($http) {
 
     /**
-     * Registers user
+     * Gets unpaid order items for logged user
      * @returns {HttpPromise}
      */
     this.getUnpaidOrderItems = function (tableId) {
         return $http.get(apiPrefix + "/cashDesk/" + tableId + "/unpaidOrderItems");
+    };
+
+    /**
+     * Gets users which have some unpaid order items on specified table
+     * @param tableId
+     * @returns {HttpPromise}
+     */
+    this.getUsersHavingUnpaidFinishedOrdersOnTable = function (tableId) {
+        return $http.get(apiPrefix + "/cashDesk/" + tableId + "/unpaidUsers");
+    };
+
+    /**
+     * Gets unpaid order items on specified table which belong to specified user
+     * @param tableId
+     * @param userId
+     * @returns {HttpPromise}
+     */
+    this.getUnpaidFinishedOrderItemsOnTableForUser = function (tableId, userId) {
+        return $http.get(apiPrefix + "/cashDesk/" + tableId + "/unpaidOrderItems/" + userId);
     };
 
     /**

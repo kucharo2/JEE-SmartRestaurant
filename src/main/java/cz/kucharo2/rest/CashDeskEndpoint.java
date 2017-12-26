@@ -2,6 +2,7 @@ package cz.kucharo2.rest;
 
 import cz.kucharo2.data.entity.Account;
 import cz.kucharo2.data.entity.OrderItem;
+import cz.kucharo2.data.enums.AccountRole;
 import cz.kucharo2.filter.Secured;
 import cz.kucharo2.service.CashDeskService;
 
@@ -30,7 +31,7 @@ public class CashDeskEndpoint {
     @GET
     @Path("{table_id}/unpaidUsers")
     @Produces(MediaType.APPLICATION_JSON)
-    @Secured
+    @Secured(roles = {AccountRole.WAITER})
     public List<Account> getUsersHavingUnpaidFinishedOrdersOnTable(@PathParam("table_id") Integer tableId) {
         return cashDeskService.getUsersHavingUnpaidFinishedOrdersOnTable(tableId);
     }
@@ -38,8 +39,8 @@ public class CashDeskEndpoint {
     @GET
     @Path("{table_id}/unpaidOrderItems/{user_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Secured
-    public List<OrderItem> getUnpaidFinishedOrdersOnTable(@PathParam("table_id") Integer tableId, @PathParam("user_id") Integer userId) {
+    @Secured(roles = {AccountRole.WAITER})
+    public List<OrderItem> getUnpaidFinishedOrderItemsOnTableForUser(@PathParam("table_id") Integer tableId, @PathParam("user_id") Integer userId) {
         return cashDeskService.getUnpaidFinishedOrderItemsOnTable(tableId, userId);
     }
 
@@ -47,7 +48,7 @@ public class CashDeskEndpoint {
     @Path("/pay")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Secured
+    @Secured(roles = {AccountRole.WAITER})
     public void payOrderItems(List<Integer> orderItemIds) {
         cashDeskService.pay(orderItemIds);
     }
