@@ -276,8 +276,8 @@ app.controller('OrderController', function MenuListController($scope, $rootScope
 
     /**
      * Checks if array contains item
-     * @param item
-     * @param arr
+     * @param item needle
+     * @param arr haystack
      * @returns {number} index of item in array
      */
     var orderContainsItem = function (item, arr) {

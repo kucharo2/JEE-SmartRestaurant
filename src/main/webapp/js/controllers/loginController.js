@@ -60,6 +60,9 @@ app.controller('LoginController', function LoginController($scope, $rootScope, $
     };
 
 
+    /**
+     * Gets logged user - checks credentials with server
+     */
     $scope.getLoggedUser = function(){
         var promise;
         if((promise = LoginService.getLoggerUser()) !== null){
@@ -72,6 +75,7 @@ app.controller('LoginController', function LoginController($scope, $rootScope, $
         }
     };
 
+    //prepare listeners for login form
     var loginForm;
     if((loginForm = $("#loginForm"))){
         loginForm.submit(function () {

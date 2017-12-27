@@ -18,6 +18,10 @@ app.service('ErrorService', function ($mdToast) {
         ERR_PASSWORD_MATCH: "Hesla se neshodují"
     };
 
+    /**
+     * Generic error function for all fe - be communication errors
+     * @param response
+     */
     this.serverErrorCallback = function (response) {
         $mdToast.show(
             $mdToast.error500()
@@ -25,10 +29,20 @@ app.service('ErrorService', function ($mdToast) {
     };
 
 
+    /**
+     * Translates be error key to frontent user friendly message
+     * @param key
+     * @returns {*}
+     */
     this.translateErrorMessage = function (key) {
         return registerErrorsTranslations[key];
     };
 
+    /**
+     * Sets error to specific field - note that proper html structure is needed for this to be functional
+     * @param fieldName
+     * @param errorKey
+     */
     this.setErrorToField = function (fieldName, errorKey) {
         var errorDiv = $("#" + fieldName);
         if (errorDiv.html() !== "") {
@@ -43,6 +57,10 @@ app.service('ErrorService', function ($mdToast) {
         }
     };
 
+    /**
+     * Clears specific field error
+     * @param fieldName
+     */
     this.clearFieldError = function (fieldName) {
         var errorDiv = $("#" + fieldName);
         errorDiv.html("");

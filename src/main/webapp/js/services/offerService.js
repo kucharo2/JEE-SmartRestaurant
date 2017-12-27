@@ -22,6 +22,10 @@ app.service('OfferService', function ($http) {
         return $http.get(apiPrefix + "/menu/" + id + "/sideDish");
     };
 
+    /**
+     * Fetches drinks grouped by categories from server
+     * @returns {HttpPromise}
+     */
     this.getDrinksGroupedByCategories = function () {
         return $http.get(apiPrefix + "/menu/drinks");
     }

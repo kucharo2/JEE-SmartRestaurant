@@ -20,6 +20,9 @@ app.service('LoginService', function ($http) {
         });
     };
 
+    /**
+     * Logouts user - removes him from local storage
+     */
     this.logout = function () {
        localStorage.removeItem("loggedUser");
     };

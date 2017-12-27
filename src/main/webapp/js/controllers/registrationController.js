@@ -44,12 +44,17 @@ app.controller('RegistrationController', function LoginController($scope, Regist
         }, ErrorService.serverErrorCallback);
     };
 
+    //bind listeners for registration form
     $("#registrationForm").submit(function () {
         if(validateRegistrationForm()){
             registerUser();
         }
     });
 
+    /**
+     * Frontend validation for registration form
+     * @returns {boolean}
+     */
     var validateRegistrationForm = function(){
         resetErrors();
         var valid = true;
@@ -59,8 +64,11 @@ app.controller('RegistrationController', function LoginController($scope, Regist
             valid = false;
         }
         return valid;
-    }
+    };
 
+    /**
+     * Clears current errors
+     */
     var resetErrors = function () {
         ErrorService.clearFieldError("username-error");
         ErrorService.clearFieldError("firstName-error");
