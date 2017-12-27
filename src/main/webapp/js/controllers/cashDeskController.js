@@ -8,6 +8,8 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
         $location.path("/tables");
     }
 
+    $scope.selectedUnpaidUser = null;
+    $scope.unpaidUsers = [];
     $scope.selectedDishes = [];
     $scope.selectionPrice = 0;
     $scope.unpaidTotalPrice = 0;
@@ -21,20 +23,37 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
     };
 
     $scope.addAllToPayed = function () {
+        var toBeAddedIds = [];
+        var toBeAddedItems = [];
         for (var i = 0; i < $scope.unpaidItems.length; i++) {
             for (var j = 0; j < $scope.unpaidItems[i].items.length; j++) {
-                $scope.addToPayed($scope.unpaidItems[i].id, $scope.unpaidItems[i].items[j]);
+                for (var k = 0; k < $scope.unpaidItems[i].items[j].count; k++) {
+                    toBeAddedIds.push($scope.unpaidItems[i].id);
+                    toBeAddedItems.push($scope.unpaidItems[i].items[j]);
+                }
             }
+        }
+        for (var l = 0; l < toBeAddedItems.length; l++) {
+            $scope.addToPayed(toBeAddedIds[l], toBeAddedItems[l]);
         }
     };
 
     $scope.removeAllFromPayed = function () {
         var toBeRemoved = [];
         for (var i = 0; i < $scope.selectedDishes.length; i++) {
-            toBeRemoved.push($scope.selectedDishes[i]);
+            if($scope.selectedDishes[i].items[0].main){
+                toBeRemoved.push($scope.selectedDishes[i]);
+            } else if($scope.selectedDishes[i].items[0].drink || $scope.selectedDishes[i].items[0].lonelySideDish){
+                for(var j = 0; j < $scope.selectedDishes[i].items.length; j++){
+                    for(var k = 0; k < $scope.selectedDishes[i].items[j].count; k++){
+                        toBeRemoved.push($scope.selectedDishes[i]);
+                    }
+                }
+            }
+
         }
-        for (var j = 0; j < toBeRemoved.length; j++) {
-            $scope.removeFromPayed(toBeRemoved[j]);
+        for (var l = 0; l < toBeRemoved.length; l++) {
+            $scope.removeFromPayed(toBeRemoved[l]);
         }
     };
 
@@ -50,51 +69,53 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
         for (var i = 0; i < $scope.unpaidItems.length; i++) {
             if ($scope.unpaidItems[i].id === index) {
                 var itemArr = $scope.unpaidItems[i];
-                if (itemArr.items[0].main) {
-                    //add whole item arr into selection
-                    $scope.selectedDishes.push({
-                        index: i,
-                        items: $scope.unpaidItems[i].items
-                    });
-                    for (var k = 0; k < itemArr.items.length; k++) {
-                        $scope.selectionPrice += itemArr.items[k].price * itemArr.items[k].count;
-                    }
-                    $scope.unpaidItems[i].items = [];
-                    return;
-                } else if (itemArr.items[0].drink || itemArr.items[0].lonelySideDish) {
-                    //add only this item into selection
-                    var indexOfItemInSelected = -1;
-                    var indexOfItemInUnpaid = itemArr.items.indexOf(dish);
-                    var itemFromUnpaid = itemArr.items[indexOfItemInUnpaid];
-                    if ((indexOfItemInSelected = itemsContainsItem(itemFromUnpaid, $scope.selectedDishes)) === -1) {
-                        var item = {
-                            name: itemFromUnpaid.name,
-                            price: itemFromUnpaid.price,
-                            drink: itemFromUnpaid.drink,
-                            lonelySideDish: itemFromUnpaid.lonelySideDish,
-                            ids: [].concat(itemFromUnpaid.ids[0]),
-                            count: 1,
-                            id: itemFromUnpaid.id
-                        };
+                if (itemArr.items[0] !== undefined) {
+                    if (itemArr.items[0].main) {
+                        //add whole item arr into selection
                         $scope.selectedDishes.push({
                             index: i,
-                            items: [].concat(item)
+                            items: $scope.unpaidItems[i].items
                         });
-                        $scope.selectionPrice += item.price;
+                        for (var k = 0; k < itemArr.items.length; k++) {
+                            $scope.selectionPrice += itemArr.items[k].price * itemArr.items[k].count;
+                        }
+                        $scope.unpaidItems[i].items = [];
+                        return;
+                    } else if (itemArr.items[0].drink || itemArr.items[0].lonelySideDish) {
+                        //add only this item into selection
+                        var indexOfItemInSelected = -1;
+                        var indexOfItemInUnpaid = itemArr.items.indexOf(dish);
+                        var itemFromUnpaid = itemArr.items[indexOfItemInUnpaid];
+                        if ((indexOfItemInSelected = itemsContainsItem(itemFromUnpaid, $scope.selectedDishes)) === -1) {
+                            var item = {
+                                name: itemFromUnpaid.name,
+                                price: itemFromUnpaid.price,
+                                drink: itemFromUnpaid.drink,
+                                lonelySideDish: itemFromUnpaid.lonelySideDish,
+                                ids: [].concat(itemFromUnpaid.ids[0]),
+                                count: 1,
+                                id: itemFromUnpaid.id
+                            };
+                            $scope.selectedDishes.push({
+                                index: i,
+                                items: [].concat(item)
+                            });
+                            $scope.selectionPrice += item.price;
 
-                    } else {
-                        var ii = parseInt(indexOfItemInSelected.split(":")[0]);
-                        var jj = parseInt(indexOfItemInSelected.split(":")[1]);
-                        $scope.selectedDishes[ii].items[jj].ids.push(itemFromUnpaid.ids[0]);
-                        $scope.selectedDishes[ii].items[jj].count++;
-                        $scope.selectionPrice += $scope.selectedDishes[ii].items[jj].price;
+                        } else {
+                            var ii = parseInt(indexOfItemInSelected.split(":")[0]);
+                            var jj = parseInt(indexOfItemInSelected.split(":")[1]);
+                            $scope.selectedDishes[ii].items[jj].ids.push(itemFromUnpaid.ids[0]);
+                            $scope.selectedDishes[ii].items[jj].count++;
+                            $scope.selectionPrice += $scope.selectedDishes[ii].items[jj].price;
+                        }
+                        $scope.unpaidItems[i].items[indexOfItemInUnpaid].count--; //lower count
+                        $scope.unpaidItems[i].items[indexOfItemInUnpaid].ids.splice(0, 1); //remove added id
+                        if ($scope.unpaidItems[i].items[indexOfItemInUnpaid].count === 0) {
+                            $scope.unpaidItems[i].items.splice(indexOfItemInUnpaid, 1);
+                        }
+                        return;
                     }
-                    $scope.unpaidItems[i].items[indexOfItemInUnpaid].count--; //lower count
-                    $scope.unpaidItems[i].items[indexOfItemInUnpaid].ids.splice(0, 1); //remove added id
-                    if ($scope.unpaidItems[i].items[indexOfItemInUnpaid].count === 0) {
-                        $scope.unpaidItems[i].items.splice(indexOfItemInUnpaid, 1);
-                    }
-                    return;
                 }
             }
         }
@@ -155,7 +176,8 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
         }
         CashDeskService.payItems(toBePayedIds).then(function () {
             //update
-            getUnpaidOrderItems();
+            $scope.getUnpaidOrderItemsForUser($scope.selectedUnpaidUser);
+            getUnpaidUsersOnTable();
             $mdToast.show(
                 $mdToast.simple()
                     .textContent("Platba položek byla úspěšně přijata")
@@ -284,6 +306,24 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
     };
 
     /**
+     * Gets unpaid order items from server for specified user
+     * Only waiter can do that
+     */
+    $scope.getUnpaidOrderItemsForUser = function (selectedUnpaidUser) {
+        $scope.selectedDishes = [];
+        $scope.selectionPrice = 0;
+        $scope.unpaidItems = [];
+        $scope.unpaidTotalPrice = 0;
+        $scope.selectedUnpaidUser = selectedUnpaidUser;
+        if (selectedUnpaidUser !== "") {
+            CashDeskService.getUnpaidFinishedOrderItemsOnTableForUser($scope.tableId, selectedUnpaidUser).then(function (response) {
+                $scope.unpaidItems = response.data;
+                groupUnpaidItems();
+            }, ErrorService.serverErrorCallback);
+        }
+    };
+
+    /**
      * Gets unpaid order items from server
      */
     var getUnpaidOrderItems = function () {
@@ -291,6 +331,12 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
             $scope.unpaidItems = response.data;
             groupUnpaidItems();
         }, ErrorService.serverErrorCallback);
+    };
+
+    var getUnpaidUsersOnTable = function () {
+        CashDeskService.getUsersHavingUnpaidFinishedOrdersOnTable($scope.tableId).then(function (response) {
+            $scope.unpaidUsers = response.data;
+        });
     };
 
     $("#cash-desk").addClass("cash-desk-compact");
@@ -302,9 +348,11 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
                 $scope.loggedUser = response.data;
                 if ($scope.isWaiter()) {
                     $("#cash-desk").removeClass("cash-desk-compact");
+                    getUnpaidUsersOnTable();
+                } else {
+                    getUnpaidOrderItems();
                 }
             }
-            getUnpaidOrderItems();
         });
     } else {
         getUnpaidOrderItems(); //for anonymous user

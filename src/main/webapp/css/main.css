@@ -2,8 +2,8 @@
 STYLES FOR OFFER PAGE AND COMMON STYLES
  *******************************************/
 body {
-    background-image: url("../img/background.jpg");
     background-size: 100%;
+    background: url("../img/background.jpg") no-repeat;
 }
 
 #loggedUser {
@@ -86,10 +86,12 @@ body {
 .content-absolute {
     position: absolute;
     top: 120px;
-    bottom: 0px;
+    bottom: 0;
     left: 0;
     right: 0;
     overflow-y: auto;
+    width: 40%;
+    background-color: white;
     border-right: 2px solid black;
 }
 
@@ -116,7 +118,7 @@ body {
 
 .left-top-corner {
     position: absolute;
-    top: 15px;
+    top: 4px;
     left: 15px;
 }
 

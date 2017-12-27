@@ -6,11 +6,21 @@
         <span ng-if="loggedUser !== null && loggedUser !== undefined"> {{loggedUser.username}}</span>
     </div>
     <div id="tableAndBillInfo" class="left-top-corner">
-        Číslo stolu: <b>{{tableId}}</b>
+        Číslo stolu: <b>{{tableId}}</b><br>
+        <div class="form-group" ng-if="isWaiter() && unpaidUsers.length > 0" id="unpaidUserDiv">
+            <label for="unpaidUserSelect"><b>Vyberte uživatele</b></label>
+            <select class="form-control" id="unpaidUserSelect"
+                    ng-model="selectedUnpaidUser"
+                    ng-change="getUnpaidOrderItemsForUser(selectedUnpaidUser)">
+                <option ng-repeat="unpaidUser in unpaidUsers" value="{{unpaidUser.id}}">{{unpaidUser.username}}</option>
+            </select>
+        </div>
     </div>
     <div id="cash-desk" class="cash-desk">
         <h1>Nezaplacené položky - Zbývá zaplatit: {{unpaidTotalPrice}} Kč
-            <button ng-if="isWaiter() && unpaidItems.length > 0" id="add-all-btn" class="btn btn-lg btn-primary" ng-click="addAllToPayed()">Přidat vše
+            <button ng-if="isWaiter() && unpaidItems.length > 0" id="add-all-btn"
+                    class="btn btn-lg btn-primary"
+                    ng-click="addAllToPayed()">Přidat vše
                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </button>
         </h1>
@@ -28,7 +38,8 @@
                     <td>
                         <i ng-if="dish.main && !dish.drink" class="fa fa-cutlery fa-lg"
                            aria-hidden="true"></i>
-                        <img ng-if="!dish.main && !dish.drink" width="35px" height="35px" src="img/priloha.png"></img>
+                        <img ng-if="!dish.main && !dish.drink" width="35px" height="35px"
+                             src="img/priloha.png"></img>
                         <i ng-if="dish.drink" class="fa fa-glass fa-lg" aria-hidden="true"></i>
                     </td>
                     <td>{{dish.count}}</td>
@@ -52,7 +63,8 @@
     <div class="to-be-payed" ng-if="isWaiter()">
         <div class="dish-info">
             <h3>K zaplacení <br>Cena: {{selectionPrice}} Kč
-                <button ng-if="selectedDishes.length > 0" id="remove-all-btn" class="btn btn-danger" ng-click="removeAllFromPayed()">
+                <button ng-if="selectedDishes.length > 0" id="remove-all-btn" class="btn btn-danger"
+                        ng-click="removeAllFromPayed()">
                     <i class="fa fa-chevron-left" aria-hidden="true"></i>
                     Odebrat vše
                 </button>
@@ -65,11 +77,11 @@
                         <th>Cena</th>
                         <th ng-if="isWaiter()">Akce</th>
                     </tr>
-                        <tr ng-repeat="selectedDish in selectedDishes track by $index">
-                            <!-- TODO styles to css file -->
-                            <td colspan="4" style="padding: 0; text-align: right">
+                    <tr ng-repeat="selectedDish in selectedDishes track by $index">
+                        <!-- TODO styles to css file -->
+                        <td colspan="4" style="padding: 0; text-align: right">
                             <table style="width: 100%; padding: 0">
-                                <tr  ng-repeat="item in selectedDish.items" >
+                                <tr ng-repeat="item in selectedDish.items">
                                     <td style="text-align: left">{{item.count}}</td>
                                     <td style="width: 50%; text-align: left">
                                         <b ng-if="item.main">{{item.name}}</b>
@@ -78,14 +90,15 @@
                                     <td>{{item.price}} Kč</td>
                                     <td>
                                         <button ng-if="item.main || item.drink || item.lonelySideDish"
-                                                class="btn btn-danger" ng-click="removeFromPayed(selectedDish)">
+                                                class="btn btn-danger"
+                                                ng-click="removeFromPayed(selectedDish)">
                                             <i class="fa fa-minus" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                 </tr>
                             </table>
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     </tr>
                 </table>
             </div>
