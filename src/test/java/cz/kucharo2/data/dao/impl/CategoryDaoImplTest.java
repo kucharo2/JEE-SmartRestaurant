@@ -27,6 +27,8 @@ public class CategoryDaoImplTest {
     @Inject
     CategoryDao categoryDao;
 
+    private static int CATEGORY_DRINKS = 2;
+
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)
@@ -37,24 +39,17 @@ public class CategoryDaoImplTest {
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
+    /**
+     * because we have init db, so is the test done this way
+     */
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistCategoryBYCode() throws Exception {
-        Assert.assertNotNull(categoryDao.getCategoryByCode(CategoryType.MAIN_FOOD));
-    }
-
-    @Test
-    @Transactional(TransactionMode.ROLLBACK)
-    public void testCategoryByCode() throws Exception {
-        Category category = new Category();
-        category.setCode(CategoryType.DRINKS);
-        category.setName("pití");
-        category.setId(2);
+        Category category = categoryDao.getById(CATEGORY_DRINKS);
 
         Category testCategory = categoryDao.getCategoryByCode(CategoryType.DRINKS);
 
-        Assert.assertEquals(category.getCode(), testCategory.getCode());
-        Assert.assertEquals(category.getName(), testCategory.getName());
-        Assert.assertEquals(category.getId(), testCategory.getId());
+        Assert.assertNotNull(testCategory);
+        Assert.assertEquals(category, testCategory);
     }
 }

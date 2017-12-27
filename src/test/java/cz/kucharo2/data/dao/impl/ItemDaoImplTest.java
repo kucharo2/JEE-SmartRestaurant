@@ -17,7 +17,9 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Tests for {@link ItemDao}
@@ -32,6 +34,16 @@ public class ItemDaoImplTest {
 
     @Inject
     private CategoryDao categoryDao;
+
+    private static String DISHES_NAME = "Vepřový řízek";
+    private static String DISHES_CODE = "VEPROVY_STEAK";
+    private static int DISHES_PRICE = 80;
+
+    private static String DRINK_NAME = "Plzeň 12° 0,5L";
+    private static String DRINK_CODE = "PLZEN_12_VELKA";
+    private static int DRINK_PRICE = 35;
+
+    private static int ID = 0;
 
     @Deployment
     public static WebArchive createDeployment() {
@@ -52,16 +64,12 @@ public class ItemDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistItemsByCategory() throws Exception {
-        Item item = new Item();
-        item.setName("Vepřový řízek");
-        item.setCode("VEPROVY_STEAK");
-        item.setCategory(categoryDao.getCategoryByCode(CategoryType.MAIN_FOOD));
-        item.setPrice(80);
+        Item item = createDishes();
 
         itemDao.createOrUpdate(item);
 
         List<Item> itemList = itemDao.getItemsByCategory(CategoryType.MAIN_FOOD);
-        Assert.assertTrue(0 < itemList.size());
+        Assert.assertFalse(itemList.isEmpty());
 
         Item testItem = itemList.stream().filter(x -> item.getId().equals(x.getId())).findAny().orElse(null);
 
@@ -83,10 +91,10 @@ public class ItemDaoImplTest {
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistItemsByListCategories() throws Exception {
         Item item = new Item();
-        item.setName("Plzeň 12° 0,5L");
-        item.setCode("PLZEN_12_VELKA");
+        item.setName(DRINK_NAME);
+        item.setCode(DRINK_CODE);
         item.setCategory(categoryDao.getCategoryByCode(CategoryType.DRINKS));
-        item.setPrice(35);
+        item.setPrice(DRINK_PRICE);
 
         itemDao.createOrUpdate(item);
 
@@ -97,7 +105,7 @@ public class ItemDaoImplTest {
         categoryTypes.add(CategoryType.DRINKS);
 
         List<Item> itemList = itemDao.getItemsByListCategories(categoryTypes);
-        Assert.assertTrue(0 < itemList.size());
+        Assert.assertFalse(itemList.isEmpty());
 
         Item testItem = itemList.stream().filter(x -> item.getId().equals(x.getId())).findAny().orElse(null);
 
@@ -108,7 +116,7 @@ public class ItemDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldNotExistItemsByCategoryCount() throws Exception {
-        Assert.assertEquals(new Long(0), itemDao.getItemsByCategoryCount(CategoryType.DRINKS));
+        Assert.assertEquals(Long.valueOf(0), itemDao.getItemsByCategoryCount(CategoryType.DRINKS));
     }
 
     @Test
@@ -120,19 +128,21 @@ public class ItemDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldNotExistItem() throws Exception {
-        Assert.assertNull(itemDao.getItemsWithCombinations(0));
+        Assert.assertNull(itemDao.getItemsWithCombinations(ID));
     }
 
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistItem() throws Exception {
-        Item item = new Item();
-        item.setId(1);
-        item.setPrice(80);
-        item.setName("Kuře DIPLOMAT");
-        item.setCode("DIPLOMAT");
+        Item item = createDishes();
+        Set<Item> itemSet = new HashSet<>();
+        itemSet.add(item);
+        item.setItemCombination(itemSet);
+        item.setItemCombinationTo(itemSet);
 
-        Item testItem = itemDao.getItemsWithCombinations(1);
+        itemDao.createOrUpdate(item);
+
+        Item testItem = itemDao.getItemsWithCombinations(item.getId());
         Assert.assertEquals(item.getId(), testItem.getId());
         Assert.assertEquals(item.getPrice(), testItem.getPrice());
         Assert.assertEquals(item.getName(), testItem.getName());
@@ -141,5 +151,15 @@ public class ItemDaoImplTest {
         Assert.assertNotNull(testItem.getCategory());
         Assert.assertNotNull(testItem.getItemCombination());
         Assert.assertNotNull(testItem.getItemCombinationTo());
+    }
+
+    private Item createDishes(){
+        Item item = new Item();
+        item.setPrice(DISHES_PRICE);
+        item.setName(DISHES_NAME);
+        item.setCode(DISHES_CODE);
+        item.setCategory(categoryDao.getCategoryByCode(CategoryType.MAIN_FOOD));
+
+        return item;
     }
 }

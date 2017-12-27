@@ -39,6 +39,10 @@ public class OrderItemImplTest {
     @Inject
     private ItemDao itemDao;
 
+    private static int ID = 1;
+    private static int FAIL_ID = 1;
+    private static int PRICE = 150;
+
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)
@@ -52,7 +56,7 @@ public class OrderItemImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldNotExistUnpaidOrderItemByOrder() throws Exception {
-        Assert.assertEquals(0, orderItemDao.getUnpaidOrderItemByOrder(0).size());
+        Assert.assertEquals(0, orderItemDao.getUnpaidOrderItemByOrder(FAIL_ID).size());
     }
 
     @Test
@@ -66,8 +70,8 @@ public class OrderItemImplTest {
         orderItem.setCreated(new Date());
         orderItem.setOrder(order);
         orderItem.setPaid(false);
-        orderItem.setPrice(150);
-        orderItem.setItem(itemDao.getById(1));
+        orderItem.setPrice(PRICE);
+        orderItem.setItem(itemDao.getById(ID));
 
         orderItemDao.createOrUpdate(orderItem);
 
@@ -78,7 +82,7 @@ public class OrderItemImplTest {
         orderDao.createOrUpdate(order);
 
         List<OrderItem> orderItemList = orderItemDao.getUnpaidOrderItemByOrder(order.getId());
-        Assert.assertTrue(0 < orderItemList.size());
+        Assert.assertFalse(orderItemList.isEmpty());
 
         OrderItem testOrderItem = orderItemList.stream().filter(x -> orderItem.getId().equals(x.getId())).findAny().orElse(null);
 

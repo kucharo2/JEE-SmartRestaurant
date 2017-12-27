@@ -44,6 +44,9 @@ public class OrderDaoImplTest {
     @Inject
     private ItemDao itemDao;
 
+    private static int ID = 1;
+    private static int FAIL_ID = 1;
+    private static int PRICE = 100;
 
     @Deployment
     public static WebArchive createDeployment() {
@@ -58,23 +61,18 @@ public class OrderDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldNotExistUnpaidOrderOnTable() throws Exception {
-        Assert.assertEquals(0, orderDao.getUnpaidOrderOnTable(0).size());
+        Assert.assertEquals(0, orderDao.getUnpaidOrderOnTable(FAIL_ID).size());
     }
 
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistUnpaidOrderOnTable() throws Exception {
-        Order order = new Order();
+        Order order = createOrder();
         order.setStatus(OrderStatus.FINISHED);
-        order.setDate(new Date());
-        order.setTable(restaurantTableDao.getById(1));
+        order.setTable(restaurantTableDao.getById(ID));
 
-        OrderItem orderItem = new OrderItem();
-        orderItem.setCreated(new Date());
-        orderItem.setOrder(order);
-        orderItem.setPaid(false);
-        orderItem.setPrice(100);
-        orderItem.setItem(itemDao.getById(1));
+        OrderItem orderItem = createOrderItem(order);
+        orderItem.setItem(itemDao.getById(ID));
 
         orderItemDao.createOrUpdate(orderItem);
 
@@ -84,8 +82,8 @@ public class OrderDaoImplTest {
 
         orderDao.createOrUpdate(order);
 
-        List<Order> orderList = orderDao.getUnpaidOrderOnTable(1);
-        Assert.assertTrue(0 < orderList.size());
+        List<Order> orderList = orderDao.getUnpaidOrderOnTable(ID);
+        Assert.assertFalse(orderList.isEmpty());
 
         Order testOrder = orderList.stream().filter(x -> order.getId().equals(x.getId())).findAny().orElse(null);
 
@@ -96,24 +94,19 @@ public class OrderDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldNotExistUnpaidFinishedOrdersOnTableByUser(){
-        Assert.assertEquals(0, orderDao.getUnpaidFinishedOrdersOnTableByUser(0, 0).size());
+        Assert.assertEquals(0, orderDao.getUnpaidFinishedOrdersOnTableByUser(FAIL_ID, FAIL_ID).size());
     }
 
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistUnpaidFinishedOrdersOnTableByUser(){
-        Order order = new Order();
+        Order order = createOrder();
         order.setStatus(OrderStatus.FINISHED);
-        order.setDate(new Date());
-        order.setTable(restaurantTableDao.getById(1));
-        order.setAccount(accountDao.getById(1));
+        order.setTable(restaurantTableDao.getById(ID));
+        order.setAccount(accountDao.getById(ID));
 
-        OrderItem orderItem = new OrderItem();
-        orderItem.setCreated(new Date());
-        orderItem.setOrder(order);
-        orderItem.setPaid(false);
-        orderItem.setPrice(100);
-        orderItem.setItem(itemDao.getById(1));
+        OrderItem orderItem = createOrderItem(order);
+        orderItem.setItem(itemDao.getById(ID));
 
         orderItemDao.createOrUpdate(orderItem);
 
@@ -123,7 +116,7 @@ public class OrderDaoImplTest {
 
         orderDao.createOrUpdate(order);
 
-        List<Order> orderList = orderDao.getUnpaidFinishedOrdersOnTableByUser(1, 1);
+        List<Order> orderList = orderDao.getUnpaidFinishedOrdersOnTableByUser(ID, ID);
         Assert.assertTrue(0 < orderList.size());
 
         Order testOrder = orderList.stream().filter(x -> order.getId().equals(x.getId())).findAny().orElse(null);
@@ -135,21 +128,20 @@ public class OrderDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldNotExistOrderByTableAndUser() throws Exception {
-        Assert.assertNull(orderDao.getCreatedOrderByTableAndUser(0, 0));
+        Assert.assertNull(orderDao.getCreatedOrderByTableAndUser(FAIL_ID, FAIL_ID));
     }
 
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistOrderByTableAndUser() throws Exception {
-        Order order = new Order();
+        Order order = createOrder();
         order.setStatus(OrderStatus.CREATED);
-        order.setDate(new Date());
-        order.setAccount(accountDao.getById(1));
-        order.setTable(restaurantTableDao.getById(2));
+        order.setAccount(accountDao.getById(ID));
+        order.setTable(restaurantTableDao.getById(ID));
 
         orderDao.createOrUpdate(order);
 
-        Order testOrder = orderDao.getCreatedOrderByTableAndUser(2, 1);
+        Order testOrder = orderDao.getCreatedOrderByTableAndUser(ID, ID);
 
         Assert.assertNotNull(testOrder);
         Assert.assertEquals(order.getId(), testOrder.getId());
@@ -166,15 +158,10 @@ public class OrderDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistOrderWithItems() throws Exception {
-        Order order = new Order();
+        Order order = createOrder();
         order.setStatus(OrderStatus.CREATED);
-        order.setDate(new Date());
 
-        OrderItem orderItem = new OrderItem();
-        orderItem.setCreated(new Date());
-        orderItem.setOrder(order);
-        orderItem.setPaid(false);
-        orderItem.setPrice(100);
+        OrderItem orderItem = createOrderItem(order);
 
         orderItemDao.createOrUpdate(orderItem);
 
@@ -190,5 +177,22 @@ public class OrderDaoImplTest {
         Assert.assertEquals(order.getId(), testOrder.getId());
         Assert.assertEquals(order.getStatus(), testOrder.getStatus());
         Assert.assertEquals(order.getDate(), testOrder.getDate());
+    }
+
+    private Order createOrder(){
+        Order order = new Order();
+        order.setDate(new Date());
+
+        return order;
+    }
+
+    private OrderItem createOrderItem(Order order){
+        OrderItem orderItem = new OrderItem();
+        orderItem.setCreated(new Date());
+        orderItem.setPaid(false);
+        orderItem.setPrice(PRICE);
+        orderItem.setOrder(order);
+
+        return orderItem;
     }
 }

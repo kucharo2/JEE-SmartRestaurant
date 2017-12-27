@@ -34,6 +34,9 @@ public class RestaurantTableDaoImplTest {
 
     private int numberOfRestaurantTable;
 
+    private static String NAME = "test";
+    private static int TABLE_SIZE = 2;
+
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)
@@ -53,8 +56,8 @@ public class RestaurantTableDaoImplTest {
     public void setUp() throws Exception {
         restaurantTable = new RestaurantTable();
 
-        restaurantTable.setSize(2);
-        restaurantTable.setName("Test");
+        restaurantTable.setSize(TABLE_SIZE);
+        restaurantTable.setName(NAME);
 
         numberOfRestaurantTable = restaurantTableDao.getAll().size();
 

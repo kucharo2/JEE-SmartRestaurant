@@ -28,6 +28,11 @@ public class AccountDaoImplTest {
     @Inject
     private AccountDao accountDao;
 
+    private static String USERNAME = "test";
+    private static String FAIL_USERNAME = "a";
+    private static String PHONE = "+420123456789";
+    private static String PASSWORD = "test";
+
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)
@@ -42,25 +47,22 @@ public class AccountDaoImplTest {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldNotExistUsername() throws Exception {
-        Assert.assertNull(accountDao.findByUsername("a"));
+        Assert.assertNull(accountDao.findByUsername(FAIL_USERNAME));
     }
 
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistUsername() throws Exception {
-        Assert.assertNotNull(accountDao.findByUsername("anonymous"));
-    }
-
-    @Test
-    @Transactional(TransactionMode.ROLLBACK)
-    public void testAccountFindByUsername() throws Exception {
         Account account = new Account();
-        account.setUsername("anonymous");
-        account.setId(1);
+        account.setUsername(USERNAME);
+        account.setPhone(PHONE);
+        account.setPassword(PasswordHashUtil.encrypt(PASSWORD));
+        account.setAccountRole(AccountRole.REGISTERED_CUSTOMER);
 
-        Account testAccount = accountDao.findByUsername("anonymous");
+        accountDao.createOrUpdate(account);
 
-        Assert.assertEquals(account.getId(), testAccount.getId());
+        Account testAccount = accountDao.findByUsername(USERNAME);
+
         Assert.assertEquals(account.getUsername(), testAccount.getUsername());
     }
 }
