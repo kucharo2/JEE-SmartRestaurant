@@ -2,9 +2,9 @@
 How to prepare your environment to get this project working
 
 ## Database preparation
- - run ![create database](database/createDB.sql) script to create project database and database user
- - connect to new created db and run ![DDL script](database/ddl.sql) to create project schema and ![database updates script](database/updates.sql) to aply updates during the development phase 
- - run ![database fill](databasse/fill_db.sql) script to created a test data
+ - run [create database](database/createDB.sql) script to create project database and database user
+ - connect to new created db and run [DDL script](database/ddl.sql) to create project schema and [database updates script](database/updates.sql) to aply updates during the development phase 
+ - run [database fill](databasse/fill_db.sql) script to created a test data
     - be aware that database fill is dummy insert that rely on id's that will be given in the empty database.
       It will not work when you tried to run it again even after one failed run.
       If something will failed during the run i recommend to drop whole database and start the creation from the begging
