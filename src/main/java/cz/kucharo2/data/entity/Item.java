@@ -35,7 +35,7 @@ public class Item extends DtoEntity {
     private Integer id;
 
     @Column(name = PRICE)
-    private int price;
+    private Long price;
 
     @Column(name = NAME)
     private String name;
@@ -80,11 +80,11 @@ public class Item extends DtoEntity {
         this.id = id;
     }
 
-    public int getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 

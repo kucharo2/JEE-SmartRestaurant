@@ -42,7 +42,7 @@ public class OrderItem extends DtoEntity {
     private boolean paid;
 
     @Column(name = PRICE)
-    private int price;
+    private Long price;
 
     @ManyToOne
     @JoinColumn(name = PARENT_ID)
@@ -88,11 +88,11 @@ public class OrderItem extends DtoEntity {
         this.paid = paid;
     }
 
-    public int getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
@@ -136,11 +136,14 @@ public class OrderItem extends DtoEntity {
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + order.hashCode();
-        result = 31 * result + item.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (order != null ? order.hashCode() : 0);
+        result = 31 * result + (item != null ? item.hashCode() : 0);
         result = 31 * result + (paid ? 1 : 0);
-        result = 31 * result + price;
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (parentOrderItem != null ? parentOrderItem.hashCode() : 0);
+        result = 31 * result + (childOrderItems != null ? childOrderItems.hashCode() : 0);
+        result = 31 * result + (created != null ? created.hashCode() : 0);
         return result;
     }
 }
