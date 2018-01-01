@@ -22,7 +22,7 @@ To manage project work distribution we used Smart Restaurant Trello [board](http
 ## Local environment
 
 ### Environment setup
- Application was implemented on [Wildfly 10](http://wildfly.org/downloads/) and it uses [PostgreSql database](https://www.postgresql.org/download/).
+ Application was implemented in Java EE and deployed on [Wildfly 10](http://wildfly.org/downloads/) and it uses [PostgreSql database](https://www.postgresql.org/download/).
   
   To run application locally follow the [environment setup](configuration).
   
