@@ -41,7 +41,7 @@ public class OrderItemImplTest {
 
     private static int ID = 1;
     private static int FAIL_ID = 1;
-    private static int PRICE = 150;
+    private static Long PRICE = 150L;
 
     @Deployment
     public static WebArchive createDeployment() {

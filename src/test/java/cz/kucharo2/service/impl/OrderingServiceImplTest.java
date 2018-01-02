@@ -66,7 +66,7 @@ public class OrderingServiceImplTest {
     private static String TABLE_NAME = "test";
     private static int ID = 1;
     private static int ID2 = 2;
-    private static int PRICE = 100;
+    private static Long PRICE = 100L;
 
     @Before
     public void setUp() throws Exception {

@@ -46,7 +46,7 @@ public class OrderDaoImplTest {
 
     private static int ID = 1;
     private static int FAIL_ID = 1;
-    private static int PRICE = 100;
+    private static Long PRICE = 100L;
 
     @Deployment
     public static WebArchive createDeployment() {

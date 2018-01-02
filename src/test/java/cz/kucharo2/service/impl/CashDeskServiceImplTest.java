@@ -43,7 +43,7 @@ public class CashDeskServiceImplTest {
 
     private static String TABLE_NAME = "test";
     private static String USERNAME = "test";
-    private static int PRICE = 255;
+    private static Long PRICE = 255L;
     private static int ID = 1;
 
     @Before

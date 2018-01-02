@@ -37,11 +37,11 @@ public class ItemDaoImplTest {
 
     private static String DISHES_NAME = "Vepřový řízek";
     private static String DISHES_CODE = "VEPROVY_STEAK";
-    private static int DISHES_PRICE = 80;
+    private static Long DISHES_PRICE = 80L;
 
     private static String DRINK_NAME = "Plzeň 12° 0,5L";
     private static String DRINK_CODE = "PLZEN_12_VELKA";
-    private static int DRINK_PRICE = 35;
+    private static Long DRINK_PRICE = 35L;
 
     private static int ID = 0;
 
