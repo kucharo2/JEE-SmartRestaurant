@@ -74,7 +74,7 @@ public class AccountServiceImplTest {
         when(accountDao.findByUsername(any(String.class))).thenReturn(account);
 
         String string = Base64.getEncoder().encodeToString(String.valueOf(USERNAME + ":" + PASSWORD).getBytes());
-        Account testAccount = accountService.checkCorrectCredentials(string);
+        Account testAccount = accountService.checkCorrectCredentials(string, false);
 
         verify(accountDao).findByUsername(any(String.class));
 
@@ -87,7 +87,7 @@ public class AccountServiceImplTest {
         when(accountDao.findByUsername(any(String.class))).thenReturn(null);
 
         String string = Base64.getEncoder().encodeToString(String.valueOf(USERNAME + ":" + PASSWORD).getBytes());
-        Account testAccount = accountService.checkCorrectCredentials(string);
+        Account testAccount = accountService.checkCorrectCredentials(string, false);
 
         verify(accountDao).findByUsername(any(String.class));
 

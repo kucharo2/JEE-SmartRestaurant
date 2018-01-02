@@ -19,9 +19,10 @@ public interface AccountService {
      * Checks account credentials.
      *
      * @param base64Hash base 64 hashed credentials
+     * @param shouldBeWaiter whether method should also check waiter role
      * @return user account if credentials was correct
      */
-    Account checkCorrectCredentials(String base64Hash);
+    Account checkCorrectCredentials(String base64Hash, boolean shouldBeWaiter);
 
     /**
      * Find account by username

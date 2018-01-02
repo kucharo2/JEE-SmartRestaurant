@@ -4,6 +4,7 @@ STYLES FOR OFFER PAGE AND COMMON STYLES
 body {
     background-size: 100%;
     background: url("../img/background.jpg") no-repeat;
+    background-size: cover;
 }
 
 #loggedUser {

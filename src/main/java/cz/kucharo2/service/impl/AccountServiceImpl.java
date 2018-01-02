@@ -43,7 +43,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account checkCorrectCredentials(String base64Hash) {
+    public Account checkCorrectCredentials(String base64Hash, boolean shouldBeWaiter) {
         String credentials = new String(Base64.getDecoder().decode(base64Hash));
         String[] split = credentials.split(":");
         String username = split[0];
@@ -52,6 +52,9 @@ public class AccountServiceImpl implements AccountService {
         // find user by username
         Account account = accountDao.findByUsername(username);
         if (account != null && account.getPassword().equals(PasswordHashUtil.encrypt(pass))) {
+            if(shouldBeWaiter && !account.getAccountRole().equals(AccountRole.WAITER)) {
+                return null;
+            }
             return account;
         } else {
             return null;

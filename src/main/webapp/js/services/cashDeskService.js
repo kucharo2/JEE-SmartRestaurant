@@ -19,7 +19,17 @@ app.service('CashDeskService', function ($http) {
      * @returns {HttpPromise}
      */
     this.getUsersHavingUnpaidFinishedOrdersOnTable = function (tableId) {
-        return $http.get(apiPrefix + "/cashDesk/" + tableId + "/unpaidUsers");
+        var loggedWaiter = localStorage.getItem("loggedWaiter");
+        if(loggedWaiter !== null && loggedWaiter !== ""){
+            return $http({
+               url: apiPrefix + "/cashDesk/" + tableId + "/unpaidUsers",
+               method: "GET",
+                headers: {
+                   "Authorization" : "Basic "+loggedWaiter
+                }
+            });
+        }
+        return null;
     };
 
     /**
@@ -29,7 +39,17 @@ app.service('CashDeskService', function ($http) {
      * @returns {HttpPromise}
      */
     this.getUnpaidFinishedOrderItemsOnTableForUser = function (tableId, userId) {
-        return $http.get(apiPrefix + "/cashDesk/" + tableId + "/unpaidOrderItems/" + userId);
+        var loggedWaiter = localStorage.getItem("loggedWaiter");
+        if(loggedWaiter !== null && loggedWaiter !== ""){
+            return $http({
+                url: apiPrefix + "/cashDesk/" + tableId + "/unpaidOrderItems/" + userId,
+                method: "GET",
+                headers: {
+                    "Authorization" : "Basic "+loggedWaiter
+                }
+            });
+        }
+        return null;
     };
 
     /**
@@ -38,14 +58,19 @@ app.service('CashDeskService', function ($http) {
      * @returns {*}
      */
     this.payItems = function (orderItemsIds) {
-        return $http({
-            url: apiPrefix + "/cashDesk/pay",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: orderItemsIds
-        });
+        var loggedWaiter = localStorage.getItem("loggedWaiter");
+        if(loggedWaiter !== null && loggedWaiter !== "") {
+            return $http({
+                url: apiPrefix + "/cashDesk/pay",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Basic " + loggedWaiter
+                },
+                data: orderItemsIds
+            });
+        }
+        return null;
     }
 
 });

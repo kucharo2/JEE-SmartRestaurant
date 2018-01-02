@@ -2,6 +2,7 @@ package cz.kucharo2.rest;
 
 import cz.kucharo2.common.model.RegisterNewAccountModel;
 import cz.kucharo2.data.entity.Account;
+import cz.kucharo2.data.enums.AccountRole;
 import cz.kucharo2.filter.Secured;
 import cz.kucharo2.rest.model.FieldError;
 import cz.kucharo2.rest.model.FormResponse;
@@ -50,6 +51,15 @@ public class AccountEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Account checkCredentials(String base64credentials) {
-        return accountService.checkCorrectCredentials(base64credentials);
+        return accountService.checkCorrectCredentials(base64credentials, false);
+    }
+
+    @POST
+    @Path("login/waiter")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    public Account checkWaiterCredentials(String base64credentials) {
+        return accountService.checkCorrectCredentials(base64credentials, true);
     }
 }

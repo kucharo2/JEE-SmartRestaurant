@@ -52,7 +52,7 @@ public class AccountFilter implements ContainerRequestFilter {
 
         String base64hash = authorizationHeader.substring("Basic".length()).trim();
 
-        Account account = accountService.checkCorrectCredentials(base64hash);
+        Account account = accountService.checkCorrectCredentials(base64hash, false);
         // password validation
         if (account == null) {
             abortOnUnauthorized(requestContext, "Invalid password or username.");

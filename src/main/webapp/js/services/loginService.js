@@ -21,6 +21,21 @@ app.service('LoginService', function ($http) {
     };
 
     /**
+     * Logins user into application
+     * @returns {HttpPromise}
+     */
+    this.loginWaiter = function (base64string) {
+        return $http({
+            url: apiPrefix + "/account/login/waiter",
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            data: base64string
+        });
+    };
+
+    /**
      * Logouts user - removes him from local storage
      */
     this.logout = function () {
@@ -33,7 +48,7 @@ app.service('LoginService', function ($http) {
      */
     this.getLoggerUser = function () {
         var base64string = localStorage.getItem("loggedUser");
-        if(base64string !== null && base64string !== undefined && base64string !== "") {
+        if (base64string !== null && base64string !== undefined && base64string !== "") {
             return $http({
                 url: apiPrefix + "/account/login",
                 method: "POST",
@@ -44,6 +59,6 @@ app.service('LoginService', function ($http) {
             });
         }
         return null;
-    }
+    };
 
 });

@@ -7,20 +7,12 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
     if (($scope.tableId = $cookies.get("table")) === undefined) {
         $location.path("/tables");
     }
-
-    $scope.selectedUnpaidUser = null;
+    $scope.isWaiter = false;
+    $scope.selectedUnpaidUser = -1;
     $scope.unpaidUsers = [];
     $scope.selectedDishes = [];
     $scope.selectionPrice = 0;
     $scope.unpaidTotalPrice = 0;
-
-    /**
-     * Checks if user has waiter role
-     * @returns {boolean}
-     */
-    $scope.isWaiter = function () {
-        return $scope.loggedUser !== undefined && $scope.loggedUser !== null && $scope.loggedUser.accountRole === "WAITER";
-    };
 
     $scope.addAllToPayed = function () {
         var toBeAddedIds = [];
@@ -174,20 +166,27 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
                 toBePayedIds = toBePayedIds.concat($scope.selectedDishes[i].items[j].ids);
             }
         }
-        CashDeskService.payItems(toBePayedIds).then(function () {
-            //update
-            $scope.getUnpaidOrderItemsForUser($scope.selectedUnpaidUser);
-            getUnpaidUsersOnTable();
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent("Platba položek byla úspěšně přijata")
-                    .position('bottom right')
-                    .hideDelay(1500)
-            );
-            $scope.selectedDishes = [];
-            $scope.selectionPrice = 0;
+        var payPromise = CashDeskService.payItems(toBePayedIds);
+        if(payPromise !== null) {
+            payPromise.then(function () {
+                //update
+                $scope.getUnpaidOrderItemsForUser($scope.selectedUnpaidUser);
+                getUnpaidUsersOnTable();
+                $mdToast.show(
+                    $mdToast.simple()
+                        .textContent("Platba položek byla úspěšně přijata")
+                        .position('bottom right')
+                        .hideDelay(1500)
+                );
+                $scope.selectedDishes = [];
+                $scope.selectionPrice = 0;
 
-        }, ErrorService.serverErrorCallback);
+            }, ErrorService.serverErrorCallback);
+        } else {
+            $mdToast.show(
+                $mdToast.notWaiterError()
+            );
+        }
     };
 
     /**
@@ -316,10 +315,26 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
         $scope.unpaidTotalPrice = 0;
         $scope.selectedUnpaidUser = selectedUnpaidUser;
         if (selectedUnpaidUser !== "") {
-            CashDeskService.getUnpaidFinishedOrderItemsOnTableForUser($scope.tableId, selectedUnpaidUser).then(function (response) {
-                $scope.unpaidItems = response.data;
-                groupUnpaidItems();
-            }, ErrorService.serverErrorCallback);
+            var promise = CashDeskService.getUnpaidFinishedOrderItemsOnTableForUser($scope.tableId, selectedUnpaidUser);
+            if (promise !== null) {
+                promise.then(function (response) {
+                    $scope.unpaidItems = response.data;
+                    groupUnpaidItems();
+                }, ErrorService.serverErrorCallback);
+            }else{
+                $mdToast.show(
+                    $mdToast.notWaiterError()
+                );
+            }
+        }
+    };
+
+    $scope.logoutWaiter = function(stayInCashDeskView) {
+        localStorage.removeItem("loggedWaiter");
+        $scope.isWaiter = false;
+        if (stayInCashDeskView) {
+            $("#cash-desk").addClass("cash-desk-compact");
+            getUnpaidOrderItems();
         }
     };
 
@@ -327,34 +342,48 @@ app.controller('CashDeskController', function CashDeskController($rootScope, $lo
      * Gets unpaid order items from server
      */
     var getUnpaidOrderItems = function () {
-        CashDeskService.getUnpaidOrderItems($scope.tableId).then(function (response) {
-            $scope.unpaidItems = response.data;
-            groupUnpaidItems();
-        }, ErrorService.serverErrorCallback);
+        if (localStorage.getItem("loggedWaiter") !== null) {
+            $("#cash-desk").removeClass("cash-desk-compact");
+            $scope.isWaiter = true;
+            getUnpaidUsersOnTable();
+        } else {
+            $scope.isWaiter = false;
+            CashDeskService.getUnpaidOrderItems($scope.tableId).then(function (response) {
+                $scope.unpaidItems = response.data;
+                groupUnpaidItems();
+            }, ErrorService.serverErrorCallback);
+        }
     };
 
     var getUnpaidUsersOnTable = function () {
-        CashDeskService.getUsersHavingUnpaidFinishedOrdersOnTable($scope.tableId).then(function (response) {
-            $scope.unpaidUsers = response.data;
-        });
+        var promise = CashDeskService.getUsersHavingUnpaidFinishedOrdersOnTable($scope.tableId);
+        if(promise !== null) {
+            promise.then(function (response) {
+                $scope.unpaidUsers = response.data;
+                if($scope.loggedUser !== undefined && $scope.loggedUser !== null) {
+                    $scope.selectedUnpaidUser = $scope.loggedUser.id;
+                    $scope.getUnpaidOrderItemsForUser($scope.selectedUnpaidUser);
+                }
+            });
+        } else {
+            $mdToast.show(
+                $mdToast.notWaiterError()
+            );
+        }
     };
 
+
     $("#cash-desk").addClass("cash-desk-compact");
+    $location.search('waiter', null);
     //Get logged user
     var loggedUserPromise;
     if ((loggedUserPromise = LoginService.getLoggerUser()) !== null) {
         loggedUserPromise.then(function (response) {
             if (response.data !== "") {
                 $scope.loggedUser = response.data;
-                if ($scope.isWaiter()) {
-                    $("#cash-desk").removeClass("cash-desk-compact");
-                    getUnpaidUsersOnTable();
-                } else {
-                    getUnpaidOrderItems();
-                }
             }
         });
-    } else {
-        getUnpaidOrderItems(); //for anonymous user
     }
+    getUnpaidOrderItems();
+
 });

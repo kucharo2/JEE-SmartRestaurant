@@ -11,21 +11,37 @@ app.controller('LoginController', function LoginController($scope, $rootScope, $
     /**
      * Logs user into application
      */
-    var loginUser = function () {
+    var loginUser = function (shouldBeWaiter) {
         $scope.errors = [];
         var base64credentials = $base64.encode($scope.username+":"+$scope.password);
-        LoginService.loginUser(base64credentials).then(function (response) {
-            if(response.data !== ""){
-                localStorage.setItem("loggedUser", base64credentials);
-                $location.path('/');
-                $http.defaults.headers.common.Authorization = 'Basic ' + base64credentials;
-                $rootScope.$emit("getActiveOrder");
-            } else {
-                $scope.username = "";
-                $scope.password = "";
-                $scope.errors.push("Nesprávné uživatelské jméno nebo heslo.");
-            }
-        }, ErrorService.serverErrorCallback);
+        console.log(shouldBeWaiter);
+        if(shouldBeWaiter){
+            LoginService.loginWaiter(base64credentials).then(function (response) {
+                if(response.data !== null && response.data !== ""){
+                    if(response.data.accountRole === "WAITER"){
+                        $location.path('/cashDesk')
+                        localStorage.setItem("loggedWaiter", base64credentials);
+                    }
+                } else {
+                    $scope.username = "";
+                    $scope.password = "";
+                    $scope.errors.push("Buď nejste čísník nebo jste zadali nesprávné uživatelské jméno nebo heslo.");
+                }
+            }, ErrorService.serverErrorCallback);
+        } else {
+            LoginService.loginUser(base64credentials).then(function (response) {
+                if(response.data !== null && response.data !== ""){
+                    localStorage.setItem("loggedUser", base64credentials);
+                    $location.path('/');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + base64credentials;
+                    $rootScope.$emit("getActiveOrder");
+                } else {
+                    $scope.username = "";
+                    $scope.password = "";
+                    $scope.errors.push("Nesprávné uživatelské jméno nebo heslo.");
+                }
+            }, ErrorService.serverErrorCallback);
+        }
     };
 
     /**
@@ -79,7 +95,8 @@ app.controller('LoginController', function LoginController($scope, $rootScope, $
     var loginForm;
     if((loginForm = $("#loginForm"))){
         loginForm.submit(function () {
-            loginUser();
+            var shouldBeWaiter = $location.search().waiter;
+            loginUser(shouldBeWaiter !== undefined && parseInt(shouldBeWaiter) === 1);
         });
     }
 

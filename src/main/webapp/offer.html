@@ -162,7 +162,7 @@
         <!-- Additional info -->
         <div class="half-of-parent right-side" ng-if="detailItem != undefined && detailItem != null">
             <div class="dish-info">
-                <img class="dish-image" src="{{detailItem.image}}" alt="A tasty image of a {{detailItem.name}}"/>
+                <img class="dish-image" ng-src="{{detailItem.image}}" alt="A tasty image of a {{detailItem.name}}"/>
                 <h1>{{detailItem.name}}</h1>
                 <p><strong>Kategorie:</strong> {{detailItem.category.name}}</p>
                 <p><strong>Popis:</strong>
