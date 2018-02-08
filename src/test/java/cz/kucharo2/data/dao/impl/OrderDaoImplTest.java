@@ -60,12 +60,6 @@ public class OrderDaoImplTest {
 
     @Test
     @Transactional(TransactionMode.ROLLBACK)
-    public void testShouldNotExistUnpaidOrderOnTable() throws Exception {
-        Assert.assertEquals(0, orderDao.getUnpaidOrderOnTable(FAIL_ID).size());
-    }
-
-    @Test
-    @Transactional(TransactionMode.ROLLBACK)
     public void testShouldExistUnpaidOrderOnTable() throws Exception {
         Order order = createOrder();
         order.setStatus(OrderStatus.FINISHED);
